@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres Généraux & Barème — signw Admin</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content" style="max-width: 1000px;">
+      <!-- En-tête -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2 style="margin: 0 0 4px;">Paramètres de la Plateforme & Barème de Score</h2>
+          <span class="text-muted text-sm">Pondération des 5 piliers de confiance, seuils de labellisation et règles d'instruction</span>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary btn-sm" onclick="resetDefaultParams()">↺ Réinitialiser</button>
+          <button class="btn btn-primary btn-sm" onclick="saveParams()">💾 Enregistrer les modifications</button>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 24px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div>
+            <h4 style="margin: 0 0 4px;">Pondération des 5 Piliers de Confiance (Total = 100%)</h4>
+            <span class="text-xs text-muted">Ajuste l'algorithme de calcul du score de confiance appliqué à tous les audits</span>
+          </div>
+          <div style="text-align: right;">
+            <span class="text-xs text-muted">Somme actuelle :</span>
+            <span id="sum-display" style="font-size: 1.25rem; font-weight: 800; color: var(--success); margin-left: 6px;">100%</span>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Pilier 1 : Capacité financière -->
+          <div style="background: var(--ink-50); padding: 14px 18px; border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label class="form-label" style="margin: 0; font-weight: 700;">💰 1. Capacité financière & solidité bancaire</label>
+              <strong id="val-p-fin" style="color: var(--brand-700);">25%</strong>
+            </div>
+            <input type="range" id="range-p-fin" min="5" max="50" value="25" class="w-full" oninput="updateWeights()">
+            <span class="text-xs text-muted">Chiffre d'affaires certifié, bilans ONECCA, ratios d'endettement, lignes de crédit bancaires.</span>
+          </div>
+
+          <!-- Pilier 2 : Références techniques -->
+          <div style="background: var(--ink-50); padding: 14px 18px; border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label class="form-label" style="margin: 0; font-weight: 700;">🏗️ 2. Références techniques & Chantiers achevés</label>
+              <strong id="val-p-ref" style="color: var(--brand-700);">25%</strong>
+            </div>
+            <input type="range" id="range-p-ref" min="5" max="50" value="25" class="w-full" oninput="updateWeights()">
+            <span class="text-xs text-muted">PV de réception provisoire et définitive, attestations de bonne fin signées par les maîtres d'ouvrage.</span>
+          </div>
+
+          <!-- Pilier 3 : Conformité juridique -->
+          <div style="background: var(--ink-50); padding: 14px 18px; border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label class="form-label" style="margin: 0; font-weight: 700;">⚖️ 3. Conformité juridique, fiscale & sociale</label>
+              <strong id="val-p-admin" style="color: var(--brand-700);">20%</strong>
+            </div>
+            <input type="range" id="range-p-admin" min="5" max="50" value="20" class="w-full" oninput="updateWeights()">
+            <span class="text-xs text-muted">Extrait RCCM, immatriculation fiscale DGI, attestation de non-redevance CNPS, non-faillite.</span>
+          </div>
+
+          <!-- Pilier 4 : Équipements & Matériel -->
+          <div style="background: var(--ink-50); padding: 14px 18px; border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label class="form-label" style="margin: 0; font-weight: 700;">🚜 4. Équipements, Matériel lourd & Ateliers</label>
+              <strong id="val-p-tech" style="color: var(--brand-700);">15%</strong>
+            </div>
+            <input type="range" id="range-p-tech" min="5" max="50" value="15" class="w-full" oninput="updateWeights()">
+            <span class="text-xs text-muted">Cartes grises, contrats de leasing, factures d'achat du parc d'engins, conformité technique.</span>
+          </div>
+
+          <!-- Pilier 5 : RH & RSE -->
+          <div style="background: var(--ink-50); padding: 14px 18px; border-radius: var(--radius-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label class="form-label" style="margin: 0; font-weight: 700;">🌱 5. Ressources Humaines, QHSE & RSE</label>
+              <strong id="val-p-rh" style="color: var(--brand-700);">15%</strong>
+            </div>
+            <input type="range" id="range-p-rh" min="5" max="50" value="15" class="w-full" oninput="updateWeights()">
+            <span class="text-xs text-muted">Diplômes des ingénieurs clés, politique de sécurité au travail, plan de gestion environnemental.</span>
+          </div>
+        </div>
+
+        <div id="sum-alert" style="display: none; margin-top: 16px; padding: 10px 14px; background: #FDE8E8; border-radius: var(--radius-sm); color: var(--danger); font-size: 0.85rem;">
+          ⚠️ Attention : La somme des piliers doit être exactement égale à 100% pour que le calcul de score reste normalisé.
+        </div>
+      </div>
+
+      <!-- Seuils des Niveaux de Certification -->
+      <div class="card" style="padding: 24px; margin-bottom: 24px;">
+        <h4 style="margin: 0 0 16px;">Seuils des Niveaux d'Attribution</h4>
+
+        <div class="grid grid-cols-3 gap-6">
+          <div style="border: 1px solid var(--gold-400); background: #FFFBF0; padding: 16px; border-radius: var(--radius-md);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span style="font-size: 1.5rem;">🥇</span>
+              <strong>Médaille d'Or</strong>
+            </div>
+            <div class="form-group" style="margin: 0;">
+              <label class="form-label text-xs">Score minimum</label>
+              <input type="number" id="threshold-gold" class="form-control" value="80" min="70" max="95">
+            </div>
+          </div>
+
+          <div style="border: 1px solid var(--ink-300); background: #F8F9FA; padding: 16px; border-radius: var(--radius-md);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span style="font-size: 1.5rem;">🥈</span>
+              <strong>Médaille d'Argent</strong>
+            </div>
+            <div class="form-group" style="margin: 0;">
+              <label class="form-label text-xs">Score minimum</label>
+              <input type="number" id="threshold-silver" class="form-control" value="65" min="55" max="79">
+            </div>
+          </div>
+
+          <div style="border: 1px solid #D7CCC8; background: #EFEBE9; padding: 16px; border-radius: var(--radius-md);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span style="font-size: 1.5rem;">🥉</span>
+              <strong>Médaille de Bronze</strong>
+            </div>
+            <div class="form-group" style="margin: 0;">
+              <label class="form-label text-xs">Score minimum</label>
+              <input type="number" id="threshold-bronze" class="form-control" value="50" min="40" max="64">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Règles de validité & SLA -->
+      <div class="card" style="padding: 24px; margin-bottom: 24px;">
+        <h4 style="margin: 0 0 16px;">Durée de validité & SLA d'instruction</h4>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div class="form-group">
+            <label class="form-label">Durée de validité d'un certificat officiel</label>
+            <select id="param-validite-mois" class="form-control">
+              <option value="12" selected>12 mois (Renouvellement annuel)</option>
+              <option value="24">24 mois (2 ans)</option>
+              <option value="36">36 mois (3 ans)</option>
+            </select>
+            <span class="text-xs text-muted">Définit la date d'expiration inscrite sur le certificat généré.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">SLA standard d'audit contradictoire</label>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="number" id="param-sla-jours" class="form-control" value="15" min="5" max="60">
+              <span class="text-sm">jours ouvrés</span>
+            </div>
+            <span class="text-xs text-muted">Délai contractuel de traitement imparti à l'auditeur.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modèles d'emails simulés -->
+      <div class="card" style="padding: 24px; margin-bottom: 24px;">
+        <h4 style="margin: 0 0 16px;">Modèles de notifications & e-mails simulés</h4>
+
+        <div class="form-group">
+          <label class="form-label">Notification : Demande de pièces complémentaires (Rejet partiel)</label>
+          <textarea id="tpl-pieces-incompletes" class="form-control" rows="3">Bonjour {{agent_nom}}, après examen contradictoire de votre dossier {{dossier_id}}, notre auditeur a relevé {{nb_pieces_rejetees}} pièce(s) nécessitant une mise à jour. Merci de régulariser sous 10 jours ouvrés.</textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Notification : Attribution officielle de certification</label>
+          <textarea id="tpl-cert-accordee" class="form-control" rows="3">Félicitations {{agent_nom}} ! Votre entreprise a obtenu le label de confiance signw Niveau {{niveau}} avec un score de {{score}}/100. Votre certificat n° {{code_sgw}} est disponible en téléchargement.</textarea>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/score.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['admin'])) return;
+      loadParams();
+    });
+
+    function loadParams() {
+      const p = window.SignwStore.getParameters();
+      const weights = p.weights || { fin: 25, ref: 25, admin: 20, tech: 15, rh: 15 };
+
+      document.getElementById('range-p-fin').value = weights.fin || 25;
+      document.getElementById('range-p-ref').value = weights.ref || 25;
+      document.getElementById('range-p-admin').value = weights.admin || 20;
+      document.getElementById('range-p-tech').value = weights.tech || 15;
+      document.getElementById('range-p-rh').value = weights.rh || 15;
+
+      document.getElementById('param-validite-mois').value = p.dureeValiditeMois || 12;
+      document.getElementById('param-sla-jours').value = p.slaJoursOuvres || 15;
+
+      updateWeights();
+    }
+
+    function updateWeights() {
+      const fin = parseInt(document.getElementById('range-p-fin').value, 10);
+      const ref = parseInt(document.getElementById('range-p-ref').value, 10);
+      const admin = parseInt(document.getElementById('range-p-admin').value, 10);
+      const tech = parseInt(document.getElementById('range-p-tech').value, 10);
+      const rh = parseInt(document.getElementById('range-p-rh').value, 10);
+
+      document.getElementById('val-p-fin').textContent = `${fin}%`;
+      document.getElementById('val-p-ref').textContent = `${ref}%`;
+      document.getElementById('val-p-admin').textContent = `${admin}%`;
+      document.getElementById('val-p-tech').textContent = `${tech}%`;
+      document.getElementById('val-p-rh').textContent = `${rh}%`;
+
+      const sum = fin + ref + admin + tech + rh;
+      const display = document.getElementById('sum-display');
+      const alertBox = document.getElementById('sum-alert');
+
+      display.textContent = `${sum}%`;
+      if (sum === 100) {
+        display.style.color = 'var(--success)';
+        alertBox.style.display = 'none';
+      } else {
+        display.style.color = 'var(--danger)';
+        alertBox.style.display = 'block';
+      }
+    }
+
+    function resetDefaultParams() {
+      document.getElementById('range-p-fin').value = 25;
+      document.getElementById('range-p-ref').value = 25;
+      document.getElementById('range-p-admin').value = 20;
+      document.getElementById('range-p-tech').value = 15;
+      document.getElementById('range-p-rh').value = 15;
+      document.getElementById('threshold-gold').value = 80;
+      document.getElementById('threshold-silver').value = 65;
+      document.getElementById('threshold-bronze').value = 50;
+      document.getElementById('param-validite-mois').value = 12;
+      document.getElementById('param-sla-jours').value = 15;
+      updateWeights();
+      window.SignwUI.showToast('Paramètres réinitialisés aux valeurs standards.', 'info');
+    }
+
+    function saveParams() {
+      const fin = parseInt(document.getElementById('range-p-fin').value, 10);
+      const ref = parseInt(document.getElementById('range-p-ref').value, 10);
+      const admin = parseInt(document.getElementById('range-p-admin').value, 10);
+      const tech = parseInt(document.getElementById('range-p-tech').value, 10);
+      const rh = parseInt(document.getElementById('range-p-rh').value, 10);
+
+      const sum = fin + ref + admin + tech + rh;
+      if (sum !== 100) {
+        window.SignwUI.showToast('Erreur : La somme des pondérations doit être strictement égale à 100%.', 'error');
+        return;
+      }
+
+      const newParams = {
+        weights: { fin, ref, admin, tech, rh },
+        thresholds: {
+          or: parseInt(document.getElementById('threshold-gold').value, 10),
+          argent: parseInt(document.getElementById('threshold-silver').value, 10),
+          bronze: parseInt(document.getElementById('threshold-bronze').value, 10)
+        },
+        dureeValiditeMois: parseInt(document.getElementById('param-validite-mois').value, 10),
+        slaJoursOuvres: parseInt(document.getElementById('param-sla-jours').value, 10)
+      };
+
+      window.SignwStore.updateParameters(newParams);
+      window.SignwStore.addJournalEntry('Admin signw', 'Mise à jour paramètres', 'Barème de score', 'Pondérations et seuils modifiés.');
+
+      window.SignwUI.showToast('Paramètres de notation et seuils enregistrés avec succès !', 'success');
+    }
+  </script>
+</body>
+</html>

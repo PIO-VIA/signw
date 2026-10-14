@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historique des Audits — signw</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+          <h2 style="margin: 0 0 4px;">Historique des Dossiers Clôturés</h2>
+          <span class="text-muted text-sm">Registre d’archivage de toutes vos instructions d’audit</span>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="exportCsv()">
+          📥 Exporter le registre (CSV)
+        </button>
+      </div>
+
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="table-container" style="border: none;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Réf & Entreprise</th>
+                <th>Secteur</th>
+                <th>Date d’audit</th>
+                <th>Score attribué</th>
+                <th>Décision</th>
+                <th>Certificat émis</th>
+              </tr>
+            </thead>
+            <tbody id="hist-table-body">
+              <!-- Rendu dynamique JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/score.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['auditeur', 'admin'])) return;
+      renderHistory();
+    });
+
+    function renderHistory() {
+      const closed = window.SignwStore.getDossiers().filter(d => ['certifie', 'certifie_avec_reserves', 'rejete', 'expire'].includes(d.statut));
+      const tbody = document.getElementById('hist-table-body');
+
+      tbody.innerHTML = closed.map(d => {
+        const agt = window.SignwStore.getAgentById(d.agentId) || { raisonSociale: 'Entreprise' };
+        const cert = window.SignwStore.getCertificationByAgent(d.agentId);
+
+        return `
+          <tr>
+            <td>
+              <strong>${agt.raisonSociale}</strong>
+              <div class="text-xs text-muted">${d.id}</div>
+            </td>
+            <td>BTP & Construction</td>
+            <td>${d.soumisLe || '2026-02-10'}</td>
+            <td><strong>${d.scoreProvisoire || agt.score || 80}</strong> / 100</td>
+            <td>${window.SignwUtils.getStatusBadge(d.statut)}</td>
+            <td><code>${cert ? cert.code : '—'}</code></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function exportCsv() {
+      window.SignwUI.showToast('Génération et téléchargement de l’export CSV en cours...', 'info');
+    }
+  </script>
+</body>
+</html>

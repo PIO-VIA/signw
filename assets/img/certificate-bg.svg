@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="1200" height="1600">
+  <defs>
+    <linearGradient id="borderGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEEAA1" />
+      <stop offset="50%" stop-color="#D99A1E" />
+      <stop offset="100%" stop-color="#9A6B0A" />
+    </linearGradient>
+    <pattern id="guillochePattern" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M0 20 Q10 0 20 20 T40 20" fill="none" stroke="#D99A1E" stroke-width="0.5" opacity="0.2" />
+      <path d="M20 0 Q40 10 20 20 T20 40" fill="none" stroke="#7A1B34" stroke-width="0.5" opacity="0.15" />
+    </pattern>
+  </defs>
+  <!-- Background parchment -->
+  <rect width="1200" height="1600" fill="#FCFBF7" />
+  <!-- Guilloche background subtle texture -->
+  <rect x="30" y="30" width="1140" height="1540" fill="url(#guillochePattern)" />
+  
+  <!-- Outer Gold Frame -->
+  <rect x="40" y="40" width="1120" height="1520" fill="none" stroke="url(#borderGold)" stroke-width="6" rx="4" />
+  <!-- Inner Burgundy Frame -->
+  <rect x="54" y="54" width="1092" height="1492" fill="none" stroke="#7A1B34" stroke-width="12" rx="2" />
+  <!-- Thin Gold Inset -->
+  <rect x="72" y="72" width="1056" height="1456" fill="none" stroke="url(#borderGold)" stroke-width="2" />
+  
+  <!-- Corner Ornaments -->
+  <g stroke="url(#borderGold)" stroke-width="3" fill="none">
+    <!-- Top-Left -->
+    <path d="M54 110 L110 110 L110 54" />
+    <circle cx="110" cy="110" r="8" fill="#7A1B34" />
+    <!-- Top-Right -->
+    <path d="M1146 110 L1090 110 L1090 54" />
+    <circle cx="1090" cy="110" r="8" fill="#7A1B34" />
+    <!-- Bottom-Left -->
+    <path d="M54 1490 L110 1490 L110 1546" />
+    <circle cx="110" cy="1490" r="8" fill="#7A1B34" />
+    <!-- Bottom-Right -->
+    <path d="M1146 1490 L1090 1490 L1090 1546" />
+    <circle cx="1090" cy="1490" r="8" fill="#7A1B34" />
+  </g>
+</svg>

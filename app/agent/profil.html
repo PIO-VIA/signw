@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Entreprise — signw</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content" style="max-width: 900px;">
+      <div style="margin-bottom: 24px;">
+        <h2 style="margin: 0 0 4px;">Profil de l’Entreprise</h2>
+        <span class="text-muted text-sm">Gérez les informations publiques visibles sur votre fiche annuaire</span>
+      </div>
+
+      <div class="card" style="padding: 32px; margin-bottom: 32px;">
+        <form onsubmit="handleSaveProfile(event)">
+          <div style="display: flex; gap: 24px; align-items: center; margin-bottom: 32px; border-bottom: 1px solid var(--ink-200); padding-bottom: 24px;">
+            <img id="profile-logo-preview" src="../../assets/img/company-logo-01.svg" alt="Logo" style="width: 80px; height: 80px; border-radius: 12px; border: 1px solid var(--ink-200);">
+            <div>
+              <h4 style="margin: 0 0 6px;">Logo officiel de l’entreprise</h4>
+              <p class="text-xs text-muted" style="margin-bottom: 10px;">Format SVG, PNG ou JPG • Carré recommandé 200×200 px</p>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="alert('Logo mis à jour pour la session !')">Changer le logo</button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+              <label class="form-label text-xs">Raison sociale :</label>
+              <input type="text" id="prof-rs" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label text-xs">Forme juridique :</label>
+              <select id="prof-forme" class="form-control">
+                <option value="SARL">SARL</option>
+                <option value="SA">SA</option>
+                <option value="SAS">SAS</option>
+                <option value="Ets">Établissement individuel</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+              <label class="form-label text-xs">Numéro RCCM :</label>
+              <input type="text" id="prof-rccm" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label text-xs">Numéro NIU (Fiscal) :</label>
+              <input type="text" id="prof-niu" class="form-control" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+              <label class="form-label text-xs">Ville d’implantation :</label>
+              <input type="text" id="prof-ville" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label text-xs">Région :</label>
+              <select id="prof-region" class="form-control">
+                <option value="Littoral">Littoral</option>
+                <option value="Centre">Centre</option>
+                <option value="Ouest">Ouest</option>
+                <option value="Sud">Sud</option>
+                <option value="Nord">Nord</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label text-xs">Description et compétences clés :</label>
+            <textarea id="prof-desc" class="form-control" rows="4"></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+              <label class="form-label text-xs">Site internet :</label>
+              <input type="text" id="prof-site" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-xs">Effectif permanent :</label>
+              <input type="number" id="prof-eff" class="form-control">
+            </div>
+          </div>
+
+          <div style="text-align: right; margin-top: 16px;">
+            <button type="submit" class="btn btn-primary btn-lg">Enregistrer les modifications</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['agent'])) return;
+
+      const user = window.SignwAuth.getCurrentUser();
+      const agent = window.SignwStore.getAgentById(user.agentId) || window.SignwStore.getAgents()[0];
+
+      document.getElementById('prof-rs').value = agent.raisonSociale;
+      document.getElementById('prof-forme').value = agent.formeJuridique;
+      document.getElementById('prof-rccm').value = agent.rccm;
+      document.getElementById('prof-niu').value = agent.niu;
+      document.getElementById('prof-ville').value = agent.ville;
+      document.getElementById('prof-region').value = agent.region;
+      document.getElementById('prof-desc').value = agent.description;
+      document.getElementById('prof-site').value = agent.siteWeb || '';
+      document.getElementById('prof-eff').value = agent.effectif || 0;
+      if (agent.logo) {
+        document.getElementById('profile-logo-preview').src = `../../${agent.logo}`;
+      }
+    });
+
+    function handleSaveProfile(e) {
+      e.preventDefault();
+      const user = window.SignwAuth.getCurrentUser();
+      const agent = window.SignwStore.getAgentById(user.agentId) || window.SignwStore.getAgents()[0];
+
+      window.SignwStore.updateAgent(agent.id, {
+        raisonSociale: document.getElementById('prof-rs').value,
+        formeJuridique: document.getElementById('prof-forme').value,
+        rccm: document.getElementById('prof-rccm').value,
+        niu: document.getElementById('prof-niu').value,
+        ville: document.getElementById('prof-ville').value,
+        region: document.getElementById('prof-region').value,
+        description: document.getElementById('prof-desc').value,
+        siteWeb: document.getElementById('prof-site').value,
+        effectif: parseInt(document.getElementById('prof-eff').value, 10) || agent.effectif
+      });
+
+      window.SignwUI.showToast('Profil d’entreprise mis à jour avec succès !', 'success');
+    }
+  </script>
+</body>
+</html>

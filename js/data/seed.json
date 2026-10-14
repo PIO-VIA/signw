@@ -1,0 +1,229 @@
+{
+  "users": [
+    {
+      "id": "usr_agent1",
+      "nom": "Jean-Marc Kamdem",
+      "email": "agent@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "agent",
+      "agentId": "agt_001",
+      "avatar": "assets/img/avatar-09.svg",
+      "telephone": "+237 699 12 34 56",
+      "region": "Littoral",
+      "creeLe": "2025-01-10",
+      "actif": true
+    },
+    {
+      "id": "usr_agent2",
+      "nom": "Ousmanou Bello",
+      "email": "agent2@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "agent",
+      "agentId": "agt_002",
+      "avatar": "assets/img/avatar-06.svg",
+      "telephone": "+237 677 88 99 00",
+      "region": "Nord",
+      "creeLe": "2025-03-12",
+      "actif": true
+    },
+    {
+      "id": "usr_agent3",
+      "nom": "Pierre Owona",
+      "email": "agent3@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "agent",
+      "agentId": "agt_003",
+      "avatar": "assets/img/avatar-07.svg",
+      "telephone": "+237 690 11 22 33",
+      "region": "Littoral",
+      "creeLe": "2025-02-15",
+      "actif": true
+    },
+    {
+      "id": "usr_principal1",
+      "nom": "Dr. Fran\u00e7ois Nguemo (Maire)",
+      "email": "principal@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "principal",
+      "principalId": "prc_001",
+      "avatar": "assets/img/avatar-08.svg",
+      "telephone": "+237 675 44 33 22",
+      "region": "Ouest",
+      "creeLe": "2025-01-05",
+      "actif": true
+    },
+    {
+      "id": "usr_principal2",
+      "nom": "Mme C\u00e9lestine Tchounkeu (Directrice March\u00e9s)",
+      "email": "principal2@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "principal",
+      "principalId": "prc_002",
+      "avatar": "assets/img/avatar-05.svg",
+      "telephone": "+237 699 00 11 22",
+      "region": "Centre",
+      "creeLe": "2025-01-08",
+      "actif": true
+    },
+    {
+      "id": "usr_principal3",
+      "nom": "Eng. Robert Essomba",
+      "email": "principal3@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "principal",
+      "principalId": "prc_003",
+      "avatar": "assets/img/avatar-11.svg",
+      "telephone": "+237 671 22 33 44",
+      "region": "Sud-Ouest",
+      "creeLe": "2025-02-01",
+      "actif": true
+    },
+    {
+      "id": "usr_auditeur1",
+      "nom": "Alain Nkoulou",
+      "email": "auditeur@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "auditeur",
+      "avatar": "assets/img/avatar-01.svg",
+      "telephone": "+237 691 55 66 77",
+      "region": "Centre",
+      "creeLe": "2024-11-01",
+      "chargeActuelle": 3,
+      "actif": true
+    },
+    {
+      "id": "usr_auditeur2",
+      "nom": "Sophie Fotso",
+      "email": "auditeur2@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "auditeur",
+      "avatar": "assets/img/avatar-02.svg",
+      "telephone": "+237 672 99 88 77",
+      "region": "Littoral",
+      "creeLe": "2024-11-15",
+      "chargeActuelle": 2,
+      "actif": true
+    },
+    {
+      "id": "usr_admin",
+      "nom": "Super Administrateur signw",
+      "email": "admin@signw.demo",
+      "motDePasse": "demo1234",
+      "role": "admin",
+      "avatar": "assets/img/avatar-04.svg",
+      "telephone": "+237 699 99 99 99",
+      "region": "Centre",
+      "creeLe": "2024-10-01",
+      "actif": true
+    }
+  ],
+  "principals": [
+    {
+      "id": "prc_001",
+      "userId": "usr_principal1",
+      "organisation": "Mairie de Bafoussam",
+      "type": "commune",
+      "region": "Ouest",
+      "adresse": "H\u00f4tel de Ville, Place des F\u00eates, Bafoussam",
+      "description": "Collectivit\u00e9 territoriale d\u00e9centralis\u00e9e g\u00e9rant les infrastructures urbaines, voiries et b\u00e2timents municipaux."
+    },
+    {
+      "id": "prc_002",
+      "userId": "usr_principal2",
+      "organisation": "Minist\u00e8re des Travaux Publics (MINTP)",
+      "type": "minist\u00e8re",
+      "region": "Centre",
+      "adresse": "Immeuble \u00c9mergence, Yaound\u00e9",
+      "description": "Ma\u00eetre d\u2019ouvrage d\u00e9l\u00e9gu\u00e9 des grands axes routiers nationaux et ouvrages d\u2019art majeurs du Cameroun."
+    },
+    {
+      "id": "prc_003",
+      "userId": "usr_principal3",
+      "organisation": "Soci\u00e9t\u00e9 Nationale de Raffinage (SONARA)",
+      "type": "soci\u00e9t\u00e9 d'\u00c9tat",
+      "region": "Sud-Ouest",
+      "adresse": "Zone Industrielle de Limbe, Cap Limboh",
+      "description": "Entreprise publique industrielle op\u00e9rant les infrastructures p\u00e9troli\u00e8res c\u00f4ti\u00e8res."
+    }
+  ],
+  "sectors": [
+    {
+      "id": "sec_btp",
+      "nom": "BTP & Construction",
+      "icone": "hard-hat",
+      "description": "B\u00e2timents, routes, terrassement, ouvrages d\u2019art, adduction d\u2019eau et assainissement.",
+      "actif": true,
+      "statut": "actif",
+      "formulaireId": "form_btp_v1",
+      "couleur": "#7A1B34",
+      "image": "assets/img/sector-btp.webp",
+      "nbAgents": 14,
+      "coutMoyenM2": 285000,
+      "coutMoyenKmRoute": 145000000
+    },
+    {
+      "id": "sec_energie",
+      "nom": "\u00c9nergie & \u00c9lectrification",
+      "icone": "zap",
+      "description": "R\u00e9seaux \u00e9lectriques MT/BT, centrales solaires photovolta\u00efques et \u00e9clairage public.",
+      "actif": true,
+      "statut": "actif",
+      "formulaireId": "form_energie_v1",
+      "couleur": "#D99A1E",
+      "image": "assets/img/sector-energy.webp",
+      "nbAgents": 6,
+      "coutMoyenM2": 180000,
+      "coutMoyenKmRoute": 35000000
+    },
+    {
+      "id": "sec_agri",
+      "nom": "Agriculture & Agro-industrie",
+      "icone": "sprout",
+      "description": "Am\u00e9nagements hydro-agricoles, magasins de stockage et pistes rurales.",
+      "actif": true,
+      "statut": "actif",
+      "formulaireId": "form_agri_v1",
+      "couleur": "#1E8E5A",
+      "image": "assets/img/sector-agri.webp",
+      "nbAgents": 4,
+      "coutMoyenM2": 95000,
+      "coutMoyenKmRoute": 22000000
+    },
+    {
+      "id": "sec_digital",
+      "nom": "Num\u00e9rique & Services IT",
+      "icone": "laptop",
+      "description": "Infrastructures t\u00e9l\u00e9coms, fibre optique, datacenters et solutions logicielles d\u2019\u00c9tat.",
+      "actif": false,
+      "statut": "bientot",
+      "formulaireId": "form_digital_v1",
+      "couleur": "#2563EB",
+      "image": "assets/img/sector-digital.webp",
+      "nbAgents": 0
+    },
+    {
+      "id": "sec_sante",
+      "nom": "Sant\u00e9 & Biom\u00e9dical",
+      "icone": "heart-pulse",
+      "description": "Centres hospitaliers, blocs op\u00e9ratoires et fourniture de plateaux techniques certifi\u00e9s.",
+      "actif": false,
+      "statut": "bientot",
+      "formulaireId": "form_sante_v1",
+      "couleur": "#C0392B",
+      "image": "assets/img/sector-health.webp",
+      "nbAgents": 0
+    },
+    {
+      "id": "sec_logistique",
+      "nom": "Transport & Logistique",
+      "icone": "truck",
+      "description": "Parcs d\u2019engins lourds, manutention portuaire et fret s\u00e9curis\u00e9.",
+      "actif": false,
+      "statut": "bientot",
+      "formulaireId": "form_logistique_v1",
+      "couleur": "#4B5563",
+      "image": "assets/img/sector-logistics.webp",
+      "nbAgents": 0
+    }
+  ]
+}

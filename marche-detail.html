@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détail du Marché — signw</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <header id="public-header"></header>
+
+  <main class="container" style="padding-top: 40px; padding-bottom: 80px;" id="marche-detail-app">
+    <!-- Rendu dynamique JS -->
+  </main>
+
+  <!-- Modale d'évaluation d'adéquation en direct -->
+  <div class="modal-overlay" id="adequacy-modal">
+    <div class="modal-card" style="max-width: 720px;">
+      <div class="modal-header">
+        <h4 style="margin: 0;">Rapport d’Adéquation Projet ↔ Prestataire</h4>
+        <button class="btn-ghost btn-sm" onclick="SignwUI.closeModal('adequacy-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="adequacy-modal-content">
+        <!-- Injecté dynamiquement -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="SignwUI.closeModal('adequacy-modal')">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <footer id="public-footer"></footer>
+
+  <script src="js/data/seed.js"></script>
+  <script src="js/core/utils.js"></script>
+  <script src="js/core/store.js"></script>
+  <script src="js/core/auth.js"></script>
+  <script src="js/core/score.js"></script>
+  <script src="js/core/ui.js"></script>
+  <script src="js/core/layout.js"></script>
+
+  <script>
+    let currentProject = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const prjId = urlParams.get('id') || 'prj_001';
+      currentProject = window.SignwStore.getProjectById(prjId);
+
+      if (!currentProject) {
+        document.getElementById('marche-detail-app').innerHTML = `
+          <div class="card text-center" style="padding: 48px;">
+            <h3>Marché introuvable</h3>
+            <p class="text-muted">La référence demandée n'existe pas ou a été archivée.</p>
+            <a href="marches.html" class="btn btn-primary">Retour à la liste des marchés</a>
+          </div>
+        `;
+        return;
+      }
+
+      renderProjectDetail();
+    });
+
+    function renderProjectDetail() {
+      const p = currentProject;
+      const user = window.SignwAuth.getCurrentUser();
+      const isAgent = user && user.role === 'agent';
+      const hasApplied = isAgent && p.candidaturesAgentIds && p.candidaturesAgentIds.includes(user.agentId);
+
+      const candidates = (p.candidaturesAgentIds || []).map(id => window.SignwStore.getAgentById(id)).filter(Boolean);
+
+      document.getElementById('marche-detail-app').innerHTML = `
+        <div style="margin-bottom: 24px;">
+          <a href="marches.html" class="text-sm text-muted">← Retour aux marchés publics</a>
+        </div>
+
+        <!-- En-tête du Marché -->
+        <div class="card" style="padding: 32px; margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+            <div>
+              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                <span class="badge" style="background: var(--brand-100); color: var(--brand-900);">${p.reference}</span>
+                <span class="badge badge-certifie">${p.statut.toUpperCase()}</span>
+                <span class="badge" style="background: var(--ink-100);">${p.sousSecteur || 'Génie Civil'}</span>
+              </div>
+              <h1 style="font-size: 2rem; margin: 0 0 8px;">${p.titre}</h1>
+              <p style="font-size: 1.05rem; color: var(--ink-500); margin: 0;">
+                Maître d'ouvrage : <strong>${p.organisation}</strong> • Région : <strong>${p.region}</strong> (${p.ville || ''})
+              </p>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+              ${isAgent ? `
+                <button class="btn btn-gold btn-lg" onclick="handleCandidate('${p.id}')" ${hasApplied ? 'disabled' : ''}>
+                  ${hasApplied ? '✓ Candidature déposée' : '📋 Candidater à ce marché'}
+                </button>
+              ` : `
+                <a href="login.html?role=agent" class="btn btn-gold btn-lg">
+                  📋 Se connecter pour candidater
+                </a>
+              `}
+            </div>
+          </div>
+
+          <!-- Métriques clés -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; border-top: 1px solid var(--ink-200); padding-top: 20px;">
+            <div>
+              <div class="text-xs text-muted">BUDGET PRÉVISIONNEL</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--brand-700);">${window.SignwUtils.formatFCFA(p.budgetFCFA)}</div>
+            </div>
+            <div>
+              <div class="text-xs text-muted">DÉLAI CONTRACTUEL</div>
+              <div style="font-size: 1.25rem; font-weight: 700;">${p.delaiMois} Mois</div>
+            </div>
+            <div>
+              <div class="text-xs text-muted">CERTIFICATION MINIMALE</div>
+              <div style="margin-top: 4px;">${window.SignwUtils.getTierBadge(p.exigences?.certificationMinimale || 'Bronze')}</div>
+            </div>
+            <div>
+              <div class="text-xs text-muted">DATE LIMITE DE DÉPÔT</div>
+              <div style="font-size: 1.15rem; font-weight: 700; color: var(--danger);">${window.SignwUtils.formatDateFR(p.dateLimite)}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Onglets Contenu -->
+        <div class="card" style="padding: 28px;">
+          <div class="tabs-nav">
+            <button class="tab-btn active" data-tab="tab-desc">Description des travaux</button>
+            <button class="tab-btn" data-tab="tab-exigences">Exigences & Matériel requis</button>
+            <button class="tab-btn" data-tab="tab-candidats">Entreprises candidates (${candidates.length})</button>
+            <button class="tab-btn" data-tab="tab-calendrier">Calendrier & Procédure</button>
+          </div>
+
+          <!-- Onglet 1 : Description -->
+          <div class="tab-pane" id="tab-desc">
+            <h4 style="margin-bottom: 14px;">Consistance détaillée des prestations</h4>
+            <p style="font-size: 1rem; line-height: 1.7; color: var(--ink-700); margin-bottom: 24px;">
+              ${p.description}
+            </p>
+            <div style="background: var(--ink-50); padding: 20px; border-radius: var(--radius-md); border-left: 4px solid var(--brand-700);">
+              <strong>Garantie Tiers de Confiance signw :</strong>
+              <p style="margin: 6px 0 0; font-size: 0.875rem; color: var(--ink-700);">
+                L'attribution de ce marché public est soumise au contrôle préalable d'adéquation technique. Seules les entreprises dont le parc matériel et les attestations fiscales ont été audités et validés par signw seront déclarées recevables.
+              </p>
+            </div>
+          </div>
+
+          <!-- Onglet 2 : Exigences -->
+          <div class="tab-pane hidden" id="tab-exigences">
+            <h4 style="margin-bottom: 16px;">Critères de qualification obligatoire</h4>
+            <div class="grid grid-cols-2 gap-6" style="margin-bottom: 24px;">
+              <div style="background: var(--ink-50); padding: 16px; border-radius: var(--radius-md);">
+                <div class="text-xs text-muted">CHIFFRE D'AFFAIRES ANNUEL MINIMAL</div>
+                <div class="font-bold" style="font-size: 1.15rem; margin-top: 4px;">${window.SignwUtils.formatFCFA(p.exigences?.caMinimum || p.budgetFCFA * 0.7)}</div>
+              </div>
+              <div style="background: var(--ink-50); padding: 16px; border-radius: var(--radius-md);">
+                <div class="text-xs text-muted">EXPÉRIENCE MINIMALE DANS LE BTP</div>
+                <div class="font-bold" style="font-size: 1.15rem; margin-top: 4px;">${p.exigences?.experienceMinAns || 5} ans d'activité avec PV de réception</div>
+              </div>
+            </div>
+
+            <h5 style="margin-bottom: 12px;">Parc d’engins lourds requis sur site :</h5>
+            <div class="table-container" style="margin-bottom: 24px;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Type d’équipement / Engin</th>
+                    <th>Quantité minimale exigée</th>
+                    <th>Preuve attendue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${(p.exigences?.materielRequis || []).map(m => `
+                    <tr>
+                      <td class="font-bold">${m.type}</td>
+                      <td>${m.quantiteMin} unité(s)</td>
+                      <td>Carte grise ou contrat de bail vérifié par auditeur</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <h5 style="margin-bottom: 12px;">Personnel clé d’encadrement technique :</h5>
+            <ul style="padding-left: 20px; font-size: 0.9375rem; color: var(--ink-700);">
+              ${(p.exigences?.personnelCle || []).map(pers => `<li style="margin-bottom: 6px;">${pers}</li>`).join('')}
+            </ul>
+          </div>
+
+          <!-- Onglet 3 : Candidats & Test d'adéquation -->
+          <div class="tab-pane hidden" id="tab-candidats">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h4 style="margin: 0;">Entreprises ayant postulé à cet appel d’offres</h4>
+              <span class="text-sm text-muted">Évaluation d'adéquation en 1 clic</span>
+            </div>
+
+            ${candidates.length === 0 ? `
+              <p class="text-muted">Aucune entreprise n'a encore déposé sa candidature sur ce marché.</p>
+            ` : `
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                ${candidates.map(agt => `
+                  <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 18px; border: 1px solid var(--ink-200);">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                      <img src="${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 50px; height: 50px; border-radius: 8px;">
+                      <div>
+                        <div class="font-bold" style="font-size: 1.05rem;">${agt.raisonSociale}</div>
+                        <div class="text-xs text-muted">📍 ${agt.ville} • CA : ${window.SignwUtils.formatFCFAShort(agt.caMoyen3ans)}</div>
+                        <div style="margin-top: 4px;">
+                          ${window.SignwUtils.getTierBadge(agt.niveau)}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                      ${window.SignwUI.renderScoreGauge(agt.score, 54)}
+                      <button class="btn btn-primary btn-sm" onclick="launchAdequacyTest('${p.id}', '${agt.id}')">
+                        ⚡ Tester l’adéquation →
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            `}
+          </div>
+
+          <!-- Onglet 4 : Calendrier -->
+          <div class="tab-pane hidden" id="tab-calendrier">
+            <h4 style="margin-bottom: 16px;">Calendrier prévisionnel de la consultation</h4>
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
+              <div>📢 <strong>Date de publication :</strong> ${window.SignwUtils.formatDateFR(p.datePublication)}</div>
+              <div>📅 <strong>Date limite de remise des offres :</strong> ${window.SignwUtils.formatDateFR(p.dateLimite)} à 14h00</div>
+              <div>🔍 <strong>Session de vérification signw :</strong> 10 jours ouvrés suivant la clôture</div>
+              <div>🏆 <strong>Décision d'attribution officielle :</strong> Sous quinzaine après audit d'adéquation</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      window.SignwUI.initTabs();
+    }
+
+    function handleCandidate(projectId) {
+      const user = window.SignwAuth.getCurrentUser();
+      if (!user || user.role !== 'agent') {
+        alert('Veuillez vous connecter avec un compte Agent.');
+        return;
+      }
+
+      const success = window.SignwStore.applyToProject(projectId, user.agentId);
+      if (success) {
+        window.SignwUI.showToast('Votre candidature a été transmise avec succès !', 'success');
+        currentProject = window.SignwStore.getProjectById(projectId);
+        renderProjectDetail();
+      } else {
+        window.SignwUI.showToast('Vous avez déjà candidaté à ce marché.', 'info');
+      }
+    }
+
+    function launchAdequacyTest(projectId, agentId) {
+      const project = window.SignwStore.getProjectById(projectId);
+      const agent = window.SignwStore.getAgentById(agentId);
+      const evalRes = window.SignwScore.evaluateAdequacy(project, agent);
+
+      const modalContent = document.getElementById('adequacy-modal-content');
+      modalContent.innerHTML = `
+        <div class="adequacy-score-card ${evalRes.verdict}" style="margin-bottom: 24px;">
+          <span class="badge" style="background: rgba(0,0,0,0.1); margin-bottom: 8px;">VERDICT OFFICIEL SIGNW</span>
+          <h2 style="margin: 0 0 8px;">${evalRes.verdictLabel} (${evalRes.scoreAdequation}/100)</h2>
+          <p style="font-size: 1.05rem; font-weight: 600; margin: 0;">
+            ${evalRes.phraseSynthese}
+          </p>
+        </div>
+
+        <h5 style="margin-bottom: 14px;">Analyse détaillée critère par critère :</h5>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+          ${evalRes.criteria.map(c => `
+            <div style="background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <strong>${c.titre}</strong>
+                <span class="badge ${c.statut === 'success' ? 'badge-certifie' : (c.statut === 'warning' ? 'badge-pieces_incompletes' : 'badge-rejete')}">
+                  ${c.score}% conforme
+                </span>
+              </div>
+              <div class="text-xs text-muted" style="margin-bottom: 6px;">Déclaré : ${c.valeurDeclaree} • Exigé : ${c.valeurRequise}</div>
+              <p class="text-xs" style="margin: 0; color: var(--ink-700);">${c.detail}</p>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="text-align: right;">
+          <a href="app/principal/adequation.html?prj=${project.id}&agt=${agent.id}" class="btn btn-secondary btn-sm" target="_blank">
+            Ouvrir dans le simulateur avancé ↗
+          </a>
+        </div>
+      `;
+
+      window.SignwUI.openModal('adequacy-modal');
+    }
+  </script>
+</body>
+</html>

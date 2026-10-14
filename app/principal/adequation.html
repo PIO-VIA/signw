@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur d’Adéquation Projet ↔ Prestataire — signw</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content">
+      <!-- En-tête -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2 style="margin: 0 0 4px;">Simulateur d’Adéquation Projet ↔ Prestataire</h2>
+          <span class="text-muted text-sm">Vérifiez instantanément si l'entreprise est techniquement et financièrement dimensionnée</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Exporter la synthèse</button>
+          <button class="btn btn-primary btn-sm" onclick="rankAllAgentsForCurrentProject()">🏆 Classer tous les agents pour ce projet</button>
+        </div>
+      </div>
+
+      <!-- Sélecteurs Projet & Agent -->
+      <div class="card" style="padding: 24px; margin-bottom: 32px; background: #FAFBFD;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 20px; align-items: flex-end;">
+          <div>
+            <label class="form-label text-xs">1. Sélectionner un projet / marché :</label>
+            <select id="sim-project-select" class="form-control" onchange="runSimulation()">
+              <!-- Injecté dynamique -->
+            </select>
+          </div>
+          <div>
+            <label class="form-label text-xs">2. Sélectionner une entreprise certifiée :</label>
+            <select id="sim-agent-select" class="form-control" onchange="runSimulation()">
+              <!-- Injecté dynamique -->
+            </select>
+          </div>
+          <div>
+            <button class="btn btn-gold" onclick="runSimulation()">
+              Calculer l’adéquation →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Résultat de l'adéquation -->
+      <div id="adequacy-result-zone">
+        <!-- Rendu dynamique JS -->
+      </div>
+
+      <!-- Zone de classement global si demandée -->
+      <div id="all-agents-rank-zone" class="hidden" style="margin-top: 40px;">
+        <!-- Rendu dynamique JS -->
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/score.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['principal', 'admin', 'auditeur'])) return;
+
+      populateSelectors();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const prjId = urlParams.get('prj');
+      const agtId = urlParams.get('agt');
+
+      if (prjId) document.getElementById('sim-project-select').value = prjId;
+      if (agtId) document.getElementById('sim-agent-select').value = agtId;
+
+      runSimulation();
+    });
+
+    function populateSelectors() {
+      const prjSelect = document.getElementById('sim-project-select');
+      const agtSelect = document.getElementById('sim-agent-select');
+
+      const projects = window.SignwStore.getProjects();
+      const agents = window.SignwStore.getAgents();
+
+      prjSelect.innerHTML = projects.map(p => `
+        <option value="${p.id}">${p.titre} (${window.SignwUtils.formatFCFAShort(p.budgetFCFA)})</option>
+      `).join('');
+
+      agtSelect.innerHTML = agents.map(a => `
+        <option value="${a.id}">${a.raisonSociale} • ${a.niveau} (Score: ${a.score}/100)</option>
+      `).join('');
+    }
+
+    function runSimulation() {
+      const prjId = document.getElementById('sim-project-select').value;
+      const agtId = document.getElementById('sim-agent-select').value;
+      const mount = document.getElementById('adequacy-result-zone');
+
+      const project = window.SignwStore.getProjectById(prjId);
+      const agent = window.SignwStore.getAgentById(agtId);
+
+      if (!project || !agent) return;
+
+      const evalRes = window.SignwScore.evaluateAdequacy(project, agent);
+
+      let themeClass = 'adequat';
+      if (evalRes.verdict === 'adequat_sous_reserves') themeClass = 'adequat_sous_reserves';
+      if (evalRes.verdict === 'insuffisant') themeClass = 'insuffisant';
+
+      mount.innerHTML = `
+        <!-- Carte Grand Verdict -->
+        <div class="card adequacy-score-card ${themeClass}" style="padding: 36px; margin-bottom: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div>
+              <span class="badge" style="background: rgba(0,0,0,0.1); margin-bottom: 8px; font-weight: 800;">VERDICT OFFICIEL SIGNW</span>
+              <h1 style="font-size: 2.2rem; margin: 0 0 10px;">
+                ${evalRes.verdictLabel.toUpperCase()} (${evalRes.scoreAdequation} / 100)
+              </h1>
+              <p style="font-size: 1.15rem; font-weight: 600; line-height: 1.5; margin: 0; max-width: 780px;">
+                ${evalRes.phraseSynthese}
+              </p>
+            </div>
+            ${window.SignwUI.renderScoreGauge(evalRes.scoreAdequation, 80)}
+          </div>
+        </div>
+
+        <!-- 2 Colonnes : Points Bloquants / Attention & Critères -->
+        <div class="grid grid-cols-2 gap-8">
+          <!-- Colonne Gauche : Alertes & Points bloquants -->
+          <div>
+            ${evalRes.pointsBloquants.length > 0 ? `
+              <div class="card" style="background: var(--danger-bg); border: 1.5px solid var(--danger); padding: 20px; margin-bottom: 20px;">
+                <h5 style="color: var(--danger); margin-bottom: 8px;">🚫 Points Bloquants Détectés :</h5>
+                <ul style="padding-left: 20px; font-size: 0.875rem; color: #742A2A; margin: 0;">
+                  ${evalRes.pointsBloquants.map(b => `<li style="margin-bottom: 4px;"><strong>${b}</strong></li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            ${evalRes.pointsAttention.length > 0 ? `
+              <div class="card" style="background: var(--warning-bg); border: 1.5px solid var(--warning); padding: 20px; margin-bottom: 20px;">
+                <h5 style="color: #9A5B00; margin-bottom: 8px;">⚠️ Points d’attention pour le maître d’ouvrage :</h5>
+                <ul style="padding-left: 20px; font-size: 0.875rem; color: #78350F; margin: 0;">
+                  ${evalRes.pointsAttention.map(a => `<li style="margin-bottom: 4px;">${a}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            <div class="card" style="padding: 24px;">
+              <h5 style="margin-bottom: 12px;">Synthèse de l’entreprise auditée :</h5>
+              <div style="font-size: 0.875rem; display: flex; flex-direction: column; gap: 8px;">
+                <div>🏢 <strong>Entreprise :</strong> ${agent.raisonSociale} (${agent.formeJuridique})</div>
+                <div>📍 <strong>Localisation :</strong> ${agent.ville} (${agent.region})</div>
+                <div>💰 <strong>Chiffre d’affaires moyen :</strong> ${window.SignwUtils.formatFCFA(agent.caMoyen3ans)}</div>
+                <div>🏆 <strong>Certificat signw :</strong> ${agent.codeCertificat || 'Non certifié'} (${agent.niveau})</div>
+                <div>👥 <strong>Effectif permanent :</strong> ${agent.effectif} salariés</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Colonne Droite : Grille des 4 critères d'analyse -->
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            ${evalRes.criteria.map(c => `
+              <div class="card" style="padding: 18px; border-left: 5px solid ${c.statut === 'success' ? 'var(--success)' : (c.statut === 'warning' ? 'var(--warning)' : 'var(--danger)')};">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <strong style="font-size: 0.95rem;">${c.titre}</strong>
+                  <span class="badge ${c.statut === 'success' ? 'badge-certifie' : (c.statut === 'warning' ? 'badge-pieces_incompletes' : 'badge-rejete')}">
+                    ${c.score}% conforme
+                  </span>
+                </div>
+                <div class="text-xs text-muted" style="margin-bottom: 6px;">
+                  Déclaré : <strong>${c.valeurDeclaree}</strong> • Exigence du marché : <strong>${c.valeurRequise}</strong>
+                </div>
+                <p class="text-xs" style="margin: 0; color: var(--ink-700); line-height: 1.4;">${c.detail}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function rankAllAgentsForCurrentProject() {
+      const prjId = document.getElementById('sim-project-select').value;
+      const project = window.SignwStore.getProjectById(prjId);
+      const agents = window.SignwStore.getAgents();
+
+      const ranked = agents.map(agt => {
+        const ev = window.SignwScore.evaluateAdequacy(project, agt);
+        return { agent: agt, eval: ev };
+      }).sort((a, b) => b.eval.scoreAdequation - a.eval.scoreAdequation);
+
+      const rankZone = document.getElementById('all-agents-rank-zone');
+      rankZone.classList.remove('hidden');
+
+      rankZone.innerHTML = `
+        <div class="card" style="padding: 24px;">
+          <h3 style="margin-bottom: 16px;">🏆 Classement d’adéquation de tous les prestataires pour : "${project.titre}"</h3>
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Rang</th>
+                  <th>Entreprise</th>
+                  <th>Niveau</th>
+                  <th>Score Adéquation</th>
+                  <th>Verdict</th>
+                  <th>Points d'attention</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${ranked.map((item, idx) => `
+                  <tr>
+                    <td class="font-bold">#${idx + 1}</td>
+                    <td>
+                      <strong>${item.agent.raisonSociale}</strong>
+                      <div class="text-xs text-muted">CA : ${window.SignwUtils.formatFCFAShort(item.agent.caMoyen3ans)} • ${item.agent.ville}</div>
+                    </td>
+                    <td>${window.SignwUtils.getTierBadge(item.agent.niveau)}</td>
+                    <td class="font-bold text-brand" style="font-size: 1.1rem;">${item.eval.scoreAdequation} / 100</td>
+                    <td><span class="badge ${item.eval.verdict === 'adequat' ? 'badge-certifie' : (item.eval.verdict === 'adequat_sous_reserves' ? 'badge-certifie_avec_reserves' : 'badge-rejete')}">${item.eval.verdictLabel}</span></td>
+                    <td class="text-xs text-muted">${item.eval.pointsBloquants[0] || item.eval.pointsAttention[0] || 'Parfaitement conforme'}</td>
+                    <td>
+                      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('sim-agent-select').value='${item.agent.id}'; runSimulation(); window.scrollTo({top: 150, behavior: 'smooth'});">
+                        Voir analyse →
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      rankZone.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

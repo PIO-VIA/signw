@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" fill="#FFFFFF" rx="8" />
+  <g fill="#3B0D1A">
+    <!-- Corner 1 -->
+    <rect x="10" y="10" width="30" height="30" rx="4" />
+    <rect x="15" y="15" width="20" height="20" rx="2" fill="#FFFFFF" />
+    <rect x="20" y="20" width="10" height="10" rx="1" fill="#3B0D1A" />
+    <!-- Corner 2 -->
+    <rect x="80" y="10" width="30" height="30" rx="4" />
+    <rect x="85" y="15" width="20" height="20" rx="2" fill="#FFFFFF" />
+    <rect x="90" y="20" width="10" height="10" rx="1" fill="#3B0D1A" />
+    <!-- Corner 3 -->
+    <rect x="10" y="80" width="30" height="30" rx="4" />
+    <rect x="15" y="85" width="20" height="20" rx="2" fill="#FFFFFF" />
+    <rect x="20" y="90" width="10" height="10" rx="1" fill="#3B0D1A" />
+    <!-- Data blocks pattern -->
+    <rect x="50" y="15" width="8" height="8" />
+    <rect x="65" y="20" width="8" height="8" />
+    <rect x="50" y="32" width="16" height="8" />
+    <rect x="15" y="50" width="8" height="16" />
+    <rect x="30" y="55" width="12" height="8" />
+    <rect x="50" y="50" width="12" height="12" fill="#D99A1E" />
+    <rect x="70" y="50" width="15" height="8" />
+    <rect x="90" y="55" width="12" height="12" />
+    <rect x="50" y="70" width="8" height="15" />
+    <rect x="65" y="75" width="15" height="8" />
+    <rect x="50" y="95" width="15" height="10" />
+    <rect x="75" y="90" width="8" height="15" />
+    <rect x="90" y="85" width="15" height="8" />
+    <rect x="95" y="100" width="10" height="10" fill="#D99A1E" />
+  </g>
+</svg>

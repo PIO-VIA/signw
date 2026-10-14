@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constructeur de Formulaire d'Audit — signw Admin</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content" style="max-width: 1400px;">
+      <!-- En-tête -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <a href="secteurs.html" class="text-xs text-brand font-bold">← Retour aux secteurs</a>
+            <span class="text-muted text-xs">•</span>
+            <span class="badge badge-soumis text-xs">Moteur FormEngine v2.0</span>
+          </div>
+          <h2 style="margin: 0 0 4px;">Constructeur de Formulaires de Qualification</h2>
+          <span class="text-muted text-sm">Créez et ajustez les exigences documentaires et techniques par filière économique</span>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <a href="../agent/dossier.html" target="_blank" class="btn btn-secondary btn-sm" title="Ouvrir la vue candidat dans un nouvel onglet">
+            ↗ Tester côté Agent
+          </a>
+        </div>
+      </div>
+
+      <!-- Conteneur FormBuilder -->
+      <div id="form-builder-app">
+        <!-- Rendu dynamique via SignwFormBuilder.init() -->
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/score.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+  <script src="../../js/core/formrender.js"></script>
+  <script src="../../js/core/formbuilder.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['admin'])) return;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const secteurId = urlParams.get('secteur') || 'sec_btp';
+
+      window.SignwFormBuilder.init('form-builder-app', secteurId);
+    });
+  </script>
+</body>
+</html>

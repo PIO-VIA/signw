@@ -1,0 +1,986 @@
+================================================================================
+SIGNW — PROTOTYPE WEB (HTML / CSS / JS)
+SPÉCIFICATION COMPLÈTE POUR L'AGENT DE DÉVELOPPEMENT
+Version 1.0 — Octobre 2026
+================================================================================
+
+LIS CE DOCUMENT EN ENTIER AVANT D'ÉCRIRE LA MOINDRE LIGNE DE CODE.
+Tout ce qui est écrit ici est une exigence, sauf mention "OPTIONNEL".
+
+
+--------------------------------------------------------------------------------
+0. RÉSUMÉ EN 10 LIGNES
+--------------------------------------------------------------------------------
+- Produit : "signw", plateforme TIERS DE CONFIANCE pour les marchés.
+- Elle certifie des AGENTS (entreprises, prestataires, personnes) pour que le
+  PRINCIPAL (client, maître d'ouvrage, acheteur public) sache si l'agent a
+  réellement fait ce qu'il prétend et s'il est capable de réaliser un projet
+  donné pour un budget donné.
+- signw NE FAIT PAS l'audit elle-même dans l'application : la plateforme
+  (1) demande les pièces justificatives, (2) les range dans un dossier,
+  (3) fait vérifier ce dossier par une équipe d'AUDITEURS, (4) délivre ou refuse
+  une certification, (5) publie le résultat de façon transparente.
+- Premier secteur : BTP / construction pour les MARCHÉS PUBLICS (Cameroun).
+- Architecture extensible : l'ADMIN peut créer de nouveaux secteurs et
+  construire lui-même le formulaire de pièces à fournir (form builder).
+- 4 espaces : Public (visiteurs), Agent, Principal, Auditeur, + Admin.
+  (5 rôles au total, voir section 3.)
+- Technologie imposée : HTML + CSS + JavaScript PUR (vanilla). Pas de framework
+  de build, pas de backend. Données simulées en JS + localStorage.
+- Objectif : prototype "vite fait mais professionnel", démontrable en 5 minutes,
+  100 % fonctionnel hors-ligne en ouvrant index.html.
+- Langue de l'interface : FRANÇAIS (devise : FCFA / XAF).
+- L'ancienne interface (SIGNUUM, 2019) est jugée datée : on la remplace par
+  une UI moderne et une UX fluide (voir sections 4 et 5).
+- Le prototype doit raconter une HISTOIRE claire : "asymétrie d'information
+  réduite grâce à un tiers de confiance" (voir section 1).
+
+
+--------------------------------------------------------------------------------
+1. CONTEXTE ET PROBLÈME RÉSOLU (à connaître pour écrire les textes du site)
+--------------------------------------------------------------------------------
+1.1 Le problème : l'ASYMÉTRIE D'INFORMATION
+Sur un marché, le vendeur (l'agent) connaît la vraie qualité de ce qu'il offre ;
+l'acheteur (le principal) ne la connaît pas. Conséquences décrites en économie
+de l'information :
+  - Sélection adverse (Akerlof) : les bons prestataires sont noyés parmi les
+    mauvais, car l'acheteur ne sait pas les distinguer.
+  - Signalement / "signaling" (Michael Spence) : un agent compétent a intérêt à
+    émettre un signal crédible de sa qualité (ex. un diplôme, une certification).
+  - Filtrage / "screening" et asymétrie (Joseph Stiglitz) : le principal doit
+    mettre en place des mécanismes pour vérifier la qualité avant de contracter.
+  - Risque moral : l'agent peut ne pas livrer ce qu'il a promis après signature.
+Dans les marchés publics de BTP : entreprises "fantômes", matériel déclaré mais
+inexistant, références de chantiers gonflées, capacité financière insuffisante
+pour le montant du marché, travaux mal exécutés, surcoûts.
+
+1.2 La solution signw
+signw joue le rôle de TIERS DE CONFIANCE indépendant :
+  - Elle transforme des déclarations de l'agent en PREUVES vérifiées.
+  - Elle publie un SIGNAL crédible et standardisé (statut + score + badge).
+  - Elle permet au principal de tester l'ADÉQUATION entre un projet (budget Y,
+    besoins X) et la capacité réelle de l'agent (module "Adéquation projet").
+  - Résultat : principal et agent sont au MÊME NIVEAU D'INFORMATION.
+
+1.3 Ce que signw n'est PAS
+  - Pas une place de marché transactionnelle (pas de paiement de contrat).
+  - Pas un outil d'audit automatique : l'audit est humain (équipe d'auditeurs).
+    L'application organise, trace et rend transparent le processus.
+
+1.4 Message à faire passer sur la page d'accueil
+  Slogan principal : "Vérifiez avant de contracter."
+  Sous-titre : "signw certifie les entreprises et prestataires sur preuves, pour
+  que chaque marché soit attribué au bon acteur, au juste prix."
+
+
+--------------------------------------------------------------------------------
+2. CONTRAINTES TECHNIQUES (NON NÉGOCIABLES)
+--------------------------------------------------------------------------------
+2.1 Stack
+  - HTML5 sémantique, CSS3 (variables CSS, Grid, Flexbox), JavaScript ES2020+
+    en modules (<script type="module">) ou scripts classiques.
+  - AUCUN framework de build (pas de React, pas de npm obligatoire).
+  - Librairies externes autorisées UNIQUEMENT via CDN et seulement si utiles :
+      * Chart.js (graphiques)            — OPTIONNEL
+      * Lucide ou Font Awesome (icônes)  — recommandé (Lucide via CDN)
+      * Google Fonts (Inter + une police d'affichage)
+    Prévoir un fallback si le CDN est indisponible (les icônes peuvent aussi
+    être des SVG inline).
+  - Pas de backend : tout est simulé.
+
+2.2 Persistance
+  - Données initiales ("seed") dans /js/data/seed.js.
+  - Au premier chargement, copier le seed dans localStorage (clé "signw_db_v1").
+  - Toutes les actions (soumettre un dossier, valider une pièce, créer un
+    secteur...) modifient localStorage et se reflètent dans les autres espaces.
+  - Bouton "Réinitialiser la démo" (dans le pied de page et dans l'espace
+    admin) qui remet le seed.
+  - Entourer chaque accès localStorage de try/catch.
+
+2.3 Authentification SIMULÉE
+  - Page de connexion avec email + mot de passe + sélection du rôle.
+  - Aucune vraie sécurité : on vérifie contre les comptes du seed.
+  - Ajouter un bandeau "COMPTES DE DÉMO" sur la page de connexion avec des
+    boutons "Se connecter en tant que : Agent / Principal / Auditeur / Admin"
+    (un clic = connexion immédiate). INDISPENSABLE pour la démonstration.
+  - Session stockée dans localStorage ("signw_session").
+  - Garde de route : si un espace est ouvert sans bonne session, rediriger vers
+    login.html avec un message.
+
+2.4 Fichiers et arborescence imposée
+  signw/
+  ├── index.html                      (accueil public)
+  ├── login.html                      (connexion + création de compte)
+  ├── marches.html                    (liste publique des marchés/projets)
+  ├── marche-detail.html              (détail d'un marché + adéquation)
+  ├── annuaire.html                   (annuaire public des agents certifiés)
+  ├── agent-profil.html               (fiche publique d'un agent)
+  ├── secteurs.html                   (liste publique des secteurs)
+  ├── comment-ca-marche.html
+  ├── verifier.html                   (vérification d'un certificat par code)
+  ├── a-propos.html
+  ├── contact.html
+  ├── app/
+  │   ├── agent/
+  │   │   ├── dashboard.html
+  │   │   ├── dossier.html            (formulaire dynamique + dépôt pièces)
+  │   │   ├── mes-dossiers.html
+  │   │   ├── certificats.html
+  │   │   ├── messages.html
+  │   │   └── profil.html
+  │   ├── principal/
+  │   │   ├── dashboard.html
+  │   │   ├── mes-projets.html
+  │   │   ├── nouveau-projet.html
+  │   │   ├── adequation.html         (simulateur budget/capacité)
+  │   │   ├── comparateur.html        (comparer 2 à 3 agents)
+  │   │   └── favoris.html
+  │   ├── auditeur/
+  │   │   ├── dashboard.html
+  │   │   ├── file-attente.html
+  │   │   ├── audit.html              (poste de vérification d'un dossier)
+  │   │   └── historique.html
+  │   └── admin/
+  │       ├── dashboard.html
+  │       ├── utilisateurs.html
+  │       ├── secteurs.html           (liste des secteurs)
+  │       ├── form-builder.html       (constructeur de formulaire par secteur)
+  │       ├── affectations.html       (affecter dossiers aux auditeurs)
+  │       ├── certifications.html     (toutes les certifications)
+  │       ├── parametres.html         (barème de score, durée de validité)
+  │       └── journal.html            (journal d'audit / traçabilité)
+  ├── css/
+  │   ├── tokens.css                  (variables : couleurs, espacements, ombres)
+  │   ├── base.css                    (reset, typo, utilitaires)
+  │   ├── components.css              (boutons, cartes, badges, tables, modales)
+  │   ├── layout.css                  (header public, sidebar app, grilles)
+  │   └── pages.css                   (styles spécifiques)
+  ├── js/
+  │   ├── data/seed.js
+  │   ├── core/store.js               (accès localStorage, CRUD, événements)
+  │   ├── core/auth.js
+  │   ├── core/ui.js                  (toasts, modales, drawer, tabs, tooltips)
+  │   ├── core/layout.js              (injecte header/sidebar/footer communs)
+  │   ├── core/score.js               (calcul du score et de l'adéquation)
+  │   ├── core/formrender.js          (rend un formulaire à partir d'un schéma JSON)
+  │   ├── core/formbuilder.js
+  │   ├── core/utils.js               (formatage FCFA, dates FR, id, debounce)
+  │   └── pages/*.js                  (un fichier par page)
+  └── assets/
+      ├── img/ ...                    (voir section 9)
+      └── icons/
+
+  Règle : header, footer et sidebar sont écrits UNE SEULE FOIS dans layout.js et
+  injectés dans chaque page (évite la duplication).
+
+2.5 Qualité de code
+  - Code commenté en français, noms de variables en anglais ou français mais
+    cohérents.
+  - Pas de CSS inline sauf cas dynamique.
+  - Pas de console.error au chargement.
+  - Tout fonctionne en ouvrant index.html directement (protocole file://) :
+    donc PAS de fetch() de fichiers JSON locaux (bloqué par CORS en file://).
+    Les données sont en .js, pas en .json.
+
+
+--------------------------------------------------------------------------------
+3. RÔLES ET PERMISSIONS
+--------------------------------------------------------------------------------
+(L'ancienne version avait : Internaute, Utilisateur, Gestionnaire, Administrateur.
+ On les remplace par des rôles métier plus clairs.)
+
+R0  VISITEUR (non connecté)
+    - Voit : accueil, secteurs, annuaire public des agents certifiés, fiches
+      publiques, marchés publics, comment ça marche, vérification de certificat.
+    - Peut : créer un compte, se connecter, contacter signw.
+
+R1  AGENT (entreprise, prestataire, personne qui propose un service)
+    - Crée et remplit un dossier de certification pour un secteur.
+    - Dépose les pièces justificatives, suit le statut, répond aux demandes
+      de pièces complémentaires, télécharge son certificat, partage son lien
+      public de vérification, candidate à des marchés.
+
+R2  PRINCIPAL (client, maître d'ouvrage, acheteur public)
+    - Crée des projets/marchés (budget, secteur, exigences).
+    - Consulte l'annuaire, compare des agents, lance le test d'ADÉQUATION
+      projet/agent, met des agents en favoris, reçoit les candidatures.
+
+R3  AUDITEUR (équipe de vérification interne à signw)
+    - Reçoit des dossiers affectés, vérifie pièce par pièce (valider /
+      rejeter / demander complément, avec commentaire et niveau de risque),
+      planifie un audit terrain (visite de chantier, contrôle du matériel),
+      émet un avis final (recommandation) sur le dossier.
+
+R4  ADMIN
+    - Gère utilisateurs, secteurs, formulaires (form builder), affectation des
+      dossiers aux auditeurs, barème de score, paramètres, journal d'audit.
+    - Valide la décision finale de certification (principe des 4 yeux :
+      l'auditeur recommande, l'admin décide).
+
+
+--------------------------------------------------------------------------------
+4. DESIGN SYSTEM (UI)
+--------------------------------------------------------------------------------
+4.1 Intention visuelle
+  Sobre, institutionnelle, moderne, rassurante : "fintech/gov-tech de confiance".
+  Beaucoup d'air, hiérarchie typographique forte, cartes arrondies, ombres
+  douces, micro-animations discrètes. Éviter l'aspect "site de 2019" (bandeaux
+  défilants, onglets biseautés, dégradés lourds, texte minuscule).
+
+4.2 Héritage de marque à moderniser
+  L'ancien logo SIGNUUM : disque rayé rouge/orange avec deux "U" noirs et
+  jaunes. Couleurs historiques : bordeaux/marron foncé, orange doré, noir.
+  → On garde un clin d'œil (bordeaux + or) mais on passe à une palette plus
+  contemporaine. Le nom affiché est "signw" (minuscules, wordmark).
+  Générer un nouveau logo (prompt en section 9).
+
+4.3 Palette (tokens CSS à définir dans tokens.css)
+  --brand-900: #3B0D1A   (bordeaux très foncé — titres, sidebar)
+  --brand-700: #7A1B34   (bordeaux principal — boutons primaires)
+  --brand-600: #9A2A47
+  --brand-500: #B8405E
+  --brand-100: #F8E6EB   (fonds teintés)
+  --gold-500:  #D99A1E   (accent or — badges "certifié", highlights)
+  --gold-100:  #FBF1D9
+  --ink-900:   #14161A   (texte principal)
+  --ink-700:   #3A3F47
+  --ink-500:   #6B7280   (texte secondaire)
+  --ink-300:   #CBD0D8   (bordures)
+  --ink-100:   #F3F4F7   (fonds de page)
+  --white:     #FFFFFF
+  Sémantique :
+  --success: #1E8E5A   --success-bg: #E3F5EC
+  --warning: #C77700   --warning-bg: #FFF2DC
+  --danger:  #C0392B   --danger-bg:  #FCE8E5
+  --info:    #2563EB   --info-bg:    #E6EEFF
+  Mode sombre : OPTIONNEL (via prefers-color-scheme + variables). Si implémenté,
+  le tester sur toutes les pages. Sinon ne pas l'implémenter à moitié.
+  Contraste texte/fond ≥ 4.5:1 (WCAG AA).
+
+4.4 Typographie
+  - Titres / display : "Plus Jakarta Sans" ou "Sora" (700/800).
+  - Texte : "Inter" (400/500/600).
+  - Échelle : 12 / 14 / 16 / 18 / 20 / 24 / 32 / 40 / 56 px (utiliser clamp()
+    pour les titres hero).
+  - Interligne 1.5 pour le texte, 1.2 pour les titres.
+  - Corps de texte jamais < 14px.
+
+4.5 Espacements, rayons, ombres
+  - Grille d'espacement 4px : 4, 8, 12, 16, 24, 32, 48, 64, 96.
+  - Rayons : 8px (inputs, boutons), 16px (cartes), 24px (grands blocs), 999px
+    (badges/pills).
+  - Ombres : sm (cartes au repos), md (hover), lg (modales).
+  - Largeur max du contenu public : 1200px ; app : fluide avec sidebar 264px.
+
+4.6 Composants à créer (components.css + ui.js)
+  - Boutons : primaire (bordeaux), secondaire (contour), ghost, danger, icône ;
+    états hover / focus visible / disabled / loading (spinner).
+  - Champs : input, select, textarea, checkbox, radio, switch, date, nombre
+    avec unité (ex. FCFA), upload par glisser-déposer, champ avec aide + erreur.
+  - Badges de statut (voir 6.3) et badge de score (cercle avec valeur).
+  - Cartes : agent, marché, secteur, KPI, pièce.
+  - Tableaux : tri par colonne, recherche, filtres, pagination (côté client),
+    ligne cliquable, état vide illustré.
+  - Onglets, accordéons, stepper (étapes), timeline verticale, breadcrumb.
+  - Modale, drawer latéral (détail d'une pièce), toasts (succès/erreur/info),
+    tooltip, dropdown de profil, notifications (cloche avec compteur).
+  - Barre de progression, jauge circulaire (score), mini-graphiques (barres,
+    anneau).
+  - Skeleton loaders (simuler 300–600 ms de chargement sur les listes).
+  - États vides avec illustration + bouton d'action.
+
+4.7 Iconographie
+  Un seul jeu d'icônes cohérent (Lucide recommandé), trait 1.75px.
+
+4.8 Animations
+  - Transitions 150–250 ms (ease-out). Apparition douce des cartes au scroll
+    (IntersectionObserver). Compteurs animés sur les chiffres clés de l'accueil.
+  - Respecter prefers-reduced-motion (désactiver les animations).
+
+
+--------------------------------------------------------------------------------
+5. PRINCIPES UX
+--------------------------------------------------------------------------------
+- Un seul objectif principal par page, un seul bouton primaire visible.
+- Le visiteur comprend en 5 secondes : QUI est signw, POUR QUI, POURQUOI.
+- Parcours Agent en 3 clics : Connexion → Nouveau dossier → Dépôt de pièces.
+- Formulaires longs découpés en ÉTAPES avec sauvegarde automatique ("brouillon
+  enregistré il y a 3 s") et barre de progression.
+- Validation en ligne (au blur) avec messages explicites en français.
+- Chaque action destructive demande confirmation (modale).
+- Chaque action réussie → toast + mise à jour visuelle immédiate.
+- Toujours indiquer "où je suis" (breadcrumb, onglet actif, étape active).
+- Toujours indiquer "ce qu'il me reste à faire" (liste de tâches sur tableaux
+  de bord : ex. "3 pièces à fournir").
+- Transparence : afficher à l'agent POURQUOI une pièce est rejetée (commentaire
+  de l'auditeur visible) et au principal COMMENT le score est calculé (bouton
+  "Voir le détail du score").
+- Mobile-first : tout utilisable à 360px de large. Sidebar → menu hamburger /
+  tiroir. Tableaux → cartes empilées ou défilement horizontal propre.
+- Accessibilité : HTML sémantique, labels liés aux champs, focus visible,
+  navigation clavier complète (modales avec piège de focus, Échap pour fermer),
+  attributs aria (aria-live pour les toasts, aria-current pour la navigation),
+  alt sur toutes les images, ne pas transmettre l'info par la couleur seule
+  (badges = couleur + icône + texte).
+- Performance : images compressées (WebP), loading="lazy", pas de JS bloquant.
+- Textes d'interface courts, actifs, sans jargon ("Déposer une pièce", pas
+  "Procéder à l'upload du document justificatif").
+
+
+--------------------------------------------------------------------------------
+6. MODÈLE DE DONNÉES ET RÈGLES MÉTIER
+--------------------------------------------------------------------------------
+6.1 Entités (objets JS dans le seed ; ids de type "usr_001", "agt_001"...)
+
+User { id, nom, email, motDePasse(démo), role[agent|principal|auditeur|admin],
+       avatar, telephone, region, creeLe, actif }
+
+Agent (profil entreprise) { id, userId, raisonSociale, formeJuridique, rccm, niu,
+       secteurId, sousSecteurs[], ville, region, anneeCreation, effectif,
+       caMoyen3ans(FCFA), siteWeb, description, logo, statutCertification,
+       score(0-100), certificatId, dateCertification, dateExpiration }
+
+Principal { id, userId, organisation, type[ministère|commune|société d'État|
+            privé|ONG], region }
+
+Secteur { id, nom, icone, description, actif, formulaireId, couleur }
+
+FormSchema { id, secteurId, version, sections[ { id, titre, description,
+            champs[ Champ ] } ] }
+
+Champ { id, type[texte|texte_long|nombre|montant|date|liste|choix_multiple|
+        case_a_cocher|fichier|tableau_repetable], label, aide, obligatoire,
+        options[], unite, min, max, poids(0-10), regleDeVerification(texte),
+        piecesAcceptees[pdf|jpg|png], tailleMaxMo }
+
+Dossier { id, agentId, secteurId, formVersion, statut, reponses{champId:valeur},
+          piecesIds[], affecteAAuditeurId, scoreProvisoire, creeLe, soumisLe,
+          historique[ {date, acteur, action, commentaire} ] }
+
+Piece { id, dossierId, champId, nomFichier, typeMime, tailleKo, deposeeLe,
+        statutPiece[a_fournir|deposee|en_verification|validee|rejetee|
+        complement_demande], commentaireAuditeur, niveauRisque[faible|moyen|
+        eleve], verifieePar, verifieeLe }
+  (Le fichier réel n'est PAS stocké : on stocke seulement le nom/taille/type.
+   Simuler le dépôt par input type=file ou glisser-déposer et afficher un
+   aperçu factice.)
+
+Certification { id, agentId, dossierId, code(ex. "SGW-2026-00481"), niveau
+               [Bronze|Argent|Or|Avec réserves], score, delivreeLe, expireLe,
+               reserves[], statut[active|expiree|suspendue|revoquee],
+               signataire }
+
+Projet (marché) { id, principalId, titre, reference, secteurId, sousSecteur,
+                  description, budgetFCFA, delaiMois, region, dateLimite,
+                  exigences { caMinimum, experienceMinAns, nbProjetsSimilaires,
+                  materielRequis[ {type, quantiteMin} ], personnelCle[],
+                  certificationMinimale }, statut[brouillon|publie|en_evaluation|
+                  attribue|clos], candidaturesAgentIds[], agentChoisiId }
+
+Evaluation d'adéquation { id, projetId, agentId, scoreAdequation, details[],
+                          verdict[adequat|adequat_sous_reserves|insuffisant],
+                          calculeLe }
+
+Message { id, fromUserId, toUserId, dossierId?, texte, envoyeLe, lu }
+Notification { id, userId, type, texte, lien, lue, creeeLe }
+Journal { id, date, acteurId, action, cible, details }  (traçabilité admin)
+
+6.2 Cycle de vie d'un DOSSIER (machine à états — à respecter strictement)
+  brouillon ──(agent soumet)──► soumis
+  soumis ──(admin affecte un auditeur)──► en_verification
+  en_verification ──(auditeur demande compléments)──► pieces_incompletes
+  pieces_incompletes ──(agent redépose)──► en_verification
+  en_verification ──(besoin de terrain)──► audit_terrain_planifie
+  audit_terrain_planifie ──(visite faite)──► en_verification
+  en_verification ──(auditeur émet avis)──► en_decision
+  en_decision ──(admin valide)──► certifie | certifie_avec_reserves | rejete
+  certifie ──(date dépassée)──► expire
+  certifie ──(fraude/alerte)──► suspendu | revoque
+  rejete ──(agent corrige et resoumet)──► soumis (nouvelle version)
+  À chaque transition : entrée dans dossier.historique + Journal + Notification
+  au destinataire concerné.
+
+6.3 Badges de statut (couleur + icône + libellé)
+  Brouillon (gris) · Soumis (bleu) · En vérification (bleu) · Pièces
+  incomplètes (orange) · Audit terrain planifié (violet) · En décision (bleu)
+  · Certifié (vert + médaille) · Certifié avec réserves (or) · Rejeté (rouge)
+  · Expiré (gris barré) · Suspendu (orange foncé) · Révoqué (rouge foncé).
+
+6.4 Calcul du SCORE DE CONFIANCE (0–100) — js/core/score.js
+  Le score est la somme pondérée de 5 piliers (barème modifiable par l'admin
+  dans parametres.html ; valeurs par défaut) :
+    1. Conformité administrative et juridique ........ 20 pts
+       (RCCM, NIU, quitus fiscal, CNPS, non-faillite, agrément sectoriel)
+    2. Capacité financière ........................... 25 pts
+       (CA moyen 3 ans, bilans, attestation bancaire, endettement)
+    3. Capacité technique et matériel ................ 25 pts
+       (liste du matériel avec preuves de propriété, adéquation au secteur)
+    4. Références et expérience ...................... 20 pts
+       (projets similaires avec PV de réception / attestations de bonne
+        exécution, ancienneté, nombre de projets)
+    5. Ressources humaines clés ...................... 10 pts
+       (CV, diplômes, contrats du personnel clé)
+  Chaque pilier = (somme des points des pièces VALIDÉES) / (points possibles).
+  Une pièce "validée" rapporte 100 % de ses points ; "validée avec risque
+  moyen" 70 % ; "risque élevé" 40 % ; rejetée/non fournie 0 %.
+  Niveaux : Or ≥ 85 · Argent 70–84 · Bronze 55–69 · < 55 : non certifiable
+  (ou "avec réserves" si ≥ 55 et pièces critiques manquantes mineures).
+  Afficher le score en jauge circulaire + le détail par pilier (barres).
+  Chaque champ du form builder a un "poids" qui alimente ce calcul et un
+  "pilier" (liste déroulante) auquel il est rattaché.
+
+6.5 Calcul de l'ADÉQUATION projet ↔ agent (le cœur de la valeur — adequation.js)
+  Entrées : un Projet (budget Y, exigences) et un Agent certifié.
+  Règles (chacune produit un sous-score 0–100 et un message clair) :
+   a) Capacité financière : ratio = budget / caMoyen3ans. Idéal ≤ 0.5 ;
+      acceptable ≤ 1 ; risqué ≤ 1.5 ; insuffisant > 1.5.
+   b) Charge en cours : somme des marchés en cours de l'agent + budget du projet
+      comparée à 2 × caMoyen3ans (alerte "surcharge" au-delà).
+   c) Expérience similaire : nb de projets de nature et taille comparables
+      (≥ 50 % du budget) vs exigence du projet.
+   d) Matériel : chaque équipement requis vs possédé ET vérifié (afficher un
+      tableau requis / possédé / vérifié, avec coche verte ou croix rouge).
+   e) Personnel clé : profils requis vs profils vérifiés.
+   f) Niveau de certification vs certification minimale exigée.
+   g) Cohérence prix : OPTIONNEL — comparer le budget au coût moyen au m²/km
+      du secteur (données fictives du seed) et signaler budget sous-évalué.
+  Verdict global : ≥ 80 "Adéquat" (vert) · 60–79 "Adéquat sous réserves"
+  (or) · < 60 "Insuffisant" (rouge). Afficher les points bloquants en tête.
+  Texte final lisible par un non-technicien : "Cet agent peut réaliser le projet
+  pour 480 M FCFA ? OUI avec réserves : matériel de terrassement insuffisant".
+
+6.6 Règles diverses
+  - Validité d'une certification : 12 mois (paramétrable).
+  - Un agent peut avoir plusieurs dossiers (un par secteur), un seul actif par
+    secteur.
+  - Code de vérification public : "SGW-AAAA-NNNNN". La page verifier.html
+    affiche : valide / expiré / suspendu / inconnu.
+  - Format monétaire : "480 000 000 FCFA" ; abréviations "480 M FCFA" dans les
+    cartes/graphiques. Dates : "14 octobre 2026".
+
+
+--------------------------------------------------------------------------------
+7. PAGES — SPÉCIFICATION DÉTAILLÉE
+--------------------------------------------------------------------------------
+
+=== 7.A ESPACE PUBLIC ===
+
+7.A.1 index.html — Accueil
+  Navigation (header sticky, transparent puis blanc au scroll) :
+    Logo signw | Secteurs | Marchés | Annuaire | Comment ça marche | À propos
+    | [Se connecter] (ghost) | [Créer un compte] (primaire)
+    (Ancienne nav : ACCUEIL, MARCHÉS, SECTEURS, SE CONNECTER, À PROPOS,
+     TERMS OF USE, CONTACTS + réseaux sociaux + barre de recherche.)
+  Sections dans l'ordre :
+   1. HERO : titre "Vérifiez avant de contracter.", sous-titre, 2 boutons
+      ("Je suis un agent — Me faire certifier" / "Je suis un maître d'ouvrage —
+      Vérifier un prestataire"), barre de recherche rapide ("Rechercher une
+      entreprise, un code de certificat..."), image hero (voir section 9),
+      3 mini-badges de confiance ("Audit indépendant", "Preuves vérifiées",
+      "Transparence publique").
+   2. CHIFFRES CLÉS animés : agents certifiés, dossiers vérifiés, pièces
+      contrôlées, milliards FCFA de marchés sécurisés (valeurs du seed).
+   3. LE PROBLÈME / LA SOLUTION : comparaison visuelle "Sans signw" (acheteur
+      dans le flou, risque de surcoût et de défaut) vs "Avec signw" (même
+      niveau d'information). 2 colonnes avec icônes.
+   4. COMMENT ÇA MARCHE en 4 étapes (stepper horizontal) :
+      1) L'agent dépose ses pièces → 2) L'équipe d'auditeurs vérifie → 3) signw
+      certifie et publie le score → 4) Le maître d'ouvrage décide en confiance.
+   5. SECTEURS : cartes (BTP actif + Énergie, Santé, Agriculture, Numérique en
+      "bientôt"/actifs selon seed) avec bouton "Voir le secteur".
+   6. AGENTS CERTIFIÉS À LA UNE : carrousel/grille de 6 cartes (logo, nom,
+      badge niveau, score, secteur, ville) → lien fiche.
+   7. SIMULATEUR RAPIDE D'ADÉQUATION (teaser) : choisir secteur + saisir budget
+      → résultat fictif "x agents compatibles" avec bouton vers l'annuaire.
+   8. TÉMOIGNAGES / USAGES (3 cartes, textes fictifs plausibles, avatars).
+   9. FAQ en accordéon (6 questions : "signw audite-t-elle elle-même ?",
+      "Combien de temps dure une certification ?", "Qui peut se faire
+      certifier ?", "Les pièces sont-elles confidentielles ?", etc.).
+   10. APPEL À L'ACTION final (bandeau bordeaux).
+   11. FOOTER : liens rapides, contacts (Douala, Yaoundé — adresses/téléphones
+       fictifs), partenaires (logos génériques), newsletter (formulaire
+       simulé), mentions "© 2026 signw".
+  Ne PAS reprendre : bannières défilantes automatiques, onglets "MENU 5/6/7"
+  vides, texte "Lorem ipsum", barre de recherche isolée sans contexte.
+
+7.A.2 login.html — Connexion / Création de compte
+  Mise en page en 2 colonnes : à gauche visuel de marque + argument de
+  confiance ; à droite carte avec onglets "Se connecter" / "Créer un compte".
+  Connexion : email, mot de passe (avec œil afficher/masquer), "Se souvenir de
+  moi", lien "Mot de passe oublié" (simulé), sélecteur de rôle sous forme de
+  4 tuiles-radio (Agent / Principal / Auditeur / Admin) plutôt qu'un dropdown.
+  Bloc "Comptes de démo" avec 4 boutons de connexion instantanée.
+  Création de compte (pas à pas, 3 étapes) :
+   1) Choix du profil : Agent (je propose des services) ou Principal (je
+      cherche un prestataire).
+   2) Informations : nom, email, téléphone, mot de passe (jauge de force),
+      organisation, région, photo de profil/logo (upload facultatif).
+   3) Confirmation + acceptation des conditions → compte créé → redirection
+      vers le tableau de bord du rôle avec un message de bienvenue.
+  (Ancienne version : champs Email, Mot de passe, Rôle (dropdown), et à la
+   création : Nom, Email, Mot de passe, Photo de profil.)
+
+7.A.3 secteurs.html — Secteurs d'activité
+  Grille de cartes de secteurs (lues dans la base → inclut ceux créés par
+  l'admin). Filtre : tous / actifs / bientôt. Clic → section détaillée : pièces
+  typiquement requises, nombre d'agents certifiés, exemple de score.
+
+7.A.4 marches.html — Marchés publics (ancien menu "MARCHÉS")
+  Liste filtrable de projets publiés : secteur, région, fourchette de budget
+  (slider double), date limite, statut, certification minimale exigée.
+  Cartes ou tableau (bascule). Tri : plus récents, budget, date limite.
+  Recherche plein texte. Pagination 9/page. Un visiteur voit les infos
+  publiques ; "Candidater" demande une connexion Agent.
+
+7.A.5 marche-detail.html
+  En-tête (titre, référence, organisation, budget, délai, statut), onglets :
+  Description · Exigences · Agents candidats · Calendrier. Sur l'onglet "Agents
+  candidats", chaque agent affiche son badge, son score et un bouton "Tester
+  l'adéquation" (visible pour Principal connecté) → ouvre le détail (6.5).
+  Bouton "Candidater" pour Agent.
+
+7.A.6 annuaire.html — Annuaire des agents certifiés
+  Filtres latéraux : secteur, région, niveau (Or/Argent/Bronze), score minimum,
+  statut de validité, CA minimum. Tri : score, récent, nom. Cartes agents
+  (logo, nom, ville, badges, score, 3 tags de spécialité, bouton "Voir la
+  fiche", cœur favori pour Principal). Bouton "Comparer" (coche jusqu'à 3
+  agents → barre flottante "Comparer (2)").
+
+7.A.7 agent-profil.html — Fiche publique d'un agent
+  Bandeau : logo, raison sociale, badge, jauge de score, boutons
+  ("Tester l'adéquation", "Ajouter aux favoris", "Télécharger le certificat").
+  Onglets :
+   - Vue d'ensemble : description, chiffres (effectif, ancienneté, CA moyen).
+   - Certification : détail par pilier (barres), liste des pièces vérifiées
+     (SANS rendre accessibles les pièces confidentielles : afficher "Vérifié le
+     12/09/2026 par signw"), réserves éventuelles, date d'expiration.
+   - Références : projets réalisés vérifiés (titre, client, montant, année,
+     statut "vérifié par PV de réception").
+   - Matériel vérifié : tableau (type, quantité, preuve vérifiée oui/non).
+   - Historique de certification (timeline).
+  Encadré "Pourquoi lui faire confiance ?" listant 3 signaux clés.
+
+7.A.8 verifier.html — Vérifier un certificat
+  Champ code (ex. SGW-2026-00481), bouton "Vérifier". Résultat en carte :
+  valide (vert) / expiré / suspendu / introuvable (rouge), avec agent, niveau,
+  dates. Prévoir un lien/QR (image fictive) renvoyant vers cette page avec
+  ?code=... pré-rempli.
+
+7.A.9 comment-ca-marche.html — Explication détaillée en 4 phases avec schéma,
+  rôles (Agent/Auditeur/Principal/Admin), principe de séparation (l'auditeur
+  recommande, l'admin décide), politique de confidentialité des pièces.
+
+7.A.10 a-propos.html (mission, vision, ancrage théorique en 3 phrases :
+  asymétrie d'information, signalement, filtrage) et contact.html (formulaire
+  simulé + coordonnées + carte statique ; validation et toast de confirmation).
+
+
+=== 7.B ESPACE AGENT (sidebar : Tableau de bord · Mes dossiers · Nouveau dossier
+    · Mes certificats · Marchés · Messages · Mon profil · Aide) ===
+
+7.B.1 app/agent/dashboard.html
+  - Bandeau de bienvenue + carte "PROCHAINE ACTION" (ex. "Déposer 3 pièces
+    manquantes — dossier BTP").
+  - KPI : statut de certification actuel, score, jours avant expiration,
+    pièces à fournir, messages non lus.
+  - Progression du dossier en cours (stepper : Brouillon → Soumis →
+    Vérification → Décision → Certifié) avec étape active surlignée.
+  - Liste "À faire" (checklist cliquable).
+  - Marchés recommandés (3 cartes basées sur secteur/score).
+  - Fil d'activité (timeline des 8 derniers événements).
+
+7.B.2 app/agent/dossier.html — Formulaire de certification
+  Rendu DYNAMIQUE par formrender.js à partir du FormSchema du secteur choisi
+  (donc modifiable par l'admin). Mise en page : colonne gauche = liste des
+  sections (avec ✓ quand complètes), centre = champs de la section active,
+  colonne droite (desktop) = aide contextuelle + "Pourquoi cette pièce ?" +
+  points rapportés par la pièce.
+  Fonctions : sauvegarde automatique, barre de progression globale (% de
+  champs obligatoires remplis), upload par glisser-déposer avec aperçu (nom,
+  taille, icône du type), bouton "remplacer/supprimer", tableau répétable (ex.
+  matériel : ligne = type, marque, quantité, année, preuve de propriété à
+  joindre ; références : projet, client, montant, année, PV à joindre),
+  validations (formats RCCM/NIU simulés, montants, dates), récapitulatif final
+  avant soumission, case de certification sur l'honneur, bouton "Soumettre pour
+  vérification" (désactivé tant que les champs obligatoires sont incomplets,
+  avec liste claire de ce qui manque). Après soumission : écran de succès +
+  prochaine étape expliquée.
+  Cas "pièces incomplètes" : bandeau orange en haut listant les pièces
+  rejetées avec le commentaire de l'auditeur ; seules ces pièces sont
+  réouvertes.
+
+7.B.3 app/agent/mes-dossiers.html — tableau des dossiers (secteur, version,
+  statut, score, dernière mise à jour, action), détail en drawer avec timeline.
+7.B.4 app/agent/certificats.html — cartes de certificats (niveau, code, dates),
+  boutons "Télécharger (PDF simulé — ouvrir une page d'impression stylée)",
+  "Copier le lien de vérification", "Partager". Le certificat visuel doit être
+  beau (cadre, médaille, signature, QR fictif) et imprimable (@media print).
+7.B.5 app/agent/messages.html — messagerie simple : liste de conversations à
+  gauche (avec l'auditeur/admin, par dossier), fil à droite, zone de saisie.
+7.B.6 app/agent/profil.html — édition du profil entreprise (logo, description,
+  coordonnées), préférences de notification, changement de mot de passe (simulé).
+
+
+=== 7.C ESPACE PRINCIPAL (sidebar : Tableau de bord · Mes projets · Nouveau
+    projet · Annuaire · Comparateur · Favoris · Messages · Profil) ===
+
+7.C.1 dashboard : KPI (projets actifs, candidatures reçues, agents favoris,
+  alertes), graphique du budget engagé par statut, derniers projets, agents
+  recommandés (adéquation élevée), alertes (ex. "Le certificat de X expire dans
+  20 jours").
+7.C.2 mes-projets : tableau + carte ; création/édition ; statut ; nb de
+  candidats ; actions (publier, clore, attribuer).
+7.C.3 nouveau-projet : assistant en 4 étapes (Infos générales → Budget & délai
+  → Exigences (CA min, expérience, matériel requis ajoutable en lignes,
+  personnel clé, certification minimale) → Récapitulatif & publication).
+  Après publication : suggestion automatique des agents les plus adéquats.
+7.C.4 adequation.html : le SIMULATEUR. Choisir un projet (ou saisir budget +
+  secteur librement) + choisir un agent → résultat selon 6.5 :
+  jauge globale, verdict en grand, tableau des critères avec sous-scores et
+  icônes, "points bloquants", "points d'attention", phrase de synthèse, bouton
+  "Exporter la synthèse" (page imprimable). Permettre aussi "Classer tous les
+  agents pour ce projet" (tableau classé par adéquation).
+7.C.5 comparateur : tableau côte à côte de 2–3 agents (score, piliers, CA,
+  matériel vérifié, références, adéquation au projet choisi) avec la meilleure
+  valeur surlignée par ligne.
+7.C.6 favoris : liste d'agents sauvegardés avec notes personnelles.
+
+
+=== 7.D ESPACE AUDITEUR (sidebar : Tableau de bord · File d'attente · Mes
+    audits · Audits terrain · Historique) ===
+
+7.D.1 dashboard : dossiers affectés, SLA (délai restant par dossier, code
+  couleur), charge de travail, pièces vérifiées cette semaine, prochaines
+  visites terrain.
+7.D.2 file-attente : tableau des dossiers affectés (agent, secteur, date de
+  soumission, priorité, % de pièces vérifiées, échéance), filtres, bouton
+  "Ouvrir".
+7.D.3 audit.html — POSTE DE VÉRIFICATION (écran le plus soigné côté auditeur)
+  Mise en page 3 zones :
+   - Gauche : liste des pièces groupées par pilier, avec statut/couleur et
+     progression globale.
+   - Centre : visionneuse de la pièce (afficher une image/PDF factice ou un
+     aperçu générique) + les informations déclarées par l'agent à côté
+     (valeur déclarée vs ce qui est lisible sur la pièce).
+   - Droite : panneau de décision pour la pièce : [Valider] [Rejeter]
+     [Demander un complément], niveau de risque (faible/moyen/élevé),
+     commentaire obligatoire si rejet/complément, "règle de vérification"
+     rappelée (ex. "Vérifier que la date de validité est postérieure à ce
+     jour"), raccourcis clavier (V = valider, R = rejeter, flèches = pièce
+     suivante).
+  Barre du bas : score provisoire recalculé en direct, bouton "Planifier un
+  audit terrain" (modale : date, lieu, objet, équipe), bouton "Émettre l'avis
+  final" (recommandation : certifier / certifier avec réserves / rejeter +
+  synthèse écrite + liste de réserves). Interdire l'avis final tant que des
+  pièces sont en statut "déposée/en vérification" (message explicite).
+7.D.4 historique : audits terminés, recherche, export CSV simulé.
+
+
+=== 7.E ESPACE ADMIN (sidebar : Tableau de bord · Utilisateurs · Secteurs &
+    formulaires · Affectations · Certifications · Paramètres · Journal) ===
+
+7.E.1 dashboard : KPI globaux, entonnoir des dossiers par statut (graphique),
+  délai moyen de certification, répartition par secteur (anneau), dossiers
+  en attente d'affectation, décisions à valider, alertes (certifs qui expirent),
+  activité récente.
+7.E.2 utilisateurs : tableau (nom, rôle, statut, dernière connexion), créer /
+  modifier / suspendre / réinitialiser le mot de passe (simulé), filtres par
+  rôle, création de comptes Auditeur.
+7.E.3 secteurs.html (admin) : liste des secteurs, bouton "Ajouter un secteur"
+  (modale : nom, icône à choisir dans une grille, couleur, description, actif
+  ou "bientôt"), actions modifier / désactiver / dupliquer. Chaque secteur
+  indique : nb de dossiers, version du formulaire.
+7.E.4 form-builder.html — CONSTRUCTEUR DE FORMULAIRE (fonction phare, la
+  soigner) pour un secteur choisi :
+   - Colonne gauche : palette de types de champs (texte, texte long, nombre,
+     montant FCFA, date, liste déroulante, choix multiple, case à cocher,
+     dépôt de fichier, tableau répétable) à glisser (ou cliquer pour ajouter).
+   - Centre : canevas du formulaire en sections ; réorganisation par
+     glisser-déposer (HTML5 drag & drop) ; ajouter / renommer / supprimer /
+     dupliquer sections et champs.
+   - Colonne droite : propriétés du champ sélectionné (label, aide,
+     obligatoire, unité, options, types de fichier acceptés, taille max, pilier
+     de score rattaché, poids 0–10, règle de vérification pour l'auditeur).
+   - Onglets en haut : "Édition" / "Aperçu (comme l'agent)" / "JSON".
+   - Aperçu en direct : rendu via formrender.js avec le même schéma.
+   - Boutons : Enregistrer le brouillon, Publier une nouvelle version
+     (incrémente "version", les dossiers existants gardent leur version),
+     Annuler, "Partir d'un modèle" (BTP prérempli, vierge, dupliquer un autre
+     secteur).
+   - Contrôles : un champ doit avoir un label ; au moins un champ obligatoire ;
+     avertir si la somme des poids par pilier est nulle.
+   - Le schéma est un objet JSON (voir 6.1) : l'exporter / l'importer en JSON.
+7.E.5 affectations : liste des dossiers soumis non affectés ; choisir un
+  auditeur (menu avec charge actuelle) ; affectation en lot ; priorité ;
+  échéance (SLA par défaut 15 jours ouvrés).
+7.E.6 certifications : tableau de toutes les certifications, décision finale
+  (écran "Décisions en attente" : lit l'avis de l'auditeur, bouton
+  Certifier / Certifier avec réserves / Rejeter + motif), actions suspendre /
+  révoquer / renouveler.
+7.E.7 parametres : barème des 5 piliers (curseurs dont la somme = 100),
+  seuils des niveaux, durée de validité, SLA, textes des e-mails simulés.
+7.E.8 journal : table chronologique inaltérable (lecture seule) de toutes les
+  actions importantes (qui, quoi, quand, sur quoi), filtres par acteur, type,
+  date, export CSV simulé.
+
+
+--------------------------------------------------------------------------------
+8. DONNÉES DE DÉMO (seed) — À CRÉER, RÉALISTES ET COHÉRENTES
+--------------------------------------------------------------------------------
+Contexte : Cameroun. Régions : Centre, Littoral, Ouest, Nord-Ouest, Sud-Ouest,
+Nord, Adamaoua, Est, Sud, Extrême-Nord. Villes : Yaoundé, Douala, Bafoussam,
+Garoua, Bamenda, Buea, Bertoua, Ebolowa.
+Toutes les entreprises, personnes, RCCM, NIU, téléphones sont FICTIFS (ne
+jamais utiliser de vraies entreprises ni de vraies personnes).
+
+8.1 Comptes de démo (mot de passe "demo1234" pour tous)
+  agent@signw.demo      → Agent "BâtiPlus Cameroun SARL" (Douala), Certifié Or
+  agent2@signw.demo     → Agent "Sahel Travaux & Routes" (Garoua), dossier en
+                          état "pièces incomplètes" (pour démontrer le flux)
+  principal@signw.demo  → Principal "Mairie de Bafoussam" (commune)
+  auditeur@signw.demo   → Auditeur "A. Nkoulou"
+  auditeur2@signw.demo  → Auditeur "S. Fotso"
+  admin@signw.demo      → Admin "Admin signw"
+
+8.2 Volume minimal
+  - 14 agents (dont 8 certifiés : 3 Or, 3 Argent, 2 Bronze ; 2 avec réserves ;
+    2 en vérification ; 1 rejeté ; 1 expiré). Spécialités BTP : routes,
+    bâtiments, hydraulique/assainissement, ouvrages d'art, électrification,
+    aménagements urbains.
+  - 3 principaux (commune, ministère, société d'État).
+  - 8 projets/marchés BTP (budgets de 45 M à 2,4 Md FCFA) à différents statuts.
+  - 25 dossiers ou plus au total pour alimenter tableaux et graphiques.
+  - 60 pièces avec statuts variés ; commentaires d'auditeurs réalistes
+    ("Attestation de non-faillite expirée depuis le 03/06/2026 — merci de
+    fournir une version à jour").
+  - Secteurs : BTP/Construction (actif, formulaire complet), Énergie
+    (actif, formulaire court), Agriculture & Agro-industrie (actif, court),
+    Numérique & Services IT (bientôt), Santé (bientôt), Transport & Logistique
+    (bientôt).
+
+8.3 Formulaire BTP par défaut (FormSchema "form_btp_v1") — sections et champs
+  S1 Identité & conformité administrative (Pilier 1)
+     Raison sociale · Forme juridique · RCCM (fichier) · NIU / carte de
+     contribuable (fichier) · Attestation de non-faillite (fichier, date de
+     validité) · Quitus fiscal (fichier) · Attestation CNPS (fichier) ·
+     Agrément sectoriel (ex. catégorie/classe d'agrément du ministère des
+     travaux publics — libellé générique) (fichier + classe)
+  S2 Capacité financière (Pilier 2)
+     CA des 3 derniers exercices (montants) · Bilans certifiés (3 fichiers) ·
+     Attestation de solvabilité bancaire (fichier) · Capacité d'autofinancement
+     (montant) · Marchés en cours (tableau répétable : intitulé, client,
+     montant, avancement %)
+  S3 Capacité technique & matériel (Pilier 3)
+     Tableau matériel (type [pelle hydraulique, bulldozer, niveleuse, camion
+     benne, bétonnière, grue, compacteur, groupe électrogène...], marque,
+     quantité, année, propriétaire/location, preuve [carte grise / facture /
+     contrat de location]) · Atelier / dépôt (adresse + photos) · Certification
+     qualité (ISO 9001, facultatif)
+  S4 Références & expérience (Pilier 4)
+     Tableau références (projet, maître d'ouvrage, localité, montant, année,
+     PV de réception [fichier], attestation de bonne exécution [fichier]) ·
+     Nombre d'années d'expérience · Contentieux éventuels (oui/non + détail)
+  S5 Personnel clé (Pilier 5)
+     Tableau personnel (nom, fonction [conducteur de travaux, ingénieur génie
+     civil, chef de chantier, topographe, HSE...], diplôme [fichier], CV
+     [fichier], ancienneté) · Effectif permanent / temporaire
+  S6 Déclaration sur l'honneur : case à cocher + signature (nom saisi + date).
+
+
+--------------------------------------------------------------------------------
+9. IMAGES À OBTENIR OU À GÉNÉRER (avec prompts)
+--------------------------------------------------------------------------------
+Règles générales
+  - Format WebP (fallback JPG), poids ≤ 250 Ko par image sauf hero ≤ 400 Ko.
+  - Nommage exact comme ci-dessous, rangées dans assets/img/.
+  - Pas de texte incrusté dans les images générées (le texte est en HTML).
+  - Pas de logos de marques réelles. Pas de visages de personnalités.
+  - Style photo : lumière naturelle chaude, contexte africain central
+    (Cameroun), personnes crédibles, tenues de chantier conformes (casque, gilet).
+  - Si banque d'images (Unsplash/Pexels/Pixabay) : n'utiliser que des images
+    libres de droits ; ajouter l'attribution dans a-propos.html.
+  - Si génération IA : utiliser les prompts ci-dessous (anglais, plus fiables) ;
+    ajouter en négatif : "no text, no watermark, no logo, no distorted hands,
+    no extra fingers".
+  - Pour toute image non obtenue, utiliser un placeholder dégradé SVG propre
+    (jamais d'image cassée).
+
+9.1 Branding
+  logo-signw.svg (logo complet) et logo-mark.svg (symbole seul), versions
+  claire et sombre.
+  PROMPT LOGO : "Minimal modern logo mark for a trust and certification
+  platform called 'signw'. A rounded shield-like shape combined with a subtle
+  checkmark formed by negative space, deep burgundy (#7A1B34) with a small gold
+  (#D99A1E) accent, flat vector, clean geometric lines, plenty of white space,
+  professional govtech/fintech look, white background, no gradients, no text."
+  (Le wordmark "signw" est ensuite composé en HTML/SVG avec la police
+   "Plus Jakarta Sans" 800.)
+  favicon.png 64×64 à partir du symbole.
+
+9.2 Accueil
+  hero-bg.webp (1920×1080)
+  PROMPT : "Wide cinematic photo of a modern construction site in Central Africa
+  at golden hour, a civil engineer in a white helmet and reflective vest
+  reviewing documents on a tablet next to an excavator, partially built concrete
+  building in the background, warm light, shallow depth of field, professional
+  editorial photography, space on the left for text overlay."
+  hero-card.webp (900×1100, portrait, optionnel)
+  PROMPT : "Portrait of two African professionals, a woman in a business suit
+  and a man in a safety helmet, shaking hands at a building site, trust and
+  agreement, soft natural light, professional corporate photography."
+
+9.3 Secteurs (800×600 chacun)
+  sector-btp.webp — "Aerial view of a road construction project in Cameroon with
+  heavy machinery and workers, red laterite soil, green vegetation, clear sky,
+  photorealistic."
+  sector-energy.webp — "Solar panel field and a small electrical substation in
+  an African landscape at sunrise, clean modern energy infrastructure,
+  photorealistic."
+  sector-agri.webp — "Large cocoa and plantain plantation in Cameroon with
+  workers harvesting, lush green, morning light, photorealistic."
+  sector-digital.webp — "Young African developers working in a bright modern
+  co-working space with laptops, collaborative atmosphere, photorealistic."
+  sector-health.webp — "Modern regional hospital building exterior in Africa
+  with medical staff in front, clean architecture, daylight, photorealistic."
+  sector-logistics.webp — "Container trucks and a port crane at the Douala
+  harbor style logistics terminal at dusk, photorealistic."
+
+9.4 Section "problème / solution" et "comment ça marche" (illustrations, SVG ou
+  PNG transparent, style cohérent : flat illustration, bordeaux/or/gris)
+  illus-asymmetry.webp — "Flat vector illustration of two people on either side
+  of a fog wall, one holding a document with a question mark, the other holding
+  a briefcase, symbolizing information asymmetry, burgundy gold and gray palette,
+  minimalist, no text."
+  illus-trust.webp — "Flat vector illustration of the same two people, fog
+  cleared, a central glowing certification badge with a checkmark between them
+  on a table, symbolizing shared information and trust, burgundy gold and gray
+  palette, minimalist, no text."
+  step-1-upload.svg / step-2-audit.svg / step-3-certify.svg / step-4-decide.svg
+  — 4 icônes/illustrations simples (document+flèche, loupe sur document, médaille
+  avec coche, balance/poignée de main). Si SVG icônes Lucide suffisent, les
+  utiliser à grande taille (64px) dans un cercle teinté.
+
+9.5 Avatars et logos fictifs
+  avatar-01..avatar-12.webp (256×256)
+  PROMPT (varier genre, âge, tenue) : "Friendly professional headshot portrait of
+  an African [woman/man] in their [30s/40s/50s], neutral soft background,
+  natural smile, business casual, studio lighting, photorealistic."
+  Ces avatars servent aux témoignages, utilisateurs, auditeurs, principaux.
+  company-logo-01..company-logo-14.svg (ou .webp 200×200) — logos FICTIFS pour
+  les 14 agents.
+  PROMPT : "Simple flat logo mark for a construction company named '[nom]',
+  geometric shape, single or two-color, vector, white background, no text."
+  partner-01..partner-08.svg : logos génériques gris (rectangle + forme) pour la
+  section partenaires (jamais de vrais logos).
+
+9.6 États vides et feedback (SVG/PNG 400×300)
+  empty-no-files.webp — "Minimal flat illustration of an empty folder with a
+  gentle shadow, burgundy and gold accents, light background, no text."
+  empty-no-results.webp — "Minimal flat illustration of a magnifying glass over
+  a blank page, light background, burgundy accents, no text."
+  success-certified.webp — "Flat illustration of a golden medal with a checkmark
+  and subtle confetti, burgundy and gold palette, no text."
+  error-generic.webp — "Flat illustration of a document with a small warning
+  triangle, soft red accent, light background, no text."
+
+9.7 Certificat (pour le rendu imprimable)
+  certificate-seal.svg — sceau circulaire bordeaux/or (peut être dessiné en
+  SVG par code : cercle, anneau crénelé, médaille centrale).
+  qr-placeholder.svg — faux QR (généré en SVG ou motif de carrés aléatoires).
+  certificate-bg.webp (1240×1754, A4 portrait) — "Elegant subtle guilloche
+  border pattern in burgundy and gold on an off-white paper background, formal
+  certificate style, center left empty, no text."
+
+9.8 Pages internes
+  principal-hero.webp / agent-hero.webp (bannières de tableau de bord 1200×300,
+  très sobres, floues) — "Soft abstract blurred shapes in burgundy and gold
+  tones, subtle gradient, modern dashboard header background, no text."
+  chantier-01..chantier-06.webp (800×600) pour les références des agents —
+  "Photo of a [completed road / school building / bridge / water treatment
+  plant / market hall / urban drainage works] in Cameroon, photorealistic,
+  daylight."
+  doc-preview-01..doc-preview-04.webp (800×1100) pour simuler la visionneuse de
+  pièces de l'auditeur — "Photo of an official-looking administrative document
+  page lying on a desk, generic placeholder content, blurred text, no readable
+  names, no real logos, top view, soft light" (attestation, bilan, carte grise,
+  PV de réception).
+
+
+--------------------------------------------------------------------------------
+10. COPYWRITING (ton et exemples)
+--------------------------------------------------------------------------------
+Ton : clair, factuel, rassurant, institutionnel mais humain. Tutoiement
+INTERDIT, vouvoiement partout. Phrases courtes. Pas de jargon.
+Exemples :
+  - Bouton agent : "Me faire certifier"   - Bouton principal : "Vérifier un
+    prestataire"
+  - Statut : "Il manque 3 pièces pour soumettre votre dossier."
+  - Rejet : "Pièce refusée : la date de validité est dépassée. Merci de
+    déposer une version à jour."
+  - Succès : "Votre dossier a été transmis. Un auditeur sera affecté sous
+    48 h ouvrées."
+  - Vide : "Aucun dossier pour le moment. Commencez par créer votre premier
+    dossier de certification."
+  Rédiger TOUS les textes en français correct (accents, ponctuation). Zéro
+  "Lorem ipsum".
+
+
+--------------------------------------------------------------------------------
+11. FLUX DE DÉMONSTRATION (à vérifier avant livraison — script de 5 minutes)
+--------------------------------------------------------------------------------
+  1) Visiteur : accueil → comprendre → annuaire → fiche d'un agent Or →
+     vérifier un code de certificat.
+  2) Se connecter en AGENT (agent2) : voir bandeau "pièces incomplètes" →
+     redéposer une pièce → resoumettre → voir le statut passer à "en
+     vérification" + notification.
+  3) Se connecter en AUDITEUR : ouvrir le dossier → valider/rejeter des pièces
+     → score qui bouge en direct → émettre l'avis final.
+  4) Se connecter en ADMIN : voir la décision en attente → Certifier → un code
+     SGW-... est généré → entrée dans le journal.
+  5) Admin : form-builder → ajouter un champ au secteur "Énergie" → publier →
+     retourner côté agent et constater que le nouveau champ apparaît.
+  6) Admin : créer un NOUVEAU secteur ("Éducation") avec 3 champs → il apparaît
+     sur secteurs.html et dans le formulaire de création de dossier de l'agent.
+  7) Se connecter en PRINCIPAL : créer un projet de 800 M FCFA → lancer
+     l'adéquation sur un agent → lire le verdict et ses raisons → comparer 2
+     agents → favoris.
+  Tout ce flux doit fonctionner sans erreur console, sur desktop ET mobile.
+
+
+--------------------------------------------------------------------------------
+12. PRIORITÉS DE RÉALISATION (si le temps manque)
+--------------------------------------------------------------------------------
+  P0 (obligatoire) : design system, layout commun, seed + store, accueil,
+     login + comptes démo, annuaire + fiche agent, dossier agent (formulaire
+     dynamique + upload simulé), poste d'audit, décision admin, form-builder
+     (ajout/édition de champs + publication), création de secteur, adéquation,
+     vérification de certificat, responsive.
+  P1 : dashboards complets avec graphiques, comparateur, marchés + détail,
+     messagerie, notifications, journal, certificat imprimable.
+  P2 (optionnel) : mode sombre, export CSV, raccourcis clavier, animations
+     avancées, drag & drop complet dans le builder (sinon boutons ↑ ↓).
+  Livrer P0 complet et soigné plutôt que P0+P1+P2 à moitié fini.
+
+
+--------------------------------------------------------------------------------
+13. CRITÈRES D'ACCEPTATION (checklist finale)
+--------------------------------------------------------------------------------
+[ ] Ouvrir index.html en double-clic : tout marche, aucune erreur console.
+[ ] Les 5 rôles se connectent en 1 clic et voient leur propre espace.
+[ ] Un visiteur ne peut pas ouvrir /app/* (redirection vers login).
+[ ] Le flux de démo (section 11) passe de bout en bout.
+[ ] Le form-builder modifie réellement le formulaire vu par les agents.
+[ ] Un nouveau secteur créé par l'admin est utilisable immédiatement.
+[ ] Le score et l'adéquation se recalculent correctement et sont expliqués.
+[ ] Le certificat est lisible, imprimable (Ctrl+P) et vérifiable par code.
+[ ] Responsive vérifié à 360, 768, 1280, 1920 px.
+[ ] Navigation clavier et focus visibles ; contrastes AA.
+[ ] Aucune image cassée ; aucun "Lorem ipsum" ; aucun texte en anglais dans
+    l'interface (hors noms techniques).
+[ ] Cohérence visuelle : mêmes composants, mêmes couleurs, mêmes espacements.
+[ ] Le bouton "Réinitialiser la démo" remet les données d'origine.
+[ ] Un fichier README.txt à la racine explique : comment ouvrir le projet, les
+    comptes de démo, la structure des dossiers, comment ajouter un secteur.
+
+FIN DU DOCUMENT
+================================================================================

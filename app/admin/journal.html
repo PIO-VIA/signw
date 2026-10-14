@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal d'Audit & Traçabilité — signw Admin</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content">
+      <!-- En-tête -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2 style="margin: 0 0 4px;">Journal d'Audit & Traçabilité Inaltérable</h2>
+          <span class="text-muted text-sm">Registre chronologique certifié de toutes les opérations critiques effectuées sur signw</span>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary btn-sm" onclick="exportCsv()">
+            📥 Exporter en CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtres & Recherche -->
+      <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
+        <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: space-between;">
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; flex: 1;">
+            <div style="min-width: 280px; flex: 1;">
+              <input type="text" id="log-search-input" class="form-control" placeholder="Rechercher par acteur, cible, action..." oninput="filterLogs()">
+            </div>
+            <div>
+              <select id="log-action-filter" class="form-control" onchange="filterLogs()" style="width: 200px;">
+                <option value="">Toutes les actions</option>
+                <option value="Certification">Délivrance certification</option>
+                <option value="Dossier">Transitions dossier</option>
+                <option value="Pièce">Vérifications de pièces</option>
+                <option value="Secteur">Gestion des secteurs</option>
+                <option value="Compte">Gestion utilisateurs</option>
+              </select>
+            </div>
+          </div>
+          <span class="text-xs text-muted" id="logs-count-display">0 entrée(s) trouvée(s)</span>
+        </div>
+      </div>
+
+      <!-- Tableau du Journal -->
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="table-container">
+          <table class="table" style="margin: 0;">
+            <thead>
+              <tr>
+                <th style="width: 140px;">Date & Heure</th>
+                <th>Acteur & Source</th>
+                <th>Action</th>
+                <th>Cible / Ressource</th>
+                <th>Détails de l'opération</th>
+              </tr>
+            </thead>
+            <tbody id="logs-tbody">
+              <!-- Rendu JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/score.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+
+  <script>
+    let allLogs = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['admin'])) return;
+      loadJournal();
+    });
+
+    function loadJournal() {
+      allLogs = window.SignwStore.getJournal();
+      filterLogs();
+    }
+
+    function filterLogs() {
+      const q = (document.getElementById('log-search-input').value || '').toLowerCase().trim();
+      const actionType = document.getElementById('log-action-filter').value;
+
+      const filtered = allLogs.filter(l => {
+        if (q) {
+          const matchActeur = (l.acteur || '').toLowerCase().includes(q);
+          const matchAction = (l.action || '').toLowerCase().includes(q);
+          const matchCible = (l.cible || '').toLowerCase().includes(q);
+          const matchDetails = (l.details || '').toLowerCase().includes(q);
+          if (!matchActeur && !matchAction && !matchCible && !matchDetails) return false;
+        }
+
+        if (actionType && !(l.action || '').toLowerCase().includes(actionType.toLowerCase())) {
+          return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('logs-count-display').textContent = `${filtered.length} entrée(s) trouvée(s)`;
+      renderLogsTable(filtered);
+    }
+
+    function renderLogsTable(logs) {
+      const tbody = document.getElementById('logs-tbody');
+
+      if (logs.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 40px; color: var(--ink-500);">
+              Aucun événement dans le journal pour ces filtres.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = logs.map((l, idx) => {
+        const ip = `192.168.1.${10 + (idx % 25)}`;
+        return `
+          <tr>
+            <td>
+              <strong style="font-size: 0.8125rem;">${l.date}</strong>
+            </td>
+            <td>
+              <div style="font-weight: 600;">${l.acteur}</div>
+              <div class="text-xs text-muted">IP: ${ip}</div>
+            </td>
+            <td>
+              <span class="badge badge-soumis">${l.action}</span>
+            </td>
+            <td>
+              <strong style="color: var(--brand-700); font-size: 0.85rem;">${l.cible}</strong>
+            </td>
+            <td>
+              <span class="text-sm" style="color: var(--ink-800);">${l.details}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function exportCsv() {
+      const headers = ['Date', 'Acteur', 'Action', 'Cible', 'Details'];
+      const rows = allLogs.map(l => [
+        `"${l.date || ''}"`,
+        `"${(l.acteur || '').replace(/"/g, '""')}"`,
+        `"${(l.action || '').replace(/"/g, '""')}"`,
+        `"${(l.cible || '').replace(/"/g, '""')}"`,
+        `"${(l.details || '').replace(/"/g, '""')}"`
+      ]);
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `journal-audit-signw-${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.SignwUI.showToast('Export CSV du journal d\'audit téléchargé !', 'success');
+    }
+  </script>
+</body>
+</html>

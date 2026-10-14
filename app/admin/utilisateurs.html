@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des Utilisateurs — signw Admin</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content">
+      <!-- En-tête -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2 style="margin: 0 0 4px;">Utilisateurs de la plateforme</h2>
+          <span class="text-muted text-sm">Gestion des comptes d'accès, création d'auditeurs et contrôle des permissions</span>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openNewUserModal()">
+          ➕ Créer un utilisateur
+        </button>
+      </div>
+
+      <!-- 4 KPI Utilisateurs -->
+      <div class="grid grid-cols-4 gap-6" style="margin-bottom: 24px;">
+        <div class="kpi-card">
+          <span class="kpi-label">TOTAL UTILISATEURS</span>
+          <span class="kpi-val" id="kpi-users-total">0</span>
+          <span class="text-xs text-muted">Comptes enregistrés</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">AUDITEURS SIGNW</span>
+          <span class="kpi-val" style="color: var(--brand-700);" id="kpi-users-auditors">0</span>
+          <span class="text-xs text-muted">Pôle d'instruction technique</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">ENTREPRISES (AGENTS)</span>
+          <span class="kpi-val" style="color: var(--gold-600);" id="kpi-users-agents">0</span>
+          <span class="text-xs text-muted">Candidats & certifiés</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">DONNEURS D'ORDRE</span>
+          <span class="kpi-val" style="color: var(--success);" id="kpi-users-principals">0</span>
+          <span class="text-xs text-muted">Maîtres d'ouvrage</span>
+        </div>
+      </div>
+
+      <!-- Filtres & Recherche -->
+      <div class="card" style="padding: 16px 20px; margin-bottom: 24px;">
+        <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: space-between;">
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; flex: 1;">
+            <div style="min-width: 260px; flex: 1;">
+              <input type="text" id="filter-search" class="form-control" placeholder="Rechercher par nom, email..." oninput="filterUsers()">
+            </div>
+            <div>
+              <select id="filter-role" class="form-control" onchange="filterUsers()" style="width: 170px;">
+                <option value="">Tous les rôles</option>
+                <option value="agent">Agent (Entreprise)</option>
+                <option value="principal">Donneur d'ordre</option>
+                <option value="auditeur">Auditeur signw</option>
+                <option value="admin">Administrateur</option>
+              </select>
+            </div>
+            <div>
+              <select id="filter-status" class="form-control" onchange="filterUsers()" style="width: 150px;">
+                <option value="">Tous les statuts</option>
+                <option value="actif">Actif</option>
+                <option value="suspendu">Suspendu</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <span class="text-xs text-muted" id="user-count-display">0 utilisateur(s) listé(s)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tableau des utilisateurs -->
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="table-container">
+          <table class="table" style="margin: 0;">
+            <thead>
+              <tr>
+                <th>Utilisateur</th>
+                <th>Rôle</th>
+                <th>Statut</th>
+                <th>Spécialité / Organisation</th>
+                <th>Créé le</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <!-- Rendu JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Création Utilisateur -->
+  <div class="modal-backdrop" id="modal-new-user" style="display: none;">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <h4 style="margin: 0;">Créer un nouvel utilisateur</h4>
+        <button class="modal-close-btn" onclick="closeNewUserModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="new-user-form" onsubmit="handleCreateUser(event)">
+          <div class="form-group">
+            <label class="form-label">Nom complet ou Raison sociale <span style="color: var(--danger)">*</span></label>
+            <input type="text" id="nu-nom" class="form-control" placeholder="ex: Alain Nkoulou ou Mairie de..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Adresse email de connexion <span style="color: var(--danger)">*</span></label>
+            <input type="email" id="nu-email" class="form-control" placeholder="ex: prenom.nom@signw.cm" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rôle sur la plateforme <span style="color: var(--danger)">*</span></label>
+            <select id="nu-role" class="form-control" required onchange="toggleSpecialiteField(this.value)">
+              <option value="auditeur">Auditeur signw (Instruction technique)</option>
+              <option value="agent">Agent (Entreprise candidate)</option>
+              <option value="principal">Principal (Maître d'ouvrage)</option>
+              <option value="admin">Administrateur signw</option>
+            </select>
+          </div>
+          <div class="form-group" id="group-specialite">
+            <label class="form-label">Spécialité sectorielle (pour Auditeur)</label>
+            <input type="text" id="nu-specialite" class="form-control" placeholder="ex: BTP, Hydraulique & Voiries">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mot de passe provisoire</label>
+            <input type="text" id="nu-password" class="form-control" value="demo1234">
+            <span class="text-xs text-muted">Par défaut : demo1234 (modifiable lors de la première connexion).</span>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="closeNewUserModal()">Annuler</button>
+            <button type="submit" class="btn btn-primary btn-sm">Créer le compte</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/score.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+
+  <script>
+    let allUsers = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['admin'])) return;
+      loadUsers();
+    });
+
+    function loadUsers() {
+      allUsers = window.SignwStore.getUsers();
+      updateKpis();
+      filterUsers();
+    }
+
+    function updateKpis() {
+      document.getElementById('kpi-users-total').textContent = allUsers.length;
+      document.getElementById('kpi-users-auditors').textContent = allUsers.filter(u => u.role === 'auditeur').length;
+      document.getElementById('kpi-users-agents').textContent = allUsers.filter(u => u.role === 'agent').length;
+      document.getElementById('kpi-users-principals').textContent = allUsers.filter(u => u.role === 'principal').length;
+    }
+
+    function filterUsers() {
+      const q = (document.getElementById('filter-search').value || '').toLowerCase().trim();
+      const role = document.getElementById('filter-role').value;
+      const status = document.getElementById('filter-status').value;
+
+      const filtered = allUsers.filter(u => {
+        if (q && !(u.nom.toLowerCase().includes(q) || u.email.toLowerCase().includes(q))) return false;
+        if (role && u.role !== role) return false;
+        if (status === 'actif' && u.actif === false) return false;
+        if (status === 'suspendu' && u.actif !== false) return false;
+        return true;
+      });
+
+      document.getElementById('user-count-display').textContent = `${filtered.length} utilisateur(s) listé(s)`;
+      renderUsersTable(filtered);
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('users-tbody');
+      if (users.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 40px; color: var(--ink-500);">
+              Aucun utilisateur ne correspond à ces critères.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const roleBadges = {
+        admin: '<span class="badge" style="background: #E8DAEF; color: #6C3483;">Admin</span>',
+        auditeur: '<span class="badge badge-soumis">Auditeur</span>',
+        agent: '<span class="badge badge-certifie">Agent</span>',
+        principal: '<span class="badge badge-terrain">Donneur d\'ordre</span>'
+      };
+
+      tbody.innerHTML = users.map(u => {
+        const isActif = u.actif !== false;
+        const orgInfo = u.organisation || u.specialite || (u.role === 'agent' ? 'Entreprise prestataire' : 'signw');
+
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="../../${u.avatar || 'assets/img/avatar-01.svg'}" alt="${u.nom}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover;">
+                <div>
+                  <strong>${u.nom}</strong>
+                  <div class="text-xs text-muted">${u.email}</div>
+                </div>
+              </div>
+            </td>
+            <td>${roleBadges[u.role] || u.role}</td>
+            <td>
+              <span class="badge ${isActif ? 'badge-certifie' : 'badge-brouillon'}">
+                ${isActif ? 'Actif' : 'Suspendu'}
+              </span>
+            </td>
+            <td><small class="text-muted">${orgInfo}</small></td>
+            <td><small class="text-muted">${u.creeLe || '2026-01-15'}</small></td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                <button class="btn btn-secondary btn-sm" onclick="toggleUserStatus('${u.id}')" title="${isActif ? 'Suspendre' : 'Réactiver'}">
+                  ${isActif ? 'Suspendre' : 'Réactiver'}
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="resetUserPassword('${u.id}')" title="Réinitialiser mot de passe">
+                  🔑
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function toggleSpecialiteField(role) {
+      const grp = document.getElementById('group-specialite');
+      grp.style.display = (role === 'auditeur') ? 'block' : 'none';
+    }
+
+    function openNewUserModal() {
+      document.getElementById('modal-new-user').style.display = 'flex';
+      document.getElementById('new-user-form').reset();
+      document.getElementById('nu-password').value = 'demo1234';
+      toggleSpecialiteField('auditeur');
+    }
+
+    function closeNewUserModal() {
+      document.getElementById('modal-new-user').style.display = 'none';
+    }
+
+    function handleCreateUser(e) {
+      e.preventDefault();
+      const nom = document.getElementById('nu-nom').value.trim();
+      const email = document.getElementById('nu-email').value.trim();
+      const role = document.getElementById('nu-role').value;
+      const specialite = document.getElementById('nu-specialite').value.trim();
+      const password = document.getElementById('nu-password').value.trim();
+
+      // Vérifier unicité email
+      const existing = window.SignwStore.getUserByEmail(email);
+      if (existing) {
+        window.SignwUI.showToast('Un utilisateur existe déjà avec cet email.', 'error');
+        return;
+      }
+
+      const newUser = window.SignwStore.createUser({
+        nom,
+        email,
+        role,
+        specialite: role === 'auditeur' ? specialite : undefined,
+        password: password || 'demo1234',
+        avatar: role === 'auditeur' ? 'assets/img/avatar-04.svg' : 'assets/img/avatar-07.svg'
+      });
+
+      closeNewUserModal();
+      loadUsers();
+      window.SignwUI.showToast(`Compte créé avec succès pour ${nom} (${role}).`, 'success');
+    }
+
+    function toggleUserStatus(userId) {
+      const u = window.SignwStore.getUserById(userId);
+      if (!u) return;
+
+      const current = u.actif !== false;
+      u.actif = !current;
+      window.SignwStore.save();
+      window.SignwStore.addJournalEntry('Admin signw', u.actif ? 'Réactivation compte' : 'Suspension compte', u.nom, `Statut mis à jour.`);
+
+      loadUsers();
+      window.SignwUI.showToast(`Le compte de ${u.nom} est désormais ${u.actif ? 'actif' : 'suspendu'}.`, 'info');
+    }
+
+    function resetUserPassword(userId) {
+      const u = window.SignwStore.getUserById(userId);
+      if (!u) return;
+
+      u.password = 'demo1234';
+      window.SignwStore.save();
+      window.SignwStore.addJournalEntry('Admin signw', 'Réinitialisation mot de passe', u.nom, `Mot de passe réinitialisé à 'demo1234'.`);
+
+      window.SignwUI.showToast(`Mot de passe réinitialisé à "demo1234" pour ${u.nom}. Un email simulé a été généré.`, 'success');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poste Auditeur — signw</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content">
+      <!-- En-tête -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2 style="margin: 0 0 4px;" id="auditor-name-header">Poste de Vérification & Contrôle</h2>
+          <span class="text-muted text-sm">Instruction indépendante sur pièces et visites de terrain</span>
+        </div>
+        <a href="file-attente.html" class="btn btn-primary">📋 Ouvrir ma file d’attente d’audit</a>
+      </div>
+
+      <!-- 4 KPI Cards -->
+      <div class="grid grid-cols-4 gap-6" style="margin-bottom: 32px;">
+        <div class="kpi-card">
+          <span class="kpi-label">DOSSIERS EN COURS</span>
+          <span class="kpi-val" id="kpi-dossiers-count" style="color: var(--brand-700);">0</span>
+          <span class="text-xs text-muted">Affectés à mon poste de travail</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">DÉLAI MOYEN RESTANT (SLA)</span>
+          <span class="kpi-val" style="color: var(--warning);">8,5 <span style="font-size: 1rem; font-weight: normal;">jours</span></span>
+          <span class="text-xs text-muted">Objectif contractuel : &lt; 15 jours</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">PIÈCES VÉRIFIÉES CETTE SEMAINE</span>
+          <span class="kpi-val">28</span>
+          <span class="text-xs text-muted">Contrôles fiscaux et cartes grises</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">VISITES TERRAIN PLANIFIÉES</span>
+          <span class="kpi-val" style="color: #6A1B9A;">2</span>
+          <span class="text-xs text-muted">Inspection de parcs matériels</span>
+        </div>
+      </div>
+
+      <!-- Liste des Dossiers Prioritaires -->
+      <div class="card" style="padding: 24px; margin-bottom: 32px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h4 style="margin: 0;">Dossiers en attente d’instruction</h4>
+          <span class="text-xs text-muted">Priorité par délai restant</span>
+        </div>
+
+        <div class="table-container" style="border: none;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Réf Dossier</th>
+                <th>Entreprise / Agent</th>
+                <th>Secteur</th>
+                <th>Statut</th>
+                <th>Avancement des pièces</th>
+                <th>Échéance SLA</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="auditor-dash-table">
+              <!-- Rendu dynamique JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/score.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['auditeur', 'admin'])) return;
+      renderAuditorDash();
+    });
+
+    function renderAuditorDash() {
+      const user = window.SignwAuth.getCurrentUser();
+      document.getElementById('auditor-name-header').textContent = `Poste d’Audit — ${user.nom}`;
+
+      const dossiers = window.SignwStore.getDossiers().filter(d => d.statut === 'en_verification' || d.statut === 'pieces_incompletes');
+      document.getElementById('kpi-dossiers-count').textContent = dossiers.length;
+
+      const tbody = document.getElementById('auditor-dash-table');
+      tbody.innerHTML = dossiers.map((d, idx) => {
+        const agent = window.SignwStore.getAgentById(d.agentId) || { raisonSociale: 'Agent', ville: 'Douala' };
+        const sec = window.SignwStore.getSectorById(d.secteurId) || { nom: 'BTP' };
+        const pieces = window.SignwStore.getPiecesByDossier(d.id);
+        const validated = pieces.filter(p => p.statutPiece === 'validee').length;
+        const totalP = Math.max(pieces.length, 6);
+        const pct = Math.round((validated / totalP) * 100);
+
+        return `
+          <tr>
+            <td><strong style="color: var(--brand-700);">${d.id}</strong></td>
+            <td>
+              <strong>${agent.raisonSociale}</strong>
+              <div class="text-xs text-muted">📍 ${agent.ville}</div>
+            </td>
+            <td>${sec.nom}</td>
+            <td>${window.SignwUtils.getStatusBadge(d.statut)}</td>
+            <td style="width: 180px;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 2px;">
+                <span>${pct}% vérifié</span>
+                <span>${validated}/${totalP}</span>
+              </div>
+              <div class="progress-bar-bg" style="height: 6px;">
+                <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+              </div>
+            </td>
+            <td>
+              <span class="badge" style="background: ${idx === 0 ? 'var(--warning-bg)' : 'var(--ink-100)'}; color: ${idx === 0 ? '#B35E00' : 'var(--ink-700)'};">
+                J+${7 + idx * 3}
+              </span>
+            </td>
+            <td>
+              <a href="audit.html?id=${d.id}" class="btn btn-primary btn-sm">
+                Ouvrir l’audit →
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

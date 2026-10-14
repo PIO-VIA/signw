@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messagerie d'Audit — signw</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/components.css">
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/pages.css">
+</head>
+<body class="app-layout">
+
+  <aside class="app-sidebar" id="app-sidebar"></aside>
+
+  <div class="app-container">
+    <header class="app-header" id="app-header"></header>
+
+    <main class="app-content">
+      <div style="margin-bottom: 24px;">
+        <h2 style="margin: 0 0 4px;">Messagerie Directe & Échanges d'Audit</h2>
+        <span class="text-muted text-sm">Communiquez directement avec votre auditeur référent pour lever les réserves</span>
+      </div>
+
+      <div class="card" style="padding: 0; overflow: hidden; display: grid; grid-template-columns: 320px 1fr; height: 600px;">
+        <!-- Colonne Gauche : Conversations -->
+        <div style="border-right: 1px solid var(--ink-200); display: flex; flex-direction: column;">
+          <div style="padding: 16px; border-bottom: 1px solid var(--ink-200); background: var(--ink-50);">
+            <strong style="font-size: 0.9rem;">Conversations d’instruction</strong>
+          </div>
+          <div style="flex: 1; overflow-y: auto; padding: 8px;" id="conv-list">
+            <!-- Injecté dynamique -->
+          </div>
+        </div>
+
+        <!-- Colonne Droite : Fil de discussion -->
+        <div style="display: flex; flex-direction: column;">
+          <div style="padding: 16px 24px; border-bottom: 1px solid var(--ink-200); background: var(--white); display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <img src="../../assets/img/avatar-01.svg" alt="Auditeur" style="width: 40px; height: 40px; border-radius: 50%;">
+              <div>
+                <strong style="display: block; font-size: 0.95rem;">Alain Nkoulou (Auditeur signw)</strong>
+                <span class="text-xs text-muted">Dossier BTP dos_002 • En vérification</span>
+              </div>
+            </div>
+            <span class="badge badge-certifie">EN LIGNE</span>
+          </div>
+
+          <!-- Zone des messages -->
+          <div style="flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #F8F9FA;" id="chat-messages-container">
+            <!-- Injecté dynamique -->
+          </div>
+
+          <!-- Zone de saisie -->
+          <div style="padding: 16px 24px; background: var(--white); border-top: 1px solid var(--ink-200); display: flex; gap: 12px; align-items: center;">
+            <input type="text" id="chat-input" class="form-control" placeholder="Rédigez votre réponse à l’auditeur..." onkeydown="if(event.key==='Enter') sendMessage()">
+            <button class="btn btn-primary" onclick="sendMessage()">Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/data/seed.js"></script>
+  <script src="../../js/core/utils.js"></script>
+  <script src="../../js/core/store.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/layout.js"></script>
+
+  <script>
+    let activeDossierId = 'dos_002';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.SignwAuth.requireAuth(['agent'])) return;
+      renderConversations();
+      renderMessages();
+    });
+
+    function renderConversations() {
+      const convList = document.getElementById('conv-list');
+      convList.innerHTML = `
+        <div style="padding: 12px; border-radius: var(--radius-md); background: var(--brand-100); border: 1px solid var(--brand-500); cursor: pointer;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <strong style="font-size: 0.875rem; color: var(--brand-900);">A. Nkoulou (Auditeur)</strong>
+            <span class="text-xs text-muted">11:20</span>
+          </div>
+          <div class="text-xs text-muted" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            Dossier BTP (dos_002) - Régularisation attestation
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMessages() {
+      const user = window.SignwAuth.getCurrentUser();
+      const messages = window.SignwStore.getMessages(activeDossierId);
+      const container = document.getElementById('chat-messages-container');
+
+      if (messages.length === 0) {
+        container.innerHTML = `<div class="text-center text-muted" style="padding: 32px;">Aucun échange pour le moment.</div>`;
+        return;
+      }
+
+      container.innerHTML = messages.map(m => {
+        const isMe = m.fromUserId === user.id;
+        return `
+          <div style="display: flex; flex-direction: column; align-items: ${isMe ? 'flex-end' : 'flex-start'};">
+            <div style="max-width: 70%; padding: 12px 18px; border-radius: 16px; font-size: 0.9rem; line-height: 1.5; ${isMe ? 'background: var(--brand-700); color: #fff; border-bottom-right-radius: 2px;' : 'background: #fff; border: 1px solid var(--ink-200); border-bottom-left-radius: 2px;'}">
+              ${m.texte}
+            </div>
+            <span class="text-xs text-muted" style="margin-top: 4px; padding: 0 4px;">${m.envoyeLe}</span>
+          </div>
+        `;
+      }).join('');
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const user = window.SignwAuth.getCurrentUser();
+      window.SignwStore.sendMessage(user.id, 'usr_auditeur1', text, activeDossierId);
+      input.value = '';
+      renderMessages();
+      window.SignwUI.showToast('Message envoyé à l’auditeur !', 'success');
+    }
+  </script>
+</body>
+</html>

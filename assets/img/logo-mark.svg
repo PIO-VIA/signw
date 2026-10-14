@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="markGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9A2A47" />
+      <stop offset="100%" stop-color="#7A1B34" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5C451" />
+      <stop offset="100%" stop-color="#D99A1E" />
+    </linearGradient>
+  </defs>
+  <!-- Shield outline -->
+  <path d="M50 8 C68 8, 86 16, 86 32 C86 62, 58 84, 50 92 C42 84, 14 62, 14 32 C14 16, 32 8, 50 8 Z" fill="url(#markGrad)" />
+  <!-- Inner Shield accent -->
+  <path d="M50 14 C64 14, 80 21, 80 34 C80 59, 56 78, 50 85 C44 78, 20 59, 20 34 C20 21, 36 14, 50 14 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+  <!-- Dynamic checkmark with gold dot -->
+  <path d="M34 48 L46 60 L70 34" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Gold trust star/gem at top -->
+  <circle cx="50" cy="24" r="5" fill="url(#goldGrad)" />
+</svg>
