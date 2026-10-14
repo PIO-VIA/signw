@@ -5,7 +5,7 @@
 
 Version : 1.0.0
 Date : Octobre 2026
-Auteur : Équipe signw
+Auteur : Antigravity & Équipe signw
 Technologie : 100% Hors-Ligne (HTML5, CSS3 pur avec Design Tokens, Vanilla JavaScript ES2020+)
 Aucune dépendance externe ni npm requise.
 
