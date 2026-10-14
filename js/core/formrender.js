@@ -94,8 +94,8 @@ window.SignwFormRender = {
         </div>
       </div>
 
-      <!-- Layout 3 colonnes -->
-      <div style="display: grid; grid-template-columns: 280px 1fr 300px; gap: 24px; align-items: start;">
+      <!-- Layout 3 colonnes responsive -->
+      <div class="form-render-layout">
 
         <!-- Colonne Gauche : Sections -->
         <div class="card" style="padding: 12px;">
@@ -300,7 +300,7 @@ window.SignwFormRender = {
         const rows = Array.isArray(val) ? val : [];
         const cols = champ.colonnes || ['Désignation', 'Quantité', 'Preuve'];
         inputHtml = `
-          <div style="border: 1px solid var(--ink-200); border-radius: var(--radius-md); overflow: hidden;">
+          <div class="table-container" style="border: 1px solid var(--ink-200); border-radius: var(--radius-md); overflow-x: auto; max-width: 100%;">
             <table class="table" id="table-${champ.id}">
               <thead>
                 <tr>

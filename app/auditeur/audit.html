@@ -16,17 +16,17 @@
   <link rel="stylesheet" href="../../css/layout.css">
   <link rel="stylesheet" href="../../css/pages.css">
 </head>
-<body class="app-layout" style="overflow: hidden;">
+<body class="app-layout audit-page-body">
 
   <aside class="app-sidebar" id="app-sidebar"></aside>
 
   <div class="app-container">
     <header class="app-header" id="app-header"></header>
 
-    <main class="app-content" style="padding: 16px; height: calc(100vh - 64px); display: flex; flex-direction: column;">
+    <main class="app-content audit-page-content" style="padding: 16px; display: flex; flex-direction: column;">
       <!-- En-tête Dossier -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: var(--white); padding: 12px 20px; border-radius: var(--radius-md); border: 1px solid var(--ink-200);">
-        <div style="display: flex; align-items: center; gap: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: var(--white); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--ink-200); flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
           <a href="file-attente.html" class="btn btn-ghost btn-sm">← File</a>
           <div>
             <h3 style="margin: 0; font-size: 1.15rem;" id="audit-agt-name">Chargement...</h3>
@@ -35,16 +35,16 @@
           <div id="audit-dossier-badge"></div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
           <div style="text-align: right;">
             <div class="text-xs text-muted">SCORE PROVISOIRE</div>
             <strong style="font-size: 1.3rem; color: var(--brand-700);" id="audit-live-score">0 / 100</strong>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="SignwUI.openModal('modal-audit-terrain')">
-            📍 Planifier visite terrain
+            📍 Visite terrain
           </button>
           <button class="btn btn-gold btn-sm" onclick="openAvisFinalModal()">
-            ⚖️ Émettre l'avis final →
+            ⚖️ Avis final →
           </button>
         </div>
       </div>

@@ -80,7 +80,7 @@ window.SignwLayout = {
         <div class="container">
           <div class="footer-grid">
             <div class="footer-col">
-              <img src="${root}assets/img/logo-signw.svg" alt="signw" style="height: 38px; filter: brightness(0) invert(1); margin-bottom: 16px;">
+              <img src="${root}assets/img/logo-signw-white.svg" alt="signw" style="height: 38px; margin-bottom: 16px;">
               <p style="color: #D3C3C8; font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">
                 Tiers de confiance indépendant pour les marchés publics et privés au Cameroun.
                 Nous transformons les déclarations en preuves vérifiées pour garantir la bonne attribution des marchés.
@@ -211,7 +211,7 @@ window.SignwLayout = {
       sidebarPlaceholder.innerHTML = `
         <div class="sidebar-header">
           <a href="${root}index.html" title="Retour au site public">
-            <img src="${root}assets/img/logo-signw.svg" alt="signw" class="sidebar-logo">
+            <img src="${root}assets/img/logo-signw-white.svg" alt="signw" class="sidebar-logo">
           </a>
           <span class="sidebar-role-badge">${role}</span>
         </div>

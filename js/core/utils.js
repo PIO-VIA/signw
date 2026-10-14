@@ -126,7 +126,7 @@ window.SignwUtils = {
    */
   getTierBadge(niveau) {
     if (!niveau) return '';
-    const n = niveau.toLowerCase();
+    const n = String(niveau).toLowerCase();
     if (n.includes('or')) {
       return `<span class="badge badge-tier-gold">★ NIVEAU OR</span>`;
     }
@@ -140,6 +140,10 @@ window.SignwUtils = {
       return `<span class="badge badge-certifie_avec_reserves">⚠ AVEC RÉSERVES</span>`;
     }
     return `<span class="badge badge-brouillon">${niveau}</span>`;
+  },
+
+  generateTierBadge(niveau) {
+    return this.getTierBadge(niveau);
   },
 
   /**

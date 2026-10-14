@@ -251,7 +251,12 @@ window.SignwScore = {
     if (globalScore >= 80 && pointsBloquants.length === 0) {
       verdict = 'adequat';
       verdictLabel = 'Adéquat';
-      phraseSynthese = `Cet agent peut réaliser le projet pour ${window.SignwUtils.formatFCFAShort(budget)} : OUI, toutes les garanties financières, techniques et humaines sont attestées.`;
+      if (pointsAttention.length > 0) {
+        const attMsg = pointsAttention[0].replace(/\.+$/, '');
+        phraseSynthese = `Cet agent présente une solide capacité globale pour réaliser ce marché (${window.SignwUtils.formatFCFAShort(budget)}), avec un point d’attention à encadrer : ${attMsg}.`;
+      } else {
+        phraseSynthese = `Cet agent peut réaliser le projet pour ${window.SignwUtils.formatFCFAShort(budget)} : OUI, toutes les garanties financières, techniques et humaines sont attestées.`;
+      }
     } else if (globalScore >= 60 || pointsBloquants.length <= 1) {
       verdict = 'adequat_sous_reserves';
       verdictLabel = 'Adéquat sous réserves';

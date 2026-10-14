@@ -111,56 +111,60 @@
       </div>
       <div class="modal-body">
         <div style="background: var(--ink-50); padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div>
               <div class="text-xs text-muted">Dossier candidat</div>
               <strong style="font-size: 1.05rem;" id="modal-dossier-ref">DOS-002</strong>
               <div id="modal-agent-name" class="text-sm font-bold" style="color: var(--brand-700);">Sahel Travaux & Routes</div>
             </div>
             <div style="text-align: right;">
-              <div class="text-xs text-muted">Score calculé</div>
-              <strong style="font-size: 1.4rem; color: var(--gold-600);" id="modal-score-val">84/100</strong>
+              <div class="text-xs text-muted">Score audité</div>
+              <strong style="font-size: 1.4rem;" id="modal-score-val">0/100</strong>
+              <div id="modal-niveau-calcule-badge" style="margin-top: 4px;"></div>
             </div>
           </div>
+        </div>
+
+        <div id="modal-uncertifiable-alert" style="display: none; background: #FEE2E2; border: 1.5px solid #EF4444; color: #991B1B; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 16px; font-size: 0.875rem;">
+          <strong>⛔ Dossier non certifiable :</strong> Le score obtenu est inférieur au seuil minimal réglementaire de 55 points. En tant que tiers de confiance indépendant, la certification ne peut être octroyée. Ce dossier doit être rejeté ou faire l'objet de compléments majeurs.
         </div>
 
         <form id="decision-form" onsubmit="submitDecision(event)">
           <div class="form-group">
             <label class="form-label">Nature de la décision <span style="color: var(--danger)">*</span></label>
             <div style="display: flex; flex-direction: column; gap: 10px;">
-              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 1px solid var(--ink-200); border-radius: var(--radius-sm);">
-                <input type="radio" name="decision_type" value="certifie" checked onchange="toggleDecisionFields()">
+              <label id="label-decision-certifie" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 1px solid var(--ink-200); border-radius: var(--radius-sm);">
+                <input type="radio" name="decision_type" id="radio-decision-certifie" value="certifie" checked onchange="toggleDecisionFields()">
                 <div>
                   <strong>Octroyer la certification complète</strong>
                   <div class="text-xs text-muted">Génération automatique du code SGW-2026-NNNNN et publication à l'annuaire</div>
                 </div>
               </label>
 
-              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 1px solid var(--ink-200); border-radius: var(--radius-sm);">
-                <input type="radio" name="decision_type" value="certifie_avec_reserves" onchange="toggleDecisionFields()">
+              <label id="label-decision-reserves" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 1px solid var(--ink-200); border-radius: var(--radius-sm);">
+                <input type="radio" name="decision_type" id="radio-decision-reserves" value="certifie_avec_reserves" onchange="toggleDecisionFields()">
                 <div>
                   <strong>Octroyer avec réserves suspensives</strong>
                   <div class="text-xs text-muted">Un délai est accordé à l'entreprise pour lever les réserves mineures</div>
                 </div>
               </label>
 
-              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 1px solid var(--ink-200); border-radius: var(--radius-sm);">
-                <input type="radio" name="decision_type" value="rejete" onchange="toggleDecisionFields()">
+              <label id="label-decision-rejete" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 1px solid var(--ink-200); border-radius: var(--radius-sm);">
+                <input type="radio" name="decision_type" id="radio-decision-rejete" value="rejete" onchange="toggleDecisionFields()">
                 <div>
                   <strong style="color: var(--danger);">Rejeter la demande de certification</strong>
-                  <div class="text-xs text-muted">Dossier non conforme ou niveau de risque élevé</div>
+                  <div class="text-xs text-muted">Dossier non conforme, score insuffisant ou niveau de risque élevé</div>
                 </div>
               </label>
             </div>
           </div>
 
           <div class="form-group" id="group-niveau">
-            <label class="form-label">Niveau de label attribué</label>
+            <label class="form-label">Niveau de label attribué (verrouillé par le score)</label>
             <select id="decision-niveau" class="form-control">
-              <option value="Or">Médaille d'Or (Score >= 80) — Excellence opérationnelle</option>
-              <option value="Argent">Médaille d'Argent (Score >= 65) — Solide et conforme</option>
-              <option value="Bronze">Médaille de Bronze (Score >= 50) — Conforme de base</option>
+              <!-- Rendu dynamique selon le score calculé -->
             </select>
+            <span class="text-xs text-muted" id="decision-niveau-hint"></span>
           </div>
 
           <div class="form-group" id="group-reserves" style="display: none;">
@@ -175,7 +179,7 @@
 
           <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
             <button type="button" class="btn btn-secondary btn-sm" onclick="closeDecisionModal()">Annuler</button>
-            <button type="submit" class="btn btn-primary btn-sm">Valider la décision & signer</button>
+            <button type="submit" class="btn btn-primary btn-sm" id="btn-submit-decision">Valider la décision & signer</button>
           </div>
         </form>
       </div>
@@ -244,8 +248,10 @@
 
       container.innerHTML = pending.map(d => {
         const agt = agents.find(a => a.id === d.agentId) || { raisonSociale: 'Entreprise candidate', ville: 'Cameroun' };
-        const sec = sectors.find(s => s.id === d.secteurId) || { nom: d.secteurId, icon: '📁' };
-        const score = d.scoreProvisoire || (agt.score || 80);
+        const scoreCalc = window.SignwScore.calculateDossierScore(d.id);
+        const score = (d.scoreProvisoire !== undefined && d.scoreProvisoire !== null)
+          ? d.scoreProvisoire
+          : (scoreCalc ? scoreCalc.scoreTotal : (agt.score || 0));
 
         const reco = d.recommandation_auditeur || 'certifier';
         const recoLabel = reco === 'certifier' ? 'Recommandation : Certifier sans réserve' : (reco === 'certifier_avec_reserves' ? 'Recommandation : Certifier avec réserves' : 'Recommandation : Rejeter');
@@ -319,7 +325,7 @@
               <strong>${agt.raisonSociale}</strong>
             </td>
             <td>
-              ${window.SignwUtils.generateTierBadge(c.niveau)}
+              ${window.SignwUtils.getTierBadge(c.niveau)}
               <span class="text-xs font-bold" style="margin-left: 6px;">${c.score}/100</span>
             </td>
             <td><small class="text-muted">${c.delivreeLe}</small></td>
@@ -365,16 +371,90 @@
       const d = window.SignwStore.getDossierById(dossierId);
       const agt = window.SignwStore.getAgentById(d ? d.agentId : null);
 
+      // Calcul réel du score
+      const scoreCalc = window.SignwScore.calculateDossierScore(dossierId);
+      const score = (d && d.scoreProvisoire !== undefined && d.scoreProvisoire !== null)
+        ? d.scoreProvisoire
+        : (scoreCalc ? scoreCalc.scoreTotal : (agt ? agt.score : 0));
+
+      const params = window.SignwStore.getParameters() || {};
+      const seuils = params.seuils || { or: 85, argent: 70, bronze: 55 };
+
+      let niveauCalcule = 'Non certifiable';
+      if (score >= seuils.or) niveauCalcule = 'Or';
+      else if (score >= seuils.argent) niveauCalcule = 'Argent';
+      else if (score >= seuils.bronze) niveauCalcule = 'Bronze';
+
       document.getElementById('modal-dossier-ref').textContent = dossierId;
       document.getElementById('modal-agent-name').textContent = agt ? agt.raisonSociale : 'Entreprise candidate';
-      const score = (d ? d.scoreProvisoire : 0) || (agt ? agt.score : 80);
-      document.getElementById('modal-score-val').textContent = `${score}/100`;
+      
+      const scoreEl = document.getElementById('modal-score-val');
+      scoreEl.textContent = `${score}/100`;
+      scoreEl.style.color = (score >= seuils.bronze) ? 'var(--gold-600)' : 'var(--danger)';
 
-      // Pré-sélection niveau
+      const badgeEl = document.getElementById('modal-niveau-calcule-badge');
+      badgeEl.innerHTML = (niveauCalcule !== 'Non certifiable')
+        ? window.SignwUtils.getTierBadge(niveauCalcule)
+        : '<span class="badge badge-danger">NON CERTIFIABLE (&lt; 55 pts)</span>';
+
+      const alertBox = document.getElementById('modal-uncertifiable-alert');
+      const radioCert = document.getElementById('radio-decision-certifie');
+      const radioRes = document.getElementById('radio-decision-reserves');
+      const radioRej = document.getElementById('radio-decision-rejete');
+      const labelCert = document.getElementById('label-decision-certifie');
+      const labelRes = document.getElementById('label-decision-reserves');
       const selNiveau = document.getElementById('decision-niveau');
-      if (score >= 80) selNiveau.value = 'Or';
-      else if (score >= 65) selNiveau.value = 'Argent';
-      else selNiveau.value = 'Bronze';
+      const hintNiveau = document.getElementById('decision-niveau-hint');
+      const motifRejet = document.getElementById('decision-motif-rejet');
+
+      if (niveauCalcule === 'Non certifiable') {
+        // Bloquer l'octroi de certification
+        alertBox.style.display = 'block';
+        radioCert.disabled = true;
+        radioRes.disabled = true;
+        labelCert.style.opacity = '0.4';
+        labelCert.style.cursor = 'not-allowed';
+        labelRes.style.opacity = '0.4';
+        labelRes.style.cursor = 'not-allowed';
+
+        radioRej.checked = true;
+        motifRejet.value = `Score de confiance insuffisant (${score}/100). Le seuil minimal d'éligibilité fixé à ${seuils.bronze} points n'est pas atteint. Rejet réglementaire.`;
+        selNiveau.innerHTML = `<option value="">Aucun label éligible (Score &lt; ${seuils.bronze})</option>`;
+        hintNiveau.textContent = 'Ce dossier ne peut prétendre à aucun niveau de médaille.';
+      } else {
+        alertBox.style.display = 'none';
+        radioCert.disabled = false;
+        radioRes.disabled = false;
+        labelCert.style.opacity = '1';
+        labelCert.style.cursor = 'pointer';
+        labelRes.style.opacity = '1';
+        labelRes.style.cursor = 'pointer';
+        radioCert.checked = true;
+        motifRejet.value = '';
+
+        // Restreindre les options au niveau calculé ou inférieur
+        let optionsHtml = '';
+        if (niveauCalcule === 'Or') {
+          optionsHtml = `
+            <option value="Or" selected>Médaille d'Or (Score ${score} ≥ ${seuils.or}) — Excellence opérationnelle</option>
+            <option value="Argent">Médaille d'Argent (Rétrogradation volontaire)</option>
+            <option value="Bronze">Médaille de Bronze</option>
+          `;
+          hintNiveau.textContent = `Score de ${score}/100 : éligible jusqu'au niveau OR.`;
+        } else if (niveauCalcule === 'Argent') {
+          optionsHtml = `
+            <option value="Argent" selected>Médaille d'Argent (Score ${score} ≥ ${seuils.argent}) — Solide et conforme</option>
+            <option value="Bronze">Médaille de Bronze (Score ≥ ${seuils.bronze})</option>
+          `;
+          hintNiveau.textContent = `Score de ${score}/100 : niveau maximal autorisé = ARGENT (Or bloqué car score < ${seuils.or}).`;
+        } else {
+          optionsHtml = `
+            <option value="Bronze" selected>Médaille de Bronze (Score ${score} ≥ ${seuils.bronze}) — Conforme de base</option>
+          `;
+          hintNiveau.textContent = `Score de ${score}/100 : niveau maximal autorisé = BRONZE (Argent/Or bloqués car score < ${seuils.argent}).`;
+        }
+        selNiveau.innerHTML = optionsHtml;
+      }
 
       document.getElementById('modal-decision').style.display = 'flex';
       toggleDecisionFields();
@@ -404,9 +484,33 @@
       const form = document.getElementById('decision-form');
       const decisionType = form.elements['decision_type'].value;
       const niveau = document.getElementById('decision-niveau').value;
-      const score = d.scoreProvisoire || 80;
+      
+      const scoreCalc = window.SignwScore.calculateDossierScore(d.id);
+      const score = (d && d.scoreProvisoire !== undefined && d.scoreProvisoire !== null)
+        ? d.scoreProvisoire
+        : (scoreCalc ? scoreCalc.scoreTotal : 0);
+
+      const params = window.SignwStore.getParameters() || {};
+      const seuils = params.seuils || { or: 85, argent: 70, bronze: 55 };
+
       const reservesText = document.getElementById('decision-reserves').value.trim();
       const motifRejet = document.getElementById('decision-motif-rejet').value.trim();
+
+      // Garde-fous d'intégrité métier
+      if (decisionType !== 'rejete') {
+        if (score < seuils.bronze) {
+          window.SignwUI.showToast(`Action bloquée : Le score (${score}/100) est inférieur au seuil minimal (${seuils.bronze} pts). Rejet obligatoire.`, 'error');
+          return;
+        }
+        if (niveau === 'Or' && score < seuils.or) {
+          window.SignwUI.showToast(`Action bloquée : L'attribution Or requiert un score ≥ ${seuils.or} pts (actuel : ${score}/100).`, 'error');
+          return;
+        }
+        if (niveau === 'Argent' && score < seuils.argent) {
+          window.SignwUI.showToast(`Action bloquée : L'attribution Argent requiert un score ≥ ${seuils.argent} pts (actuel : ${score}/100).`, 'error');
+          return;
+        }
+      }
 
       if (decisionType === 'rejete') {
         if (!motifRejet) {
@@ -414,7 +518,7 @@
           return;
         }
         window.SignwStore.transitionDossier(d.id, 'rejete', 'Admin signw', `Rejet motivé : ${motifRejet}`);
-        window.SignwUI.showToast(`Dossier ${d.id} rejeté. L'entreprise a été notifiée.`, 'info');
+        window.SignwUI.showToast(`Dossier ${d.id} rejeté avec motif enregistré. L'entreprise a été notifiée.`, 'info');
       } else {
         const reserves = (decisionType === 'certifie_avec_reserves' && reservesText) ? [reservesText] : [];
         const cert = window.SignwStore.grantCertification(
@@ -425,7 +529,7 @@
           reserves,
           'Super Administrateur signw'
         );
-        window.SignwUI.showToast(`🎉 Certification officielle délivrée avec succès ! Code : ${cert.code}`, 'success');
+        window.SignwUI.showToast(`🎉 Certification officielle délivrée avec succès ! Code : ${cert.code} (Niveau ${niveau}, Score ${score}/100)`, 'success');
       }
 
       closeDecisionModal();

@@ -24,7 +24,7 @@
     <div class="auth-branding-pane">
       <div>
         <a href="index.html">
-          <img src="assets/img/logo-signw.svg" alt="signw" style="height: 44px; filter: brightness(0) invert(1); margin-bottom: 32px;">
+          <img src="assets/img/logo-signw-white.svg" alt="signw" style="height: 44px; margin-bottom: 32px;">
         </a>
         <span class="badge" style="background: rgba(217, 154, 30, 0.2); color: var(--gold-100); border: 1px solid rgba(217, 154, 30, 0.4); margin-bottom: 20px;">
           Tiers de confiance certifié
@@ -58,7 +58,7 @@
           <p class="text-xs text-muted" style="margin-bottom: 12px;">
             Cliquez sur un profil pour tester instantanément le parcours complet :
           </p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div class="auth-demo-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             <button type="button" class="btn btn-secondary btn-sm" onclick="SignwAuth.loginAs('agent@signw.demo')" style="justify-content: flex-start; text-align: left;">
               🏢 <strong>Agent Or</strong> (BâtiPlus)
             </button>
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Carte d'Authentification -->
-        <div class="card" style="padding: 32px;">
+        <div class="card auth-main-card" style="padding: 32px;">
           <!-- Onglets Connexion / Création -->
           <div class="tabs-nav" style="margin-bottom: 24px;">
             <button class="tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">Se connecter</button>

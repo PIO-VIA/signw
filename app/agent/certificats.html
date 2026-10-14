@@ -139,7 +139,7 @@
           </div>
 
           <!-- Grille des métadonnées et validité -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.875rem; margin-bottom: 36px; padding: 16px 24px; background: #F8E6EB; border-radius: 6px;">
+          <div class="certificate-meta-grid" style="font-size: 0.875rem; margin-bottom: 36px; padding: 16px 24px; background: #F8E6EB; border-radius: 6px;">
             <div>
               <strong>Date d’émission officielle :</strong> ${window.SignwUtils.formatDateFR(cert.delivreeLe)}<br>
               <strong>Date d’échéance / Renouvellement :</strong> ${window.SignwUtils.formatDateFR(cert.expireLe)}
@@ -151,21 +151,21 @@
           </div>
 
           <!-- Sceau, QR et Signatures -->
-          <div class="certificate-footer-signatures" style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 20px;">
+          <div class="certificate-footer-signatures" style="padding-top: 20px;">
             <!-- Sceau officiel -->
             <div style="text-align: center;">
-              <img src="../../assets/img/certificate-seal.svg" alt="Sceau officiel" style="width: 120px; height: 120px; margin: 0 auto 6px;">
+              <img src="../../assets/img/certificate-seal.svg" alt="Sceau officiel" style="width: 100px; height: 100px; margin: 0 auto 6px; max-width: 100%;">
               <div style="font-size: 0.6875rem; font-weight: 700; color: var(--brand-900);">SCEAU OFFICIEL SIGNW</div>
             </div>
 
             <!-- QR code de vérification instantanée -->
             <div style="text-align: center;">
-              <img src="../../assets/img/qr-placeholder.svg" alt="QR Code" style="width: 90px; height: 90px; margin: 0 auto 6px;">
+              <img src="../../assets/img/qr-placeholder.svg" alt="QR Code" style="width: 80px; height: 80px; margin: 0 auto 6px; max-width: 100%;">
               <div style="font-size: 0.6875rem; color: var(--ink-500);">SCANNER POUR CONTRÔLER L’AUTHENTICITÉ</div>
             </div>
 
             <!-- Signature électronique certifiée -->
-            <div style="text-align: right;">
+            <div style="text-align: center;">
               <div style="font-size: 0.75rem; color: var(--ink-500); margin-bottom: 6px;">Fait à Yaoundé, le ${window.SignwUtils.formatDateFR(cert.delivreeLe)}</div>
               <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 800; color: #1E3A8A; font-style: italic;">
                 Commission Nationale d’Audit signw

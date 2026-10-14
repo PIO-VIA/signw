@@ -71,27 +71,27 @@
             <div style="display: flex; gap: 20px; align-items: center;">
               <img src="${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 72px; height: 72px; border-radius: 12px; border: 1px solid var(--ink-200);">
               <div>
-                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                  <h1 style="font-size: 2.2rem; margin: 0;">${agt.raisonSociale}</h1>
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
+                  <h1 style="font-size: clamp(1.35rem, 3vw, 2.1rem); margin: 0; word-break: break-word;">${agt.raisonSociale}</h1>
                   ${window.SignwUtils.getTierBadge(agt.niveau)}
                 </div>
-                <div style="font-size: 0.95rem; color: var(--ink-500);">
+                <div style="font-size: 0.95rem; color: var(--ink-500); word-break: break-word;">
                   Forme juridique : <strong>${agt.formeJuridique}</strong> • RCCM : <strong>${agt.rccm}</strong> • NIU : <strong>${agt.niu}</strong>
                 </div>
-                <div style="font-size: 0.875rem; color: var(--ink-500); margin-top: 4px;">
+                <div style="font-size: 0.875rem; color: var(--ink-500); margin-top: 4px; word-break: break-word;">
                   📍 ${agt.adresse || agt.ville} (${agt.region}) • Site web : <a href="https://${agt.siteWeb}" target="_blank">${agt.siteWeb}</a>
                 </div>
               </div>
             </div>
 
             <!-- Jauge et Actions -->
-            <div style="display: flex; align-items: center; gap: 24px;">
+            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
               <div style="text-align: center;">
                 <div class="text-xs text-muted" style="margin-bottom: 4px; font-weight: 700;">SCORE DE CONFIANCE</div>
                 ${window.SignwUI.renderScoreGauge(agt.score, 68)}
               </div>
 
-              <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 180px;">
                 <a href="app/principal/adequation.html?agt=${agt.id}" class="btn btn-primary btn-sm">
                   ⚡ Tester l’adéquation projet
                 </a>
@@ -108,18 +108,18 @@
           </div>
 
           <!-- 4 Métriques d'en-tête -->
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; border-top: 1px solid var(--ink-200); padding-top: 20px;">
+          <div class="agent-metrics-grid" style="border-top: 1px solid var(--ink-200); padding-top: 20px;">
             <div>
               <div class="text-xs text-muted">CHIFFRE D'AFFAIRES MOYEN (3 ANS)</div>
-              <div style="font-size: 1.35rem; font-weight: 800; color: var(--brand-700);">${window.SignwUtils.formatFCFA(agt.caMoyen3ans)}</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--brand-700);">${window.SignwUtils.formatFCFA(agt.caMoyen3ans)}</div>
             </div>
             <div>
               <div class="text-xs text-muted">EFFECTIF SALARIÉ DÉCLARÉ</div>
-              <div style="font-size: 1.35rem; font-weight: 700;">${agt.effectif} permanents</div>
+              <div style="font-size: 1.25rem; font-weight: 700;">${agt.effectif} permanents</div>
             </div>
             <div>
               <div class="text-xs text-muted">ANCIENNETÉ DU PRESTATAIRE</div>
-              <div style="font-size: 1.35rem; font-weight: 700;">${new Date().getFullYear() - agt.anneeCreation} ans (${agt.anneeCreation})</div>
+              <div style="font-size: 1.25rem; font-weight: 700;">${new Date().getFullYear() - agt.anneeCreation} ans (${agt.anneeCreation})</div>
             </div>
             <div>
               <div class="text-xs text-muted">STATUT DU CERTIFICAT</div>
@@ -129,7 +129,7 @@
         </div>
 
         <!-- Layout Grille 2 colonnes : Onglets détaillés + Encadré de confiance -->
-        <div style="display: grid; grid-template-columns: 1fr 340px; gap: 32px; align-items: start;">
+        <div class="agent-profile-layout">
 
           <!-- Colonne Gauche : Onglets -->
           <div class="card" style="padding: 28px;">
