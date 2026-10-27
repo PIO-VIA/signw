@@ -1,445 +1,333 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Poste de Vérification d’Audit — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Poste de Vérification d’Audit — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout audit-page-body">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content audit-page-content" style="padding: 16px; display: flex; flex-direction: column;">
-      <!-- En-tête Dossier -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: var(--white); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--ink-200); flex-wrap: wrap; gap: 12px;">
-        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-          <a href="file-attente.html" class="btn btn-ghost btn-sm">← File</a>
-          <div>
-            <h3 style="margin: 0; font-size: 1.15rem;" id="audit-agt-name">Chargement...</h3>
-            <span class="text-xs text-muted" id="audit-dossier-ref">Dossier BTP</span>
-          </div>
-          <div id="audit-dossier-badge"></div>
-        </div>
+ <main class="app-content audit-page-content" style="padding: 16px; display: flex; flex-direction: column;">
+ <!-- En-tête Dossier -->
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: var(--white); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--ink-200); flex-wrap: wrap; gap: 12px;">
+ <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+ <a href="file-attente.html" class="btn btn-ghost btn-sm">← File</a>
+ <div>
+ <h3 style="margin: 0; font-size: 1.15rem;" id="audit-agt-name">Chargement...</h3>
+ <span class="text-xs text-muted" id="audit-dossier-ref">Dossier BTP</span>
+ </div>
+ <div id="audit-dossier-badge"></div>
+ </div>
 
-        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-          <div style="text-align: right;">
-            <div class="text-xs text-muted">SCORE PROVISOIRE</div>
-            <strong style="font-size: 1.3rem; color: var(--brand-700);" id="audit-live-score">0 / 100</strong>
-          </div>
-          <button class="btn btn-secondary btn-sm" onclick="SignwUI.openModal('modal-audit-terrain')">
-            📍 Visite terrain
-          </button>
-          <button class="btn btn-gold btn-sm" onclick="openAvisFinalModal()">
-            ⚖️ Avis final →
-          </button>
-        </div>
-      </div>
+ <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+ <div style="text-align: right;">
+ <div class="text-xs text-muted">SCORE PROVISOIRE</div>
+ <strong style="font-size: 1.3rem; color: var(--brand-700);" id="audit-live-score">0 / 100</strong>
+ </div>
+ <button class="btn btn-secondary btn-sm" onclick="SignwUI.openModal('modal-audit-terrain')">
+ Visite terrain
+ </button>
+ <button class="btn btn-primary btn-sm" onclick="openAvisFinalModal()">
+  Avis final →
+ </button>
+ </div>
+ </div>
 
-      <!-- Poste 3 Zones -->
-      <div class="audit-workstation" style="flex: 1; min-height: 0;">
+ <!-- Poste 3 Zones -->
+ <div class="audit-workstation" style="flex: 1; min-height: 0;">
 
-        <!-- Zone 1 : Arbre des pièces par pilier -->
-        <div class="audit-sidebar-tree">
-          <div class="audit-tree-header">
-            <strong style="font-size: 0.875rem;">Pièces justificatives du dossier</strong>
-            <div class="text-xs text-muted" id="tree-progress-text">Progression : 0%</div>
-          </div>
-          <div class="audit-tree-list" id="audit-tree-mount">
-            <!-- Injecté dynamique -->
-          </div>
-        </div>
+ <!-- Zone 1 : Arbre des pièces par pilier -->
+ <div class="audit-sidebar-tree">
+ <div class="audit-tree-header">
+ <strong style="font-size: 0.875rem;">Pièces justificatives du dossier</strong>
+ <div class="text-xs text-muted" id="tree-progress-text">Progression : 0%</div>
+ </div>
+ <div class="audit-tree-list" id="audit-tree-mount">
+ <!-- Injecté dynamique -->
+ </div>
+ </div>
 
-        <!-- Zone 2 : Visionneuse de document + Déclarations de l'agent -->
-        <div class="audit-viewer-zone">
-          <div style="padding: 12px 16px; background: var(--ink-50); border-bottom: 1px solid var(--ink-200); display: flex; justify-content: space-between; align-items: center;">
-            <strong id="viewer-doc-title" style="font-size: 0.9rem;">Document</strong>
-            <span class="text-xs text-muted" id="viewer-doc-meta">Format PDF certifié</span>
-          </div>
+ <!-- Zone 2 : Visionneuse de document + Déclarations de l'agent -->
+ <div class="audit-viewer-zone">
+ <div style="padding: 12px 16px; background: var(--ink-50); border-bottom: 1px solid var(--ink-200); display: flex; justify-content: space-between; align-items: center;">
+ <strong id="viewer-doc-title" style="font-size: 0.9rem;">Document</strong>
+ <span class="text-xs text-muted" id="viewer-doc-meta">Format PDF certifié</span>
+ </div>
 
-          <div class="audit-viewer-body">
-            <!-- Déclarations agent vs Document -->
-            <div style="width: 100%; max-width: 580px; background: var(--white); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 14px; border: 1px solid var(--ink-300); font-size: 0.8125rem;">
-              <span class="font-bold text-brand">Déclaration de l’entreprise :</span>
-              <div id="viewer-declaration-text" style="color: var(--ink-900); margin-top: 2px;"></div>
-            </div>
+ <div class="audit-viewer-body">
+ <!-- Déclarations agent vs Document -->
+ <div style="width: 100%; max-width: 580px; background: var(--white); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 14px; border: 1px solid var(--ink-300); font-size: 0.8125rem;">
+ <span class="font-bold text-brand">Déclaration de l’entreprise :</span>
+ <div id="viewer-declaration-text" style="color: var(--ink-900); margin-top: 2px;"></div>
+ </div>
 
-            <!-- Aperçu réaliste document officiel -->
-            <div class="audit-doc-preview" id="viewer-doc-preview-mount" style="padding: 16px; text-align: center;">
-              <img id="doc-preview-img" src="../../assets/img/doc-preview-01.svg" alt="Aperçu document" style="max-height: 480px; width: auto; margin: 0 auto; box-shadow: var(--shadow-sm);">
-            </div>
-          </div>
-        </div>
+ <!-- Aperçu réaliste document officiel -->
+ <div class="audit-doc-preview" id="viewer-doc-preview-mount" style="padding: 16px; text-align: center;">
+ <img id="doc-preview-img" src="../../assets/img/doc-preview-01.svg" alt="Aperçu document" style="max-height: 480px; width: auto; margin: 0 auto; box-shadow: var(--shadow-sm);">
+ </div>
+ </div>
+ </div>
 
-        <!-- Zone 3 : Panneau de décision auditeur -->
-        <div class="audit-decision-zone">
-          <div>
-            <h4 style="margin: 0 0 6px;">Décision d'audit sur cette pièce</h4>
-            <span class="text-xs text-muted">Contrôle de conformité et cotation du risque</span>
-          </div>
+ <!-- Zone 3 : Panneau de décision auditeur -->
+ <div class="audit-decision-zone">
+ <div>
+ <h4 style="margin: 0 0 6px;">Décision d'audit sur cette pièce</h4>
+ <span class="text-xs text-muted">Contrôle de conformité et cotation du risque</span>
+ </div>
 
-          <!-- Règle de vérification rappelée -->
-          <div style="background: var(--ink-50); padding: 12px; border-radius: var(--radius-md); border-left: 3px solid var(--brand-700); font-size: 0.8125rem;">
-            <strong style="color: var(--brand-900);">Règle de vérification :</strong>
-            <p id="rule-text" style="margin: 4px 0 0; color: var(--ink-700);">Vérifier que la date de validité est postérieure à ce jour.</p>
-          </div>
+ <!-- Règle de vérification rappelée -->
+ <div style="background: var(--ink-50); padding: 12px; border-radius: var(--radius-md); font-size: 0.8125rem;">
+ <strong style="color: var(--brand-900);">Règle de vérification :</strong>
+ <p id="rule-text" style="margin: 4px 0 0; color: var(--ink-700);">Vérifier que la date de validité est postérieure à ce jour.</p>
+ </div>
 
-          <!-- 3 Boutons de décision -->
-          <div>
-            <label class="form-label text-xs">Verdict sur la pièce :</label>
-            <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
-              <button type="button" class="btn btn-secondary btn-sm" id="btn-valider" onclick="setDecision('validee')" style="justify-content: flex-start; color: var(--success); font-weight: 700;">
-                ✓ Valider la pièce conforme (Touche V)
-              </button>
-              <button type="button" class="btn btn-secondary btn-sm" id="btn-complement" onclick="setDecision('complement_demande')" style="justify-content: flex-start; color: var(--warning); font-weight: 700;">
-                ⚠️ Demander un complément
-              </button>
-              <button type="button" class="btn btn-secondary btn-sm" id="btn-rejeter" onclick="setDecision('rejetee')" style="justify-content: flex-start; color: var(--danger); font-weight: 700;">
-                ✕ Rejeter la pièce non conforme (Touche R)
-              </button>
-            </div>
-          </div>
+ <!-- 3 Boutons de décision -->
+ <div>
+ <label class="form-label text-xs">Verdict sur la pièce :</label>
+ <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+ <button type="button" class="btn btn-secondary btn-sm btn-wrap" id="btn-valider" onclick="setDecision('validee')" style="justify-content: flex-start; color: var(--success); font-weight: 700;">
+ Valider (V)
+ </button>
+ <button type="button" class="btn btn-secondary btn-sm btn-wrap" id="btn-complement" onclick="setDecision('complement_demande')" style="justify-content: flex-start; color: var(--warning); font-weight: 700;">
+ Demander un complément
+ </button>
+ <button type="button" class="btn btn-secondary btn-sm btn-wrap" id="btn-rejeter" onclick="setDecision('rejetee')" style="justify-content: flex-start; color: var(--danger); font-weight: 700;">
+ Rejeter (R)
+ </button>
+ </div>
+ </div>
 
-          <!-- Niveau de risque -->
-          <div class="form-group">
-            <label class="form-label text-xs">Niveau de risque évalué :</label>
-            <select id="piece-risk-select" class="form-control" style="font-size: 0.8125rem;">
-              <option value="faible">Faible (Pièce authentifiée à 100%)</option>
-              <option value="moyen">Moyen (Pièce valide avec réserve mineure - 70%)</option>
-              <option value="eleve">Élevé (Incohérence matérielle - 40%)</option>
-            </select>
-          </div>
+ <!-- Niveau de risque -->
+ <div class="form-group">
+ <label class="form-label text-xs">Niveau de risque évalué :</label>
+ <select id="piece-risk-select" class="form-control" style="font-size: 0.8125rem;">
+ <option value="faible">Faible — authentifiée</option>
+ <option value="moyen">Moyen — réserve mineure</option>
+ <option value="eleve">Élevé — incohérence</option>
+ </select>
+ </div>
 
-          <!-- Commentaire obligatoire si rejet/complément -->
-          <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
-            <label class="form-label text-xs">Commentaire / Justification de l'auditeur :</label>
-            <textarea id="piece-comment-text" class="form-control" style="flex: 1; min-height: 80px; font-size: 0.8125rem;" placeholder="Mentionnez le motif précis visible par l’agent..."></textarea>
-          </div>
+ <!-- Commentaire obligatoire si rejet/complément -->
+ <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
+ <label class="form-label text-xs">Commentaire / Justification de l'auditeur :</label>
+ <textarea id="piece-comment-text" class="form-control" style="flex: 1; min-height: 80px; font-size: 0.8125rem;" placeholder="Mentionnez le motif précis visible par l’agent..."></textarea>
+ </div>
 
-          <button class="btn btn-primary w-full" onclick="saveActivePieceDecision()">
-            Enregistrer la décision & Pièce suivante →
-          </button>
-        </div>
+ <button class="btn btn-primary w-full btn-wrap" onclick="saveActivePieceDecision()">
+ Enregistrer & pièce suivante
+ </button>
+ </div>
 
-      </div>
-    </main>
-  </div>
+ </div>
+ </main>
+ </div>
 
-  <!-- Modale Audit Terrain -->
-  <div class="modal-overlay" id="modal-audit-terrain">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h4 style="margin: 0;">Planifier un Audit Terrain (Inspection sur Site)</h4>
-        <button class="btn-ghost btn-sm" onclick="SignwUI.closeModal('modal-audit-terrain')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label text-xs">Date de la descente sur site :</label>
-          <input type="date" id="terrain-date" class="form-control" value="2026-11-05">
-        </div>
-        <div class="form-group">
-          <label class="form-label text-xs">Lieu de l'inspection :</label>
-          <input type="text" id="terrain-lieu" class="form-control" value="Parc matériel Bonabéri, Douala">
-        </div>
-        <div class="form-group">
-          <label class="form-label text-xs">Objet du contrôle :</label>
-          <textarea id="terrain-objet" class="form-control" rows="3">Contrôle physique des numéros de châssis des 2 pelles hydrauliques et de la niveleuse déclarées dans le dossier.</textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label text-xs">Inspecteur principal :</label>
-          <input type="text" class="form-control" value="Alain Nkoulou (Auditeur BTP)">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary btn-sm" onclick="SignwUI.closeModal('modal-audit-terrain')">Annuler</button>
-        <button class="btn btn-primary btn-sm" onclick="confirmAuditTerrain()">Enregistrer et notifier l'entreprise</button>
-      </div>
-    </div>
-  </div>
+ <!-- Modale Audit Terrain -->
+ <div class="modal-overlay" id="modal-audit-terrain">
+ <div class="modal-card">
+ <div class="modal-header">
+ <h4 style="margin: 0;">Planifier un Audit Terrain (Inspection sur Site)</h4>
+ <button class="btn-ghost btn-sm" onclick="SignwUI.closeModal('modal-audit-terrain')">&times;</button>
+ </div>
+ <div class="modal-body">
+ <div class="form-group">
+ <label class="form-label text-xs">Date de la descente sur site :</label>
+ <input type="date" id="terrain-date" class="form-control" value="2026-11-05">
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Lieu de l'inspection :</label>
+ <input type="text" id="terrain-lieu" class="form-control" value="Parc matériel Bonabéri, Douala">
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Objet du contrôle :</label>
+ <textarea id="terrain-objet" class="form-control" rows="3">Contrôle physique des numéros de châssis des 2 pelles hydrauliques et de la niveleuse déclarées dans le dossier.</textarea>
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Inspecteur principal :</label>
+ <input type="text" class="form-control" value="Alain Nkoulou (Auditeur BTP)">
+ </div>
+ </div>
+ <div class="modal-footer">
+ <button class="btn btn-secondary btn-sm" onclick="SignwUI.closeModal('modal-audit-terrain')">Annuler</button>
+ <button class="btn btn-primary btn-sm btn-wrap" onclick="confirmAuditTerrain()">Enregistrer et notifier</button>
+ </div>
+ </div>
+ </div>
 
-  <!-- Modale Avis Final -->
-  <div class="modal-overlay" id="modal-avis-final">
-    <div class="modal-card" style="max-width: 600px;">
-      <div class="modal-header">
-        <h4 style="margin: 0;">Émission de l'Avis d'Audit Final (Recommandation)</h4>
-        <button class="btn-ghost btn-sm" onclick="SignwUI.closeModal('modal-avis-final')">&times;</button>
-      </div>
-      <div class="modal-body" id="avis-final-body">
-        <!-- Injecté dynamique -->
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary btn-sm" onclick="SignwUI.closeModal('modal-avis-final')">Fermer</button>
-        <button class="btn btn-gold btn-sm" id="btn-submit-avis" onclick="submitFinalAvis()">
-          Transmettre pour décision à l'administrateur signw
-        </button>
-      </div>
-    </div>
-  </div>
+ <!-- Modale Avis Final -->
+ <div class="modal-overlay" id="modal-avis-final">
+ <div class="modal-card" style="max-width: 600px;">
+ <div class="modal-header">
+ <h4 style="margin: 0;">Émission de l'Avis d'Audit Final (Recommandation)</h4>
+ <button class="btn-ghost btn-sm" onclick="SignwUI.closeModal('modal-avis-final')">&times;</button>
+ </div>
+ <div class="modal-body" id="avis-final-body">
+ <!-- Injecté dynamique -->
+ </div>
+ <div class="modal-footer">
+ <button class="btn btn-secondary btn-sm" onclick="SignwUI.closeModal('modal-avis-final')">Fermer</button>
+ <button class="btn btn-primary btn-sm btn-wrap" id="btn-submit-avis" onclick="submitFinalAvis()">
+ Transmettre à l’administrateur
+ </button>
+ </div>
+ </div>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    let currentDossier = null;
-    let currentPiece = null;
-    let piecesList = [];
+ <script>
+ let currentDossier = null; let currentPiece = null; let piecesList = []; document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['auditeur', 'admin'])) return; const urlParams = new URLSearchParams(window.location.search); const dosId = urlParams.get('id') || 'dos_002'; // default: Sahel Travaux pour la démo !
+ loadDossier(dosId); // Raccourcis clavier (V = valider, R = rejeter)
+ window.addEventListener('keydown', (e) => {
+ if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; if (e.key === 'v' || e.key === 'V') setDecision('validee'); if (e.key === 'r' || e.key === 'R') setDecision('rejetee'); }); }); function loadDossier(dosId) {
+ currentDossier = window.SignwStore.getDossierById(dosId); if (!currentDossier) {
+ alert('Dossier introuvable'); window.location.href = 'file-attente.html'; return; }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['auditeur', 'admin'])) return;
+ const agent = window.SignwStore.getAgentById(currentDossier.agentId); document.getElementById('audit-agt-name').textContent = agent ? agent.raisonSociale : 'Agent'; document.getElementById('audit-dossier-ref').textContent = `Dossier ${currentDossier.id} • Secteur BTP`; document.getElementById('audit-dossier-badge').innerHTML = window.SignwUtils.getStatusBadge(currentDossier.statut); piecesList = window.SignwStore.getPiecesByDossier(currentDossier.id); if (piecesList.length === 0) {
+ // Créer 4 pièces types si le dossier n'en avait pas encore
+ piecesList = [
+ window.SignwStore.savePiece({ dossierId: currentDossier.id, champId: 'f_rccm_doc', nomFichier: 'RCCM_Officiel.pdf', statutPiece: 'validee' }),
+ window.SignwStore.savePiece({ dossierId: currentDossier.id, champId: 'f_quitus', nomFichier: 'Quitus_Fiscal_DGI.pdf', statutPiece: 'validee' }),
+ window.SignwStore.savePiece({ dossierId: currentDossier.id, champId: 'f_faillite', nomFichier: 'Non_Faillite_Tribunal.pdf', statutPiece: 'en_verification' })
+ ]; }
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const dosId = urlParams.get('id') || 'dos_002'; // default: Sahel Travaux pour la démo !
-      loadDossier(dosId);
+ renderTree(); selectPiece(piecesList[0].id); recalculateScore(); }
 
-      // Raccourcis clavier (V = valider, R = rejeter)
-      window.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        if (e.key === 'v' || e.key === 'V') setDecision('validee');
-        if (e.key === 'r' || e.key === 'R') setDecision('rejetee');
-      });
-    });
+ function renderTree() {
+ const mount = document.getElementById('audit-tree-mount'); const validatedCount = piecesList.filter(p => p.statutPiece === 'validee').length; const pct = Math.round((validatedCount / piecesList.length) * 100); document.getElementById('tree-progress-text').textContent = `Conformité : ${pct}% (${validatedCount}/${piecesList.length} validées)`; mount.innerHTML = piecesList.map(p => {
+ const isActive = currentPiece && currentPiece.id === p.id; const statusMap = {
+ validee: '<span style="color: var(--success); font-weight: 700;">Validée</span>',
+ rejetee: '<span style="color: var(--danger); font-weight: 700;">Rejetée</span>',
+ complement_demande: '<span style="color: var(--warning); font-weight: 700;">Complément</span>',
+ en_verification: '<span class="text-muted">En attente</span>',
+ deposee: '<span class="text-muted">Déposée</span>'
+ }; return `
+ <div class="audit-piece-item ${isActive ? 'active' : ''}" onclick="selectPiece('${p.id}')">
+ <div style="min-width:0; flex:1;">
+ <div class="font-bold text-xs" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+ ${p.nomFichier}
+ </div>
+ <div class="text-xs text-muted">${(p.tailleKo / 1024).toFixed(1)} Mo</div>
+ </div>
+ <div style="font-size: 0.75rem; flex-shrink:0; margin-left: 8px;">${statusMap[p.statutPiece] || p.statutPiece}</div>
+ </div>
+ `; }).join(''); }
 
-    function loadDossier(dosId) {
-      currentDossier = window.SignwStore.getDossierById(dosId);
-      if (!currentDossier) {
-        alert('Dossier introuvable');
-        window.location.href = 'file-attente.html';
-        return;
-      }
+ function selectPiece(pieceId) {
+ currentPiece = piecesList.find(p => p.id === pieceId) || piecesList[0]; renderTree(); document.getElementById('viewer-doc-title').textContent = currentPiece.nomFichier; document.getElementById('viewer-doc-meta').textContent = `${(currentPiece.tailleKo / 1024).toFixed(1)} Mo • Déposé le ${currentPiece.deposeeLe}`; document.getElementById('viewer-declaration-text').textContent = `Valeur déclarée par l’agent pour ce champ : ${currentPiece.nomFichier}`; // Image preview simulation
+ const previewImg = document.getElementById('doc-preview-img'); const previews = [
+ '../../assets/img/doc-preview-01.svg',
+ '../../assets/img/doc-preview-02.svg',
+ '../../assets/img/doc-preview-03.svg',
+ '../../assets/img/doc-preview-04.svg'
+ ]; previewImg.src = previews[piecesList.indexOf(currentPiece) % previews.length]; document.getElementById('piece-risk-select').value = currentPiece.niveauRisque || 'faible'; document.getElementById('piece-comment-text').value = currentPiece.commentaireAuditeur || ''; highlightDecisionButtons(currentPiece.statutPiece); }
 
-      const agent = window.SignwStore.getAgentById(currentDossier.agentId);
-      document.getElementById('audit-agt-name').textContent = agent ? agent.raisonSociale : 'Agent';
-      document.getElementById('audit-dossier-ref').textContent = `Dossier ${currentDossier.id} • Secteur BTP`;
-      document.getElementById('audit-dossier-badge').innerHTML = window.SignwUtils.getStatusBadge(currentDossier.statut);
+ function setDecision(status) {
+ if (!currentPiece) return; currentPiece.statutPiece = status; highlightDecisionButtons(status); if (status === 'validee') {
+ document.getElementById('piece-comment-text').value = 'Pièce contrôlée conforme avec les registres officiels.'; } else if (status === 'rejetee') {
+ document.getElementById('piece-comment-text').value = 'Pièce non conforme : date de validité expirée ou non certifiée.'; } else if (status === 'complement_demande') {
+ document.getElementById('piece-comment-text').value = 'Merci de fournir le document complémentaire attestant de la validité.'; }
+ }
 
-      piecesList = window.SignwStore.getPiecesByDossier(currentDossier.id);
-      if (piecesList.length === 0) {
-        // Créer 4 pièces types si le dossier n'en avait pas encore
-        piecesList = [
-          window.SignwStore.savePiece({ dossierId: currentDossier.id, champId: 'f_rccm_doc', nomFichier: 'RCCM_Officiel.pdf', statutPiece: 'validee' }),
-          window.SignwStore.savePiece({ dossierId: currentDossier.id, champId: 'f_quitus', nomFichier: 'Quitus_Fiscal_DGI.pdf', statutPiece: 'validee' }),
-          window.SignwStore.savePiece({ dossierId: currentDossier.id, champId: 'f_faillite', nomFichier: 'Non_Faillite_Tribunal.pdf', statutPiece: 'en_verification' })
-        ];
-      }
+ function highlightDecisionButtons(status) {
+ document.getElementById('btn-valider').style.background = status === 'validee' ? 'var(--success-bg)' : ''; document.getElementById('btn-complement').style.background = status === 'complement_demande' ? 'var(--warning-bg)' : ''; document.getElementById('btn-rejeter').style.background = status === 'rejetee' ? 'var(--danger-bg)' : ''; }
 
-      renderTree();
-      selectPiece(piecesList[0].id);
-      recalculateScore();
-    }
+ function saveActivePieceDecision() {
+ if (!currentPiece) return; const risk = document.getElementById('piece-risk-select').value; const comment = document.getElementById('piece-comment-text').value; if ((currentPiece.statutPiece === 'rejetee' || currentPiece.statutPiece === 'complement_demande') && !comment.trim()) {
+ alert('Le commentaire d’audit est obligatoire en cas de rejet ou de demande de complément.'); return; }
 
-    function renderTree() {
-      const mount = document.getElementById('audit-tree-mount');
-      const validatedCount = piecesList.filter(p => p.statutPiece === 'validee').length;
-      const pct = Math.round((validatedCount / piecesList.length) * 100);
-      document.getElementById('tree-progress-text').textContent = `Conformité : ${pct}% (${validatedCount}/${piecesList.length} validées)`;
+ window.SignwStore.updatePieceDecision(currentPiece.id, {
+ statutPiece: currentPiece.statutPiece,
+ niveauRisque: risk,
+ commentaireAuditeur: comment,
+ verifieePar: window.SignwAuth.getCurrentUser().nom
+ }); window.SignwUI.showToast(`Décision enregistrée pour "${currentPiece.nomFichier}".`, 'success'); // Pièce suivante
+ const nextIdx = (piecesList.indexOf(currentPiece) + 1) % piecesList.length; recalculateScore(); selectPiece(piecesList[nextIdx].id); }
 
-      mount.innerHTML = piecesList.map(p => {
-        const isActive = currentPiece && currentPiece.id === p.id;
-        const statusMap = {
-          validee: '<span style="color: var(--success); font-weight: bold;">✓ Validée</span>',
-          rejetee: '<span style="color: var(--danger); font-weight: bold;">✕ Rejetée</span>',
-          complement_demande: '<span style="color: var(--warning); font-weight: bold;">⚠ Complément</span>',
-          en_verification: '<span class="text-muted">⏳ En attente</span>',
-          deposee: '<span class="text-muted">📥 Déposée</span>'
-        };
+ function recalculateScore() {
+ const res = window.SignwScore.calculateDossierScore(currentDossier.id); document.getElementById('audit-live-score').textContent = `${res.scoreTotal} / 100`; currentDossier.scoreProvisoire = res.scoreTotal; window.SignwStore.save(); }
 
-        return `
-          <div class="audit-piece-item ${isActive ? 'active' : ''}" onclick="selectPiece('${p.id}')">
-            <div>
-              <div class="font-bold text-xs" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">
-                📄 ${p.nomFichier}
-              </div>
-              <div class="text-xs text-muted">${(p.tailleKo / 1024).toFixed(1)} Mo</div>
-            </div>
-            <div style="font-size: 0.75rem;">${statusMap[p.statutPiece] || p.statutPiece}</div>
-          </div>
-        `;
-      }).join('');
-    }
+ function confirmAuditTerrain() {
+ const date = document.getElementById('terrain-date').value; const lieu = document.getElementById('terrain-lieu').value; window.SignwStore.transitionDossier(
+ currentDossier.id,
+ 'audit_terrain_planifie',
+ window.SignwAuth.getCurrentUser().nom,
+ `Audit terrain planifié pour le ${date} à ${lieu}`
+ ); window.SignwUI.closeModal('modal-audit-terrain'); window.SignwUI.showToast('Visite terrain planifiée et consignée au journal !', 'success'); document.getElementById('audit-dossier-badge').innerHTML = window.SignwUtils.getStatusBadge('audit_terrain_planifie'); }
 
-    function selectPiece(pieceId) {
-      currentPiece = piecesList.find(p => p.id === pieceId) || piecesList[0];
-      renderTree();
+ function openAvisFinalModal() {
+ const pending = piecesList.filter(p => p.statutPiece === 'en_verification' || p.statutPiece === 'deposee'); const body = document.getElementById('avis-final-body'); const submitBtn = document.getElementById('btn-submit-avis'); if (pending.length > 0) {
+ body.innerHTML = `
+ <div class="card" style="background: var(--warning-bg); border: 1.5px solid var(--warning); padding: 20px;">
+ <h4 style="color: #9A5B00; margin: 0 0 8px;">Impossible d’émettre l’avis final :</h4>
+ <p style="font-size: 0.9rem; margin: 0;">
+ Il reste <strong>${pending.length} pièce(s)</strong> en cours de vérification. Vous devez statuer sur chacune d’elles avant de transmettre le dossier à la décision.
+ </p>
+ </div>
+ `; submitBtn.style.display = 'none'; } else {
+ submitBtn.style.display = 'inline-flex'; const res = window.SignwScore.calculateDossierScore(currentDossier.id); body.innerHTML = `
+ <div style="background: var(--ink-50); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
+ <div style="display: flex; justify-content: space-between; align-items: center;">
+ <strong>Score final calculé :</strong>
+ <span class="font-bold text-brand" style="font-size: 1.3rem;">${res.scoreTotal} / 100</span>
+ </div>
+ <div style="font-size: 0.8125rem; color: var(--ink-500); margin-top: 4px;">Niveau éligible : <strong>${res.niveau}</strong></div>
+ </div>
 
-      document.getElementById('viewer-doc-title').textContent = currentPiece.nomFichier;
-      document.getElementById('viewer-doc-meta').textContent = `${(currentPiece.tailleKo / 1024).toFixed(1)} Mo • Déposé le ${currentPiece.deposeeLe}`;
-      document.getElementById('viewer-declaration-text').textContent = `Valeur déclarée par l’agent pour ce champ : ${currentPiece.nomFichier}`;
+ <div class="form-group">
+ <label class="form-label text-xs">Recommandation formelle de l’auditeur :</label>
+ <select id="avis-recommandation" class="form-control">
+ <option value="certifie">Favorable : Délivrer la certification Niveau ${res.niveau}</option>
+ <option value="certifie_avec_reserves">Favorable avec réserves (pièces mineures sous condition)</option>
+ <option value="rejete">Défavorable : Rejeter la demande de qualification</option>
+ </select>
+ </div>
 
-      // Image preview simulation
-      const previewImg = document.getElementById('doc-preview-img');
-      const previews = [
-        '../../assets/img/doc-preview-01.svg',
-        '../../assets/img/doc-preview-02.svg',
-        '../../assets/img/doc-preview-03.svg',
-        '../../assets/img/doc-preview-04.svg'
-      ];
-      previewImg.src = previews[piecesList.indexOf(currentPiece) % previews.length];
+ <div class="form-group">
+ <label class="form-label text-xs">Rapport de synthèse d'audit (destiné à l’administrateur) :</label>
+ <textarea id="avis-synthese" class="form-control" rows="4" placeholder="Synthétisez les constats de conformité, solvabilité et solidité du parc d'engins..."></textarea>
+ </div>
+ `; }
 
-      document.getElementById('piece-risk-select').value = currentPiece.niveauRisque || 'faible';
-      document.getElementById('piece-comment-text').value = currentPiece.commentaireAuditeur || '';
+ window.SignwUI.openModal('modal-avis-final'); }
 
-      highlightDecisionButtons(currentPiece.statutPiece);
-    }
-
-    function setDecision(status) {
-      if (!currentPiece) return;
-      currentPiece.statutPiece = status;
-      highlightDecisionButtons(status);
-
-      if (status === 'validee') {
-        document.getElementById('piece-comment-text').value = 'Pièce contrôlée conforme avec les registres officiels.';
-      } else if (status === 'rejetee') {
-        document.getElementById('piece-comment-text').value = 'Pièce non conforme : date de validité expirée ou non certifiée.';
-      } else if (status === 'complement_demande') {
-        document.getElementById('piece-comment-text').value = 'Merci de fournir le document complémentaire attestant de la validité.';
-      }
-    }
-
-    function highlightDecisionButtons(status) {
-      document.getElementById('btn-valider').style.background = status === 'validee' ? 'var(--success-bg)' : '';
-      document.getElementById('btn-complement').style.background = status === 'complement_demande' ? 'var(--warning-bg)' : '';
-      document.getElementById('btn-rejeter').style.background = status === 'rejetee' ? 'var(--danger-bg)' : '';
-    }
-
-    function saveActivePieceDecision() {
-      if (!currentPiece) return;
-
-      const risk = document.getElementById('piece-risk-select').value;
-      const comment = document.getElementById('piece-comment-text').value;
-
-      if ((currentPiece.statutPiece === 'rejetee' || currentPiece.statutPiece === 'complement_demande') && !comment.trim()) {
-        alert('Le commentaire d’audit est obligatoire en cas de rejet ou de demande de complément.');
-        return;
-      }
-
-      window.SignwStore.updatePieceDecision(currentPiece.id, {
-        statutPiece: currentPiece.statutPiece,
-        niveauRisque: risk,
-        commentaireAuditeur: comment,
-        verifieePar: window.SignwAuth.getCurrentUser().nom
-      });
-
-      window.SignwUI.showToast(`Décision enregistrée pour "${currentPiece.nomFichier}".`, 'success');
-
-      // Pièce suivante
-      const nextIdx = (piecesList.indexOf(currentPiece) + 1) % piecesList.length;
-      recalculateScore();
-      selectPiece(piecesList[nextIdx].id);
-    }
-
-    function recalculateScore() {
-      const res = window.SignwScore.calculateDossierScore(currentDossier.id);
-      document.getElementById('audit-live-score').textContent = `${res.scoreTotal} / 100`;
-      currentDossier.scoreProvisoire = res.scoreTotal;
-      window.SignwStore.save();
-    }
-
-    function confirmAuditTerrain() {
-      const date = document.getElementById('terrain-date').value;
-      const lieu = document.getElementById('terrain-lieu').value;
-
-      window.SignwStore.transitionDossier(
-        currentDossier.id,
-        'audit_terrain_planifie',
-        window.SignwAuth.getCurrentUser().nom,
-        `Audit terrain planifié pour le ${date} à ${lieu}`
-      );
-
-      window.SignwUI.closeModal('modal-audit-terrain');
-      window.SignwUI.showToast('Visite terrain planifiée et consignée au journal !', 'success');
-      document.getElementById('audit-dossier-badge').innerHTML = window.SignwUtils.getStatusBadge('audit_terrain_planifie');
-    }
-
-    function openAvisFinalModal() {
-      const pending = piecesList.filter(p => p.statutPiece === 'en_verification' || p.statutPiece === 'deposee');
-      const body = document.getElementById('avis-final-body');
-      const submitBtn = document.getElementById('btn-submit-avis');
-
-      if (pending.length > 0) {
-        body.innerHTML = `
-          <div class="card" style="background: var(--warning-bg); border: 1.5px solid var(--warning); padding: 20px;">
-            <h4 style="color: #9A5B00; margin: 0 0 8px;">Impossible d’émettre l’avis final :</h4>
-            <p style="font-size: 0.9rem; margin: 0;">
-              Il reste <strong>${pending.length} pièce(s)</strong> en cours de vérification. Vous devez statuer sur chacune d’elles avant de transmettre le dossier à la décision.
-            </p>
-          </div>
-        `;
-        submitBtn.style.display = 'none';
-      } else {
-        submitBtn.style.display = 'inline-flex';
-        const res = window.SignwScore.calculateDossierScore(currentDossier.id);
-
-        body.innerHTML = `
-          <div style="background: var(--ink-50); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <strong>Score final calculé :</strong>
-              <span class="font-bold text-brand" style="font-size: 1.3rem;">${res.scoreTotal} / 100</span>
-            </div>
-            <div style="font-size: 0.8125rem; color: var(--ink-500); margin-top: 4px;">Niveau éligible : <strong>${res.niveau}</strong></div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label text-xs">Recommandation formelle de l’auditeur :</label>
-            <select id="avis-recommandation" class="form-control">
-              <option value="certifie">Favorable : Délivrer la certification Niveau ${res.niveau}</option>
-              <option value="certifie_avec_reserves">Favorable avec réserves (pièces mineures sous condition)</option>
-              <option value="rejete">Défavorable : Rejeter la demande de qualification</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label text-xs">Rapport de synthèse d'audit (destiné à l’administrateur) :</label>
-            <textarea id="avis-synthese" class="form-control" rows="4" placeholder="Synthétisez les constats de conformité, solvabilité et solidité du parc d'engins..."></textarea>
-          </div>
-        `;
-      }
-
-      window.SignwUI.openModal('modal-avis-final');
-    }
-
-    function submitFinalAvis() {
-      const reco = document.getElementById('avis-recommandation').value;
-      const synthese = document.getElementById('avis-synthese').value || 'Avis technique favorable.';
-
-      window.SignwStore.transitionDossier(
-        currentDossier.id,
-        'en_decision',
-        window.SignwAuth.getCurrentUser().nom,
-        `Avis final émis (${reco}) : ${synthese}`
-      );
-
-      window.SignwStore.addNotification(
-        'usr_admin',
-        'info',
-        `Nouveau dossier prêt pour décision finale : ${currentDossier.id}`,
-        `app/admin/certifications.html?dos=${currentDossier.id}`
-      );
-
-      window.SignwUI.closeModal('modal-avis-final');
-      window.SignwUI.showToast('Avis d’audit transmis à l’administrateur avec succès !', 'success');
-
-      setTimeout(() => {
-        window.location.href = 'file-attente.html';
-      }, 700);
-    }
-  </script>
+ function submitFinalAvis() {
+ const reco = document.getElementById('avis-recommandation').value; const synthese = document.getElementById('avis-synthese').value || 'Avis technique favorable.'; window.SignwStore.transitionDossier(
+ currentDossier.id,
+ 'en_decision',
+ window.SignwAuth.getCurrentUser().nom,
+ `Avis final émis (${reco}) : ${synthese}`
+ ); window.SignwStore.addNotification(
+ 'usr_admin',
+ 'info',
+ `Nouveau dossier prêt pour décision finale : ${currentDossier.id}`,
+ `app/admin/certifications.html?dos=${currentDossier.id}`
+ ); window.SignwUI.closeModal('modal-avis-final'); window.SignwUI.showToast('Avis d’audit transmis à l’administrateur avec succès !', 'success'); setTimeout(() => {
+ window.location.href = 'file-attente.html'; }, 700); }
+ </script>
 </body>
 </html>

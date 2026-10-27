@@ -1,71 +1,57 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dossier de Qualification — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Dossier de Qualification — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <div id="form-render-mount">
-        <!-- Rendu dynamique via formrender.js -->
-      </div>
-    </main>
-  </div>
+ <main class="app-content">
+ <div id="form-render-mount">
+ <!-- Rendu dynamique via formrender.js -->
+ </div>
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
-  <script src="../../js/core/formrender.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
+ <script src="../../js/core/formrender.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['agent'])) return;
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['agent'])) return; const user = window.SignwAuth.getCurrentUser(); const agent = window.SignwStore.getAgentById(user.agentId) || window.SignwStore.getAgents()[0]; const urlParams = new URLSearchParams(window.location.search); let dossierId = urlParams.get('id'); let dossier = null; if (dossierId) {
+ dossier = window.SignwStore.getDossierById(dossierId); }
 
-      const user = window.SignwAuth.getCurrentUser();
-      const agent = window.SignwStore.getAgentById(user.agentId) || window.SignwStore.getAgents()[0];
-      const urlParams = new URLSearchParams(window.location.search);
-      let dossierId = urlParams.get('id');
+ if (!dossier) {
+ // Prendre le premier dossier actif de l'agent ou en créer un nouveau
+ const existing = window.SignwStore.getDossiersByAgent(agent.id); if (existing.length > 0) {
+ dossier = existing[0]; } else {
+ dossier = window.SignwStore.createDossier(agent.id, agent.secteurId || 'sec_btp'); }
+ }
 
-      let dossier = null;
-      if (dossierId) {
-        dossier = window.SignwStore.getDossierById(dossierId);
-      }
-
-      if (!dossier) {
-        // Prendre le premier dossier actif de l'agent ou en créer un nouveau
-        const existing = window.SignwStore.getDossiersByAgent(agent.id);
-        if (existing.length > 0) {
-          dossier = existing[0];
-        } else {
-          dossier = window.SignwStore.createDossier(agent.id, agent.secteurId || 'sec_btp');
-        }
-      }
-
-      const schema = window.SignwStore.getFormSchemaBySector(dossier.secteurId);
-      window.SignwFormRender.init('form-render-mount', schema, dossier);
-    });
-  </script>
+ const schema = window.SignwStore.getFormSchemaBySector(dossier.secteurId); window.SignwFormRender.init('form-render-mount', schema, dossier); }); </script>
 </body>
 </html>

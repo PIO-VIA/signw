@@ -1,493 +1,396 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>signw — Tiers de Confiance pour les Marchés Publics & Privés</title>
-  <meta name="description" content="signw certifie les entreprises et prestataires sur preuves au Cameroun, pour que chaque marché soit attribué au bon acteur, au juste prix.">
-  <link rel="icon" type="image/png" href="favicon.png">
-
-  <!-- Polices Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
-
-  <!-- Design System CSS -->
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/pages.css">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>SIGNW — Tiers de Confiance pour les Marchés Publics & Privés</title>
+ <meta name="description" content="SIGNW certifie les entreprises et prestataires sur preuves au Cameroun, pour que chaque marché soit attribué au bon acteur, au juste prix.">
+ <link rel="icon" type="image/png" href="favicon.png">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="css/tokens.css">
+ <link rel="stylesheet" href="css/base.css">
+ <link rel="stylesheet" href="css/components.css">
+ <link rel="stylesheet" href="css/layout.css">
+ <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
 
-  <!-- Header injecté par layout.js -->
-  <header id="public-header"></header>
+ <header id="public-header"></header>
 
-  <main>
-    <!-- 1. SECTION HERO -->
-    <section class="hero-section">
-      <div class="container hero-content">
-        <div class="hero-badge-tag">
-          <span>🛡️ Plateforme Tiers de Confiance</span>
-          <span style="opacity: 0.6;">•</span>
-          <span>Cameroun & Afrique Centrale</span>
-        </div>
+ <main>
+ <section class="hero-section" id="hero">
+ <div class="hero-atmosphere" aria-hidden="true"></div>
+ <div class="container hero-content">
+ <p class="hero-eyebrow">Tiers de confiance · Cameroun</p>
+ <h1 class="hero-title">Vérifiez avant<br>de contracter.</h1>
+ <p class="hero-subtitle">
+ SIGNW certifie les entreprises sur preuves auditées, pour que chaque marché soit attribué au bon acteur.
+ </p>
 
-        <h1 class="hero-title">Vérifiez avant de contracter.</h1>
+ <div class="hero-search-bar">
+ <span id="hero-search-icon"></span>
+ <input type="text" id="hero-search-input" placeholder="Entreprise, secteur ou code SGW-…">
+ <button class="btn btn-primary" onclick="handleHeroSearch()">Rechercher</button>
+ </div>
 
-        <p class="hero-subtitle">
-          signw certifie les entreprises et prestataires sur <strong>preuves vérifiées</strong>,
-          pour que chaque marché public ou privé soit attribué au bon acteur, au juste prix.
-        </p>
+ <div class="hero-actions">
+ <a href="login.html?role=agent&tab=register" class="btn btn-primary btn-lg">Me faire certifier</a>
+ <a href="annuaire.html" class="btn btn-on-dark btn-lg">Consulter l’annuaire</a>
+ </div>
+ </div>
 
-        <!-- Barre de recherche rapide -->
-        <div class="hero-search-bar">
-          <span style="font-size: 1.25rem; padding-left: 8px;">🔍</span>
-          <input type="text" id="hero-search-input" placeholder="Rechercher une entreprise, un secteur, ou un code de certificat (ex: SGW-2026-00481)...">
-          <button class="btn btn-primary" onclick="handleHeroSearch()">Rechercher</button>
-        </div>
+ <div class="hero-bottom">
+ <div class="container">
+ <div class="stats-banner">
+ <div class="stat-item">
+ <div class="stat-number" data-counter="14">0</div>
+ <div class="stat-label">Agents référencés</div>
+ </div>
+ <div class="stat-item">
+ <div class="stat-number" data-counter="25">0</div>
+ <div class="stat-label">Dossiers instruits</div>
+ </div>
+ <div class="stat-item">
+ <div class="stat-number" data-counter="64">0</div>
+ <div class="stat-label">Pièces contrôlées</div>
+ </div>
+ <div class="stat-item">
+ <div class="stat-number"><span data-counter="5">0</span>,4 Md</div>
+ <div class="stat-label">FCFA de marchés sécurisés</div>
+ </div>
+ </div>
+ </div>
+ <a href="#apres-hero" class="hero-scroll" aria-label="Continuer">
+ <span>Découvrir</span>
+ <span class="hero-scroll-line"></span>
+ </a>
+ </div>
+ </section>
 
-        <div class="hero-actions" style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px;">
-          <a href="login.html?role=agent&tab=register" class="btn btn-gold btn-lg">
-            🏢 Me faire certifier (Agent)
-          </a>
-          <a href="annuaire.html" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.3);">
-            🏛️ Vérifier un prestataire (Maître d’ouvrage)
-          </a>
-        </div>
+ <div id="apres-hero"></div>
 
-        <!-- 3 Mini-badges de confiance -->
-        <div class="hero-trust-badges">
-          <div class="hero-trust-item">
-            <span style="color: var(--gold-500); font-weight: bold;">✓</span>
-            <span>Audit humain indépendant</span>
-          </div>
-          <div class="hero-trust-item">
-            <span style="color: var(--gold-500); font-weight: bold;">✓</span>
-            <span>Preuves matérielles & fiscales vérifiées</span>
-          </div>
-          <div class="hero-trust-item">
-            <span style="color: var(--gold-500); font-weight: bold;">✓</span>
-            <span>Transparence & Traçabilité inaltérable</span>
-          </div>
-        </div>
-      </div>
-    </section>
+ <section class="why-signw home-section">
+ <div class="container">
+ <div class="home-section-head centered">
+ <span class="section-eyebrow">Pourquoi SIGNW</span>
+ <h2>Réduire l’asymétrie d’information</h2>
+ <p class="lead">Sans tiers de confiance, l’acheteur ne distingue pas la vraie qualité. SIGNW transforme les déclarations en preuves auditées.</p>
+ </div>
 
-    <!-- 2. CHIFFRES CLÉS ANIMÉS -->
-    <section class="container" style="margin-bottom: 64px;">
-      <div class="stats-banner">
-        <div class="stat-item">
-          <div class="stat-number" data-counter="14">0</div>
-          <div class="stat-label">Entreprises & Agents référencés</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" data-counter="25">0</div>
-          <div class="stat-label">Dossiers d’audit instruits</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" data-counter="64">0</div>
-          <div class="stat-label">Pièces justificatives contrôlées</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number"><span data-counter="5">0</span>,4 Md</div>
-          <div class="stat-label">FCFA de marchés publics sécurisés</div>
-        </div>
-      </div>
-    </section>
+ <div class="why-panels">
+ <article class="why-panel why-panel--before">
+ <div class="why-panel-media">
+ <img src="assets/img/illus-asymmetry.webp" alt="Asymétrie d'information sur les marchés">
+ <div class="why-panel-shade"></div>
+ <span class="why-panel-label">Sans certification</span>
+ </div>
+ <div class="why-panel-body">
+ <ul>
+ <li><strong>Sélection adverse</strong> — les bons prestataires sont noyés parmi les dossiers fantômes.</li>
+ <li><strong>Déclarations invérifiées</strong> — matériel loué pour la journée, bilans non contrôlés.</li>
+ <li><strong>Surcoûts & abandons</strong> — incapacité réelle à absorber le volume du marché.</li>
+ </ul>
+ </div>
+ </article>
 
-    <!-- 3. PROBLÈME / SOLUTION (ASYMÉTRIE D'INFORMATION) -->
-    <section class="container" style="margin-bottom: 80px;">
-      <div class="text-center" style="max-width: 760px; margin: 0 auto 48px;">
-        <span class="badge badge-soumis" style="margin-bottom: 8px;">Fondement économique</span>
-        <h2>Réduire l’asymétrie d’information sur les marchés</h2>
-        <p class="lead">
-          En l’absence de tiers de confiance, l’acheteur ne peut pas distinguer la vraie qualité d’une entreprise.
-          signw rétablit l'équilibre en transformant les déclarations en preuves auditées.
-        </p>
-      </div>
+ <article class="why-panel why-panel--after">
+ <div class="why-panel-media">
+ <img src="assets/img/illus-trust.webp" alt="Confiance sur preuves avec SIGNW">
+ <div class="why-panel-shade"></div>
+ <span class="why-panel-label">Avec SIGNW</span>
+ </div>
+ <div class="why-panel-body">
+ <ul>
+ <li><strong>Signal crédible</strong> — badge, score de confiance et certificat SGW publics.</li>
+ <li><strong>Audit humain</strong> — pièces et terrain vérifiés par des auditeurs indépendants.</li>
+ <li><strong>Adéquation projet</strong> — test budget / capacité avant contractualisation.</li>
+ </ul>
+ </div>
+ </article>
+ </div>
+ </div>
+ </section>
 
-      <div class="grid grid-cols-2 gap-8">
-        <!-- Sans signw -->
-        <div class="problem-solution-card problem-card">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <span style="font-size: 2rem;">❌</span>
-            <h3 style="color: #9B2C2C; margin: 0;">Sans signw : Le flou contractuel</h3>
-          </div>
-          <img src="assets/img/illus-asymmetry.webp" alt="Asymétrie d'information sans signw" style="border-radius: var(--radius-md); margin-bottom: 20px; max-height: 240px; object-fit: cover;">
-          <ul style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; color: #742A2A; list-style: none;">
-            <li>⚠️ <strong>Sélection adverse (Akerlof) :</strong> Les prestataires sérieux sont pénalisés par les devis irréalistes d'entreprises fantômes.</li>
-            <li>⚠️ <strong>Déclarations sur l’honneur invérifiées :</strong> Engins lourds loués pour la journée ou matériel inexistant.</li>
-            <li>⚠️ <strong>Surcoûts et abandons de chantiers :</strong> Retards chroniques et incapacité financière à absorber le volume des travaux.</li>
-          </ul>
-        </div>
+ <section class="home-section" style="background: var(--ink-50); padding: var(--space-16) 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+ <div class="container">
+ <div class="home-section-head centered">
+ <span class="section-eyebrow">Processus</span>
+ <h2>Certification en quatre étapes</h2>
+ <p class="lead">Un flux transparent, avec séparation instruction / décision (principe des 4 yeux).</p>
+ </div>
 
-        <!-- Avec signw -->
-        <div class="problem-solution-card solution-card">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <span style="font-size: 2rem;">✅</span>
-            <h3 style="color: #22543D; margin: 0;">Avec signw : La confiance sur preuves</h3>
-          </div>
-          <img src="assets/img/illus-trust.webp" alt="Confiance partagée avec signw" style="border-radius: var(--radius-md); margin-bottom: 20px; max-height: 240px; object-fit: cover;">
-          <ul style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; color: #22543D; list-style: none;">
-            <li>🎯 <strong>Signalement crédible (Spence) :</strong> Les entreprises compétentes émettent un signal officiel certifié (Badge + Score).</li>
-            <li>🎯 <strong>Audit humain & visites terrain :</strong> Vérification systématique des cartes grises, bilans certifiés ONECCA et PV de réception.</li>
-            <li>🎯 <strong>Test d’adéquation projet :</strong> Simulateur algorithmique vérifiant en 1 clic si l'agent est capable de réaliser un projet pour son budget.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+ <div class="grid grid-cols-4 gap-4">
+ <div class="card text-center">
+ <div class="step-num">1</div>
+ <h4 style="margin-bottom: 8px;">Dépôt</h4>
+ <p class="text-sm text-muted">Formulaire sectoriel et pièces justificatives.</p>
+ </div>
+ <div class="card text-center">
+ <div class="step-num">2</div>
+ <h4 style="margin-bottom: 8px;">Audit</h4>
+ <p class="text-sm text-muted">Contrôle des preuves et visite terrain.</p>
+ </div>
+ <div class="card text-center">
+ <div class="step-num">3</div>
+ <h4 style="margin-bottom: 8px;">Décision</h4>
+ <p class="text-sm text-muted">Validation admin, score et certificat.</p>
+ </div>
+ <div class="card text-center">
+ <div class="step-num">4</div>
+ <h4 style="margin-bottom: 8px;">Attribution</h4>
+ <p class="text-sm text-muted">Le maître d’ouvrage compare et contractualise.</p>
+ </div>
+ </div>
 
-    <!-- 4. COMMENT ÇA MARCHE EN 4 ÉTAPES -->
-    <section style="background: var(--ink-50); padding: 80px 0; border-top: 1px solid var(--ink-200); border-bottom: 1px solid var(--ink-200); margin-bottom: 80px;">
-      <div class="container">
-        <div class="text-center" style="max-width: 720px; margin: 0 auto 48px;">
-          <span class="badge badge-soumis" style="margin-bottom: 8px;">Processus certifié</span>
-          <h2>Comment fonctionne la certification signw ?</h2>
-          <p class="lead">Un processus transparent, rigoureux et indépendant garantissant le principe des 4 yeux.</p>
-        </div>
+ <div class="text-center" style="margin-top: var(--space-6);">
+ <a href="comment-ca-marche.html" class="btn btn-secondary btn-sm">Voir la méthodologie</a>
+ </div>
+ </div>
+ </section>
 
-        <div class="grid grid-cols-4 gap-6">
-          <div class="card text-center" style="padding: 24px;">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-100); color: var(--brand-700); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">1</div>
-            <h4 style="margin-bottom: 8px;">1. Dépôt de dossier</h4>
-            <p class="text-sm text-muted">L’agent renseigne le formulaire sectoriel et téléverse ses pièces administratives, bilans comptables et preuves de matériel.</p>
-          </div>
+ <section class="container home-section">
+ <div class="home-section-toolbar">
+ <div>
+ <span class="section-eyebrow">Secteurs</span>
+ <h2>Domaines de certification</h2>
+ <p class="lead" style="margin: 0;">Modèle extensible, formulaires adaptés à chaque filière.</p>
+ </div>
+ <a href="secteurs.html" class="btn btn-secondary btn-sm">Tous les secteurs</a>
+ </div>
+ <div class="grid grid-cols-3 gap-4" id="home-sectors-grid"></div>
+ </section>
 
-          <div class="card text-center" style="padding: 24px;">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-100); color: var(--brand-700); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">2</div>
-            <h4 style="margin-bottom: 8px;">2. Audit humain</h4>
-            <p class="text-sm text-muted">L’équipe d’auditeurs signw examine chaque pièce, contrôle l'authenticité auprès des organismes émetteurs et programme une visite sur site.</p>
-          </div>
+ <section class="container home-section">
+ <div class="home-section-toolbar">
+ <div>
+ <span class="section-eyebrow">Annuaire</span>
+ <h2>Agents certifiés</h2>
+ <p class="lead" style="margin: 0;">Scores audités et spécialités des entreprises qualifiées.</p>
+ </div>
+ <a href="annuaire.html" class="btn btn-primary btn-sm">Explorer l’annuaire</a>
+ </div>
+ <div class="grid grid-cols-3 gap-4" id="home-featured-agents"></div>
+ </section>
 
-          <div class="card text-center" style="padding: 24px;">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-100); color: var(--brand-700); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">3</div>
-            <h4 style="margin-bottom: 8px;">3. Décision & Score</h4>
-            <p class="text-sm text-muted">L'administrateur valide la décision finale (règle des 4 yeux). Le score de confiance (0-100) et le certificat officiel sécurisé sont publiés.</p>
-          </div>
+ <section class="container home-section">
+ <div class="home-sim-card">
+ <div class="grid grid-cols-2 gap-8 items-center">
+ <div>
+ <span class="section-eyebrow" style="color: rgba(255,255,255,0.65);">Adéquation</span>
+ <h2>Tester un budget face aux capacités réelles</h2>
+ <p style="color: rgba(248,230,235,0.85); font-size: var(--text-base); line-height: 1.55; margin-bottom: 0;">
+ Croisement capacité financière, parc matériel vérifié et expérience — avant de contractualiser.
+ </p>
+ </div>
+ <div class="home-sim-form">
+ <h4 style="margin-bottom: 14px;">Test rapide</h4>
+ <div class="form-group">
+ <label class="form-label text-xs">Secteur</label>
+ <select class="form-control" id="sim-quick-sector">
+ <option value="sec_btp">BTP & Construction</option>
+ <option value="sec_energie">Énergie & Électrification</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Budget estimé (FCFA)</label>
+ <div class="input-with-unit">
+ <input type="number" class="form-control" id="sim-quick-budget" value="480000000">
+ <span class="input-unit">FCFA</span>
+ </div>
+ </div>
+ <button class="btn btn-primary w-full" onclick="handleQuickSimulate()">Voir les entreprises compatibles</button>
+ <div id="sim-quick-result" style="margin-top: 12px; font-size: var(--text-sm);"></div>
+ </div>
+ </div>
+ </div>
+ </section>
 
-          <div class="card text-center" style="padding: 24px;">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-100); color: var(--brand-700); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">4</div>
-            <h4 style="margin-bottom: 8px;">4. Attribution sereine</h4>
-            <p class="text-sm text-muted">Le maître d’ouvrage simule l'adéquation projet/agent et contractualise en toute connaissance de cause avec le meilleur candidat.</p>
-          </div>
-        </div>
+ <section class="container home-section">
+ <div class="home-section-head centered">
+ <span class="section-eyebrow">Témoignages</span>
+ <h2>Ils utilisent SIGNW</h2>
+ </div>
+ <div class="grid grid-cols-3 gap-4">
+ <div class="card">
+ <div class="flex items-center gap-3" style="margin-bottom: 12px;">
+ <img src="assets/img/avatar-08.svg" alt="" style="width: 40px; height: 40px; border-radius: 50%;">
+ <div>
+ <strong class="text-sm">Dr. François Nguemo</strong>
+ <div class="text-xs text-muted">Mairie de Bafoussam</div>
+ </div>
+ </div>
+ <p class="text-sm text-muted" style="font-style: italic; margin: 0;">
+ « Sur nos marchés de voirie, SIGNW a permis d’écarter les dossiers à fausses attestations. »
+ </p>
+ </div>
+ <div class="card">
+ <div class="flex items-center gap-3" style="margin-bottom: 12px;">
+ <img src="assets/img/avatar-09.svg" alt="" style="width: 40px; height: 40px; border-radius: 50%;">
+ <div>
+ <strong class="text-sm">Jean-Marc Kamdem</strong>
+ <div class="text-xs text-muted">BâtiPlus Cameroun · Agent Or</div>
+ </div>
+ </div>
+ <p class="text-sm text-muted" style="font-style: italic; margin: 0;">
+ « Le certificat Or accélère nos soumissions : parc et bilans reconnus sans contestation. »
+ </p>
+ </div>
+ <div class="card">
+ <div class="flex items-center gap-3" style="margin-bottom: 12px;">
+ <img src="assets/img/avatar-05.svg" alt="" style="width: 40px; height: 40px; border-radius: 50%;">
+ <div>
+ <strong class="text-sm">Célestine Tchounkeu</strong>
+ <div class="text-xs text-muted">Direction des marchés, MINTP</div>
+ </div>
+ </div>
+ <p class="text-sm text-muted" style="font-style: italic; margin: 0;">
+ « Le module d’adéquation croise charge et expérience en quelques secondes. »
+ </p>
+ </div>
+ </div>
+ </section>
 
-        <div class="text-center" style="margin-top: 36px;">
-          <a href="comment-ca-marche.html" class="btn btn-secondary">Consulter le protocole complet d'audit →</a>
-        </div>
-      </div>
-    </section>
+ <section class="container home-section" style="max-width: 720px;">
+ <div class="home-section-head centered">
+ <span class="section-eyebrow">FAQ</span>
+ <h2>Questions fréquentes</h2>
+ </div>
 
-    <!-- 5. SECTEURS COUVERTS -->
-    <section class="container" style="margin-bottom: 80px;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <span class="badge badge-soumis" style="margin-bottom: 8px;">Secteurs économiques</span>
-          <h2>Nos secteurs de certification</h2>
-          <p class="lead" style="margin: 0;">Un modèle extensible adapté aux spécificités techniques de chaque filière.</p>
-        </div>
-        <a href="secteurs.html" class="btn btn-secondary">Tous les secteurs →</a>
-      </div>
+ <div class="accordion-item open">
+ <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
+ <span>SIGNW audite-t-elle elle-même les entreprises ?</span>
+ <span id="acc-chevron-1"></span>
+ </button>
+ <div class="accordion-content">
+ Non. SIGNW organise le dépôt des preuves, les fait vérifier par des auditeurs, sépare l’instruction de la décision finale, et publie le résultat.
+ </div>
+ </div>
+ <div class="accordion-item">
+ <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
+ <span>Combien de temps est valable une certification ?</span>
+ <span></span>
+ </button>
+ <div class="accordion-content">
+ 12 mois. Le renouvellement exige les bilans N-1 et la mise à jour des attestations fiscales et sociales.
+ </div>
+ </div>
+ <div class="accordion-item">
+ <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
+ <span>Les pièces comptables sont-elles publiques ?</span>
+ <span></span>
+ </button>
+ <div class="accordion-content">
+ Non. Seuls le score, le niveau et le statut sont publics. Les pièces restent accessibles aux auditeurs habilités.
+ </div>
+ </div>
+ <div class="accordion-item">
+ <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
+ <span>Comment vérifier un certificat ?</span>
+ <span></span>
+ </button>
+ <div class="accordion-content">
+ Saisissez le code <code>SGW-AAAA-NNNNN</code> sur la page Vérifier, ou scannez le QR code du certificat.
+ </div>
+ </div>
+ </section>
 
-      <div class="grid grid-cols-3 gap-6" id="home-sectors-grid">
-        <!-- Rempli dynamiquement par JS -->
-      </div>
-    </section>
+ <section class="cta-band">
+ <div class="container">
+ <h2>Prêt à sécuriser vos marchés ?</h2>
+ <p>Rejoignez les acteurs certifiés sur preuves au Cameroun.</p>
+ <div class="flex justify-center gap-3 flex-wrap">
+ <a href="login.html?tab=register&role=agent" class="btn btn-primary">Déposer un dossier</a>
+ <a href="login.html?role=principal" class="btn btn-on-dark">Espace maître d’ouvrage</a>
+ </div>
+ </div>
+ </section>
+ </main>
 
-    <!-- 6. AGENTS CERTIFIÉS À LA UNE -->
-    <section class="container" style="margin-bottom: 80px;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <span class="badge badge-certifie" style="margin-bottom: 8px;">Annuaire transparent</span>
-          <h2>Prestataires certifiés à la une</h2>
-          <p class="lead" style="margin: 0;">Consultez les scores audités et les spécialités des entreprises qualifiées.</p>
-        </div>
-        <a href="annuaire.html" class="btn btn-primary">Explorer l’annuaire complet →</a>
-      </div>
+ <footer id="public-footer"></footer>
 
-      <div class="grid grid-cols-3 gap-6" id="home-featured-agents">
-        <!-- Rempli dynamiquement par JS -->
-      </div>
-    </section>
+ <script src="js/data/seed.js"></script>
+ <script src="js/core/utils.js"></script>
+ <script src="js/core/store.js"></script>
+ <script src="js/core/auth.js"></script>
+ <script src="js/core/score.js"></script>
+ <script src="js/core/ui.js"></script>
+ <script src="js/core/icons.js"></script>
+ <script src="js/core/layout.js"></script>
 
-    <!-- 7. SIMULATEUR RAPIDE D'ADÉQUATION (TEASER) -->
-    <section class="container" style="margin-bottom: 80px;">
-      <div class="card home-sim-card" style="background: linear-gradient(135deg, var(--brand-900), var(--brand-700)); color: var(--white); padding: 48px; border-radius: var(--radius-xl);">
-        <div class="grid grid-cols-2 gap-8 items-center">
-          <div>
-            <span class="badge badge-gold" style="margin-bottom: 12px; background: var(--gold-100); color: #8A5E08;">Module exclusif</span>
-            <h2 style="color: var(--white); margin-bottom: 16px;">Simulateur d’Adéquation Projet ↔ Prestataire</h2>
-            <p style="color: #F8E6EB; font-size: 1.05rem; line-height: 1.6; margin-bottom: 24px;">
-              Vous avez un budget et des exigences techniques ? Notre algorithme croise la capacité financière, le parc matériel vérifié et l'expérience réelle des agents pour vous livrer une synthèse immédiate.
-            </p>
-            <div style="display: flex; gap: 12px; font-size: 0.875rem; flex-wrap: wrap;">
-              <span style="background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: var(--radius-full);">⚡ Calcul immédiat</span>
-              <span style="background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: var(--radius-full);">🛡️ Détection des points bloquants</span>
-            </div>
-          </div>
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ const searchIcon = document.getElementById('hero-search-icon'); if (searchIcon && window.SignwIcons) {
+ searchIcon.outerHTML = SignwIcons.render('search', { size: 18, className: 'icon' }); }
+ document.querySelectorAll('.accordion-trigger span:last-child').forEach(el => {
+ if (window.SignwIcons) el.innerHTML = SignwIcons.render('chevron-down', { size: 16 }); }); renderHomeSectors(); renderHomeAgents(); animateCounters(); }); function animateCounters() {
+ document.querySelectorAll('[data-counter]').forEach(el => {
+ const target = parseInt(el.getAttribute('data-counter'), 10) || 0; let n = 0; const step = Math.max(1, Math.ceil(target / 24)); const t = setInterval(() => {
+ n = Math.min(target, n + step); el.textContent = n; if (n >= target) clearInterval(t); }, 30); }); }
 
-          <div class="home-sim-form" style="background: var(--white); border-radius: var(--radius-lg); padding: 28px; color: var(--ink-900); box-shadow: var(--shadow-xl);">
-            <h4 style="margin-bottom: 16px;">Faire un test rapide</h4>
-            <div class="form-group">
-              <label class="form-label text-xs">Secteur du marché :</label>
-              <select class="form-control" id="sim-quick-sector">
-                <option value="sec_btp">BTP & Construction</option>
-                <option value="sec_energie">Énergie & Électrification</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label text-xs">Budget estimé du projet (FCFA) :</label>
-              <div class="input-with-unit">
-                <input type="number" class="form-control" id="sim-quick-budget" value="480000000">
-                <span class="input-unit">FCFA</span>
-              </div>
-            </div>
-            <button class="btn btn-gold w-full" onclick="handleQuickSimulate()" style="margin-top: 8px;">
-              Tester l’adéquation des entreprises →
-            </button>
-            <div id="sim-quick-result" style="margin-top: 14px; font-size: 0.875rem; text-align: center; color: var(--ink-700);"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+ function renderHomeSectors() {
+ const container = document.getElementById('home-sectors-grid'); if (!container) return; const sectors = window.SignwStore.getSectors(); container.innerHTML = sectors.map(sec => `
+ <div class="card card-hover" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+ <div style="height: 140px; overflow: hidden; background: var(--brand-900);">
+ <img src="${sec.image || 'assets/img/sector-btp.webp'}" alt="${sec.nom}" style="width: 100%; height: 100%; object-fit: cover;">
+ </div>
+ <div style="padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+ <div>
+ <div class="flex justify-between items-center" style="margin-bottom: 6px;">
+ <h4 style="margin: 0;">${sec.nom}</h4>
+ <span class="badge ${sec.actif ? 'badge-certifie' : 'badge-brouillon'}">${sec.actif ? 'Actif' : 'Bientôt'}</span>
+ </div>
+ <p class="text-sm text-muted" style="margin-bottom: 12px;">${sec.description || 'Secteur certifié SIGNW.'}</p>
+ </div>
+ <div class="flex justify-between items-center" style="border-top: 1px solid var(--ink-100); padding-top: 10px;">
+ <span class="text-xs text-muted">${sec.nbAgents || 0} entreprises</span>
+ <a href="secteurs.html?id=${sec.id}" class="btn btn-ghost btn-sm">Voir</a>
+ </div>
+ </div>
+ </div>
+ `).join(''); }
 
-    <!-- 8. TÉMOIGNAGES CLIENTS & MAÎTRES D'OUVRAGE -->
-    <section class="container" style="margin-bottom: 80px;">
-      <div class="text-center" style="max-width: 680px; margin: 0 auto 48px;">
-        <span class="badge badge-soumis" style="margin-bottom: 8px;">Retours d'expérience</span>
-        <h2>Ils font confiance à signw</h2>
-        <p class="lead">Des acteurs publics et privés engagés pour la transparence contractuelle.</p>
-      </div>
+ function renderHomeAgents() {
+ const container = document.getElementById('home-featured-agents'); if (!container) return; const agents = window.SignwStore.getAgents().filter(a => a.statutCertification.includes('certifie')).slice(0, 6); container.innerHTML = agents.map(agt => `
+ <div class="card card-hover">
+ <div class="flex justify-between items-start" style="margin-bottom: 12px;">
+ <div class="flex gap-3 items-center">
+ <img src="${agt.logo || 'assets/img/company-logo-01.svg'}" alt="" style="width: 40px; height: 40px; border-radius: 8px;">
+ <div>
+ <h4 style="font-size: var(--text-base); margin: 0 0 2px;">${agt.raisonSociale}</h4>
+ <span class="text-xs text-muted">${agt.ville}</span>
+ </div>
+ </div>
+ ${window.SignwUI.renderScoreGauge(agt.score, 48)}
+ </div>
+ <div class="flex gap-2 flex-wrap" style="margin-bottom: 10px;">
+ ${window.SignwUtils.getTierBadge(agt.niveau)}
+ <span class="badge badge-brouillon">CA ${window.SignwUtils.formatFCFAShort(agt.caMoyen3ans)}</span>
+ </div>
+ <p class="text-sm text-muted" style="margin-bottom: 12px;">
+ ${agt.description.length > 90 ? agt.description.substring(0, 90) + '…' : agt.description}
+ </p>
+ <div class="flex justify-between items-center" style="border-top: 1px solid var(--ink-100); padding-top: 10px;">
+ <code class="text-xs text-brand">${agt.codeCertificat || 'CERTIFIÉ'}</code>
+ <a href="agent-profil.html?id=${agt.id}" class="btn btn-secondary btn-sm">Fiche</a>
+ </div>
+ </div>
+ `).join(''); }
 
-      <div class="grid grid-cols-3 gap-6">
-        <div class="card" style="padding: 24px;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <img src="assets/img/avatar-08.svg" alt="Maire" style="width: 48px; height: 48px; border-radius: 50%;">
-            <div>
-              <strong style="display: block; font-size: 0.95rem;">Dr. François Nguemo</strong>
-              <small class="text-muted">Maire de Bafoussam (Maître d’ouvrage)</small>
-            </div>
-          </div>
-          <p style="font-size: 0.9rem; color: var(--ink-700); font-style: italic;">
-            « Sur nos marchés de voirie municipale, signw nous a permis d'éliminer immédiatement les dossiers à fausses attestations. Les entreprises retenues disposaient bien du matériel vérifié sur place. »
-          </p>
-        </div>
+ function handleHeroSearch() {
+ const q = (document.getElementById('hero-search-input').value || '').trim(); if (!q) return; if (q.toUpperCase().startsWith('SGW-')) {
+ window.location.href = `verifier.html?code=${encodeURIComponent(q)}`; } else {
+ window.location.href = `annuaire.html?q=${encodeURIComponent(q)}`; }
+ }
 
-        <div class="card" style="padding: 24px;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <img src="assets/img/avatar-09.svg" alt="DG Entreprise" style="width: 48px; height: 48px; border-radius: 50%;">
-            <div>
-              <strong style="display: block; font-size: 0.95rem;">Jean-Marc Kamdem</strong>
-              <small class="text-muted">DG, BâtiPlus Cameroun SARL (Agent Or)</small>
-            </div>
-          </div>
-          <p style="font-size: 0.9rem; color: var(--ink-700); font-style: italic;">
-            « Obtenir le certificat Niveau Or a été un formidable accélérateur. Nos bilans et notre parc d'engins sont reconnus sans contestation possible lors des dépouillements d'offres. »
-          </p>
-        </div>
-
-        <div class="card" style="padding: 24px;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <img src="assets/img/avatar-05.svg" alt="MINTP" style="width: 48px; height: 48px; border-radius: 50%;">
-            <div>
-              <strong style="display: block; font-size: 0.95rem;">Mme Célestine Tchounkeu</strong>
-              <small class="text-muted">Directrice des Marchés, MINTP</small>
-            </div>
-          </div>
-          <p style="font-size: 0.9rem; color: var(--ink-700); font-style: italic;">
-            « Le module d’adéquation projet est d’une efficacité redoutable : il croise le ratio de charge et l’expérience similaire en quelques secondes. Un vrai tiers de confiance régalien. »
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 9. FAQ EN ACCORDÉON -->
-    <section class="container" style="margin-bottom: 80px; max-width: 860px;">
-      <div class="text-center" style="margin-bottom: 40px;">
-        <span class="badge badge-soumis" style="margin-bottom: 8px;">Foire aux questions</span>
-        <h2>Questions fréquentes sur signw</h2>
-      </div>
-
-      <div class="accordion-item open">
-        <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
-          <span>signw audite-t-elle elle-même les entreprises ?</span>
-          <span>▼</span>
-        </button>
-        <div class="accordion-content">
-          Non. signw n'est pas un juge ou un organisme d'audit automatisé unilatéral. Elle organise le dépôt rigoureux des preuves (RCCM, bilans ONECCA, cartes grises, PV signés), fait vérifier ces pièces par une équipe d'auditeurs assermentés, sépare l'instruction de la décision finale (principe des 4 yeux), et publie le résultat en toute transparence.
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
-          <span>Combien de temps est valable une certification ?</span>
-          <span>▼</span>
-        </button>
-        <div class="accordion-content">
-          La certification signw est délivrée pour une durée de 12 mois. Chaque année, l'entreprise doit déposer ses bilans N-1 récents et mettre à jour ses attestations fiscales et sociales pour renouveler son badge.
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
-          <span>Mes pièces comptables et bancaires sont-elles publiques ?</span>
-          <span>▼</span>
-        </button>
-        <div class="accordion-content">
-          Absolument pas. signw applique une politique stricte de confidentialité : seules les conclusions (score global de confiance, validité, niveau de certification, liste des attestations vérifiées avec date) sont publiques. Vos états financiers et pièces brutes ne sont accessibles qu’aux auditeurs habilités.
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
-          <span>Comment vérifier l'authenticité d'un certificat signw ?</span>
-          <span>▼</span>
-        </button>
-        <div class="accordion-content">
-          Chaque certificat comporte un code public unique au format <code>SGW-AAAA-NNNNN</code> et un QR code officiel. Toute personne peut saisir ce code sur la page "Vérifier certificat" pour consulter instantanément le statut actif, suspendu ou expiré du document.
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="this.parentElement.classList.toggle('open')">
-          <span>Quels sont les niveaux de certification et leurs seuils ?</span>
-          <span>▼</span>
-        </button>
-        <div class="accordion-content">
-          La certification comprend 3 niveaux principaux : Niveau Or (Score ≥ 85), Niveau Argent (70 à 84) et Niveau Bronze (55 à 69). En cas de non-conformité mineure sur un point non bloquant, une certification "Avec réserves" peut être attribuée temporairement.
-        </div>
-      </div>
-    </section>
-
-    <!-- 10. BANDEAU APPEL À L'ACTION FINAL -->
-    <section style="background: var(--brand-900); color: var(--white); padding: 70px 0; text-align: center;">
-      <div class="container" style="max-width: 780px;">
-        <h2 style="color: var(--white); margin-bottom: 16px;">Prêt à sécuriser vos marchés ?</h2>
-        <p style="color: #F8E6EB; font-size: 1.15rem; margin-bottom: 32px;">
-          Rejoignez la première communauté d'acteurs économiques certifiés sur preuves au Cameroun.
-        </p>
-        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-          <a href="login.html?tab=register&role=agent" class="btn btn-gold btn-lg">Déposer un dossier de qualification</a>
-          <a href="login.html?role=principal" class="btn btn-secondary btn-lg" style="color: #fff; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3);">Accès Maître d’ouvrage</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer injecté par layout.js -->
-  <footer id="public-footer"></footer>
-
-  <!-- Scripts -->
-  <script src="js/data/seed.js"></script>
-  <script src="js/core/utils.js"></script>
-  <script src="js/core/store.js"></script>
-  <script src="js/core/auth.js"></script>
-  <script src="js/core/score.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/layout.js"></script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      renderHomeSectors();
-      renderHomeAgents();
-    });
-
-    function renderHomeSectors() {
-      const container = document.getElementById('home-sectors-grid');
-      if (!container) return;
-      const sectors = window.SignwStore.getSectors();
-
-      container.innerHTML = sectors.map(sec => `
-        <div class="card card-hover" style="display: flex; flex-direction: column; overflow: hidden; padding: 0;">
-          <div style="height: 160px; overflow: hidden; position: relative; background: var(--brand-900);">
-            <img src="${sec.image || 'assets/img/sector-btp.webp'}" alt="${sec.nom}" style="width: 100%; height: 100%; object-fit: cover;">
-            <div style="position: absolute; top: 12px; right: 12px;">
-              <span class="badge ${sec.actif ? 'badge-certifie' : 'badge-brouillon'}">
-                ${sec.actif ? 'ACTIF' : 'BIENTÔT'}
-              </span>
-            </div>
-          </div>
-          <div style="padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <h4 style="margin: 0 0 8px;">${sec.nom}</h4>
-              <p class="text-sm text-muted" style="margin-bottom: 16px;">${sec.description || 'Secteur d’activité certifié signw.'}</p>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--ink-100); padding-top: 12px;">
-              <span class="text-xs font-bold text-muted">${sec.nbAgents || 0} entreprises</span>
-              <a href="secteurs.html?id=${sec.id}" class="btn btn-ghost btn-sm" style="color: var(--brand-700);">Voir le secteur →</a>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderHomeAgents() {
-      const container = document.getElementById('home-featured-agents');
-      if (!container) return;
-      // Afficher les 6 premiers agents certifiés
-      const agents = window.SignwStore.getAgents().filter(a => a.statutCertification.includes('certifie')).slice(0, 6);
-
-      container.innerHTML = agents.map(agt => `
-        <div class="card card-hover" style="display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
-              <div style="display: flex; gap: 12px; align-items: center;">
-                <img src="${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 48px; height: 48px; border-radius: 8px;">
-                <div>
-                  <h4 style="font-size: 1.05rem; margin: 0 0 2px;">${agt.raisonSociale}</h4>
-                  <span class="text-xs text-muted">📍 ${agt.ville} (${agt.region})</span>
-                </div>
-              </div>
-              ${window.SignwUI.renderScoreGauge(agt.score, 52)}
-            </div>
-
-            <div style="display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;">
-              ${window.SignwUtils.getTierBadge(agt.niveau)}
-              <span class="badge" style="background: var(--ink-100); font-weight: normal;">CA : ${window.SignwUtils.formatFCFAShort(agt.caMoyen3ans)}</span>
-            </div>
-
-            <p class="text-sm text-muted" style="line-height: 1.4; margin-bottom: 16px;">
-              ${agt.description.length > 95 ? agt.description.substring(0, 95) + '...' : agt.description}
-            </p>
-          </div>
-
-          <div style="border-top: 1px solid var(--ink-100); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <code class="text-xs" style="color: var(--brand-700); font-weight: 700;">${agt.codeCertificat || 'CERTIFIÉ'}</code>
-            <a href="agent-profil.html?id=${agt.id}" class="btn btn-secondary btn-sm">Consulter la fiche →</a>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function handleHeroSearch() {
-      const q = (document.getElementById('hero-search-input').value || '').trim();
-      if (!q) return;
-      if (q.toUpperCase().startsWith('SGW-')) {
-        window.location.href = `verifier.html?code=${encodeURIComponent(q)}`;
-      } else {
-        window.location.href = `annuaire.html?q=${encodeURIComponent(q)}`;
-      }
-    }
-
-    function handleQuickSimulate() {
-      const budget = document.getElementById('sim-quick-budget').value;
-      const sector = document.getElementById('sim-quick-sector').value;
-      const resEl = document.getElementById('sim-quick-result');
-
-      const agents = window.SignwStore.getAgents().filter(a => a.secteurId === sector && a.statutCertification.includes('certifie'));
-      const compatible = agents.filter(a => a.caMoyen3ans >= budget * 0.5);
-
-      resEl.innerHTML = `
-        <div style="padding: 10px; background: var(--success-bg); border-radius: var(--radius-md); border: 1px solid var(--success); margin-bottom: 8px;">
-          <strong>🎯 ${compatible.length} entreprises compatibles trouvées</strong> pour ce budget de ${window.SignwUtils.formatFCFAShort(budget)}.
-        </div>
-        <a href="app/principal/adequation.html?budget=${budget}&sec=${sector}" class="btn btn-primary btn-sm">
-          Lancer l'audit d'adéquation complet →
-        </a>
-      `;
-    }
-  </script>
+ function handleQuickSimulate() {
+ const budget = document.getElementById('sim-quick-budget').value; const sector = document.getElementById('sim-quick-sector').value; const resEl = document.getElementById('sim-quick-result'); const agents = window.SignwStore.getAgents().filter(a => a.secteurId === sector && a.statutCertification.includes('certifie')); const compatible = agents.filter(a => a.caMoyen3ans >= budget * 0.5); resEl.innerHTML = `
+ <div class="alert alert-success" style="margin-bottom: 8px;">
+ <strong>${compatible.length}</strong>&nbsp;entreprise(s) compatible(s) pour ${window.SignwUtils.formatFCFAShort(budget)}.
+ </div>
+ <a href="app/principal/adequation.html?budget=${budget}&sec=${sector}" class="btn btn-primary btn-sm w-full">Lancer l’adéquation complète</a>
+ `; }
+ </script>
 </body>
 </html>

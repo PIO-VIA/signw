@@ -1,304 +1,258 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Créer un Appel d’Offres — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Créer un Appel d’Offres — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content" style="max-width: 860px;">
-      <div style="margin-bottom: 24px;">
-        <h2 style="margin: 0 0 4px;">Publier un Nouvel Appel d’Offres</h2>
-        <span class="text-muted text-sm">Assistant de cadrage en 4 étapes pour sécuriser votre marché</span>
-      </div>
+ <main class="app-content" style="max-width: 860px;">
+ <div style="margin-bottom: 24px;">
+ <h2 style="margin: 0 0 4px;">Publier un Nouvel Appel d’Offres</h2>
+ <span class="text-muted text-sm">Assistant de cadrage en 4 étapes pour sécuriser votre marché</span>
+ </div>
 
-      <!-- Stepper 4 étapes -->
-      <div class="card" style="padding: 16px 24px; margin-bottom: 24px;">
-        <div class="stepper" style="margin: 8px 0;">
-          <div class="stepper-line"></div>
-          <div class="stepper-step active" id="st-1">
-            <div class="stepper-num">1</div>
-            <span class="stepper-label">1. Infos générales</span>
-          </div>
-          <div class="stepper-step" id="st-2">
-            <div class="stepper-num">2</div>
-            <span class="stepper-label">2. Budget & Délais</span>
-          </div>
-          <div class="stepper-step" id="st-3">
-            <div class="stepper-num">3</div>
-            <span class="stepper-label">3. Exigences</span>
-          </div>
-          <div class="stepper-step" id="st-4">
-            <div class="stepper-num">4</div>
-            <span class="stepper-label">4. Publication</span>
-          </div>
-        </div>
-      </div>
+ <!-- Stepper 4 étapes -->
+ <div class="card" style="padding: 16px 24px; margin-bottom: 24px;">
+ <div class="stepper" style="margin: 8px 0;">
+ <div class="stepper-line"></div>
+ <div class="stepper-step active" id="st-1">
+ <div class="stepper-num">1</div>
+ <span class="stepper-label">1. Infos générales</span>
+ </div>
+ <div class="stepper-step" id="st-2">
+ <div class="stepper-num">2</div>
+ <span class="stepper-label">2. Budget & Délais</span>
+ </div>
+ <div class="stepper-step" id="st-3">
+ <div class="stepper-num">3</div>
+ <span class="stepper-label">3. Exigences</span>
+ </div>
+ <div class="stepper-step" id="st-4">
+ <div class="stepper-num">4</div>
+ <span class="stepper-label">4. Publication</span>
+ </div>
+ </div>
+ </div>
 
-      <div class="card" style="padding: 32px;">
-        <!-- Étape 1 -->
-        <div id="step-pane-1">
-          <h4 style="margin-bottom: 20px;">1. Informations générales sur le marché</h4>
-          <div class="form-group">
-            <label class="form-label text-xs">Intitulé du marché public :</label>
-            <input type="text" id="prj-titre" class="form-control" placeholder="Ex: Travaux de bitumage et drainage de la voirie..." required>
-          </div>
+ <div class="card" style="padding: 32px;">
+ <!-- Étape 1 -->
+ <div id="step-pane-1">
+ <h4 style="margin-bottom: 20px;">1. Informations générales sur le marché</h4>
+ <div class="form-group">
+ <label class="form-label text-xs">Intitulé du marché public :</label>
+ <input type="text" id="prj-titre" class="form-control" placeholder="Ex: Travaux de bitumage et drainage de la voirie..." required>
+ </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label text-xs">Secteur technique :</label>
-              <select id="prj-secteur" class="form-control">
-                <option value="sec_btp">BTP & Construction</option>
-                <option value="sec_energie">Énergie & Électrification</option>
-                <option value="sec_agri">Agriculture & Aménagements</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label text-xs">Sous-domaine :</label>
-              <input type="text" id="prj-sous-secteur" class="form-control" placeholder="Ex: Voirie & Ouvrages d'art">
-            </div>
-          </div>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+ <div class="form-group">
+ <label class="form-label text-xs">Secteur technique :</label>
+ <select id="prj-secteur" class="form-control">
+ <option value="sec_btp">BTP & Construction</option>
+ <option value="sec_energie">Énergie & Électrification</option>
+ <option value="sec_agri">Agriculture & Aménagements</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Sous-domaine :</label>
+ <input type="text" id="prj-sous-secteur" class="form-control" placeholder="Ex: Voirie & Ouvrages d'art">
+ </div>
+ </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label text-xs">Région d'exécution :</label>
-              <select id="prj-region" class="form-control">
-                <option value="Ouest">Ouest</option>
-                <option value="Littoral">Littoral</option>
-                <option value="Centre">Centre</option>
-                <option value="Nord">Nord</option>
-                <option value="Sud">Sud</option>
-                <option value="Sud-Ouest">Sud-Ouest</option>
-                <option value="Est">Est</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label text-xs">Ville / Localité :</label>
-              <input type="text" id="prj-ville" class="form-control" placeholder="Ex: Bafoussam">
-            </div>
-          </div>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+ <div class="form-group">
+ <label class="form-label text-xs">Région d'exécution :</label>
+ <select id="prj-region" class="form-control">
+ <option value="Ouest">Ouest</option>
+ <option value="Littoral">Littoral</option>
+ <option value="Centre">Centre</option>
+ <option value="Nord">Nord</option>
+ <option value="Sud">Sud</option>
+ <option value="Sud-Ouest">Sud-Ouest</option>
+ <option value="Est">Est</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Ville / Localité :</label>
+ <input type="text" id="prj-ville" class="form-control" placeholder="Ex: Bafoussam">
+ </div>
+ </div>
 
-          <div class="form-group">
-            <label class="form-label text-xs">Description des travaux :</label>
-            <textarea id="prj-desc" class="form-control" rows="3" placeholder="Nature des travaux, métrés estimatifs..."></textarea>
-          </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Description des travaux :</label>
+ <textarea id="prj-desc" class="form-control" rows="3" placeholder="Nature des travaux, métrés estimatifs..."></textarea>
+ </div>
 
-          <div style="text-align: right; margin-top: 20px;">
-            <button type="button" class="btn btn-primary" onclick="goToStep(2)">Étape 2 : Budget & Délais →</button>
-          </div>
-        </div>
+ <div style="text-align: right; margin-top: 20px;">
+ <button type="button" class="btn btn-primary" onclick="goToStep(2)">Étape 2 : Budget & Délais →</button>
+ </div>
+ </div>
 
-        <!-- Étape 2 -->
-        <div id="step-pane-2" class="hidden">
-          <h4 style="margin-bottom: 20px;">2. Enveloppe budgétaire et calendrier</h4>
-          <div class="form-group">
-            <label class="form-label text-xs">Budget total prévisionnel (TTC) :</label>
-            <div class="input-with-unit">
-              <input type="number" id="prj-budget" class="form-control" placeholder="Ex: 500000000" value="480000000">
-              <span class="input-unit">FCFA</span>
-            </div>
-          </div>
+ <!-- Étape 2 -->
+ <div id="step-pane-2" class="hidden">
+ <h4 style="margin-bottom: 20px;">2. Enveloppe budgétaire et calendrier</h4>
+ <div class="form-group">
+ <label class="form-label text-xs">Budget total prévisionnel (TTC) :</label>
+ <div class="input-with-unit">
+ <input type="number" id="prj-budget" class="form-control" placeholder="Ex: 500000000" value="480000000">
+ <span class="input-unit">FCFA</span>
+ </div>
+ </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label text-xs">Délai d’exécution contractuel (Mois) :</label>
-              <input type="number" id="prj-delai" class="form-control" value="8">
-            </div>
-            <div class="form-group">
-              <label class="form-label text-xs">Date limite de soumission :</label>
-              <input type="date" id="prj-limite" class="form-control" value="2026-12-15">
-            </div>
-          </div>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+ <div class="form-group">
+ <label class="form-label text-xs">Délai d’exécution contractuel (Mois) :</label>
+ <input type="number" id="prj-delai" class="form-control" value="8">
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Date limite de soumission :</label>
+ <input type="date" id="prj-limite" class="form-control" value="2026-12-15">
+ </div>
+ </div>
 
-          <div style="display: flex; justify-content: space-between; margin-top: 24px;">
-            <button type="button" class="btn btn-secondary" onclick="goToStep(1)">← Précédent</button>
-            <button type="button" class="btn btn-primary" onclick="goToStep(3)">Étape 3 : Exigences →</button>
-          </div>
-        </div>
+ <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+ <button type="button" class="btn btn-secondary" onclick="goToStep(1)">← Précédent</button>
+ <button type="button" class="btn btn-primary" onclick="goToStep(3)">Étape 3 : Exigences →</button>
+ </div>
+ </div>
 
-        <!-- Étape 3 -->
-        <div id="step-pane-3" class="hidden">
-          <h4 style="margin-bottom: 20px;">3. Critères d'éligibilité et parc d'engins requis</h4>
+ <!-- Étape 3 -->
+ <div id="step-pane-3" class="hidden">
+ <h4 style="margin-bottom: 20px;">3. Critères d'éligibilité et parc d'engins requis</h4>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label text-xs">Chiffre d’affaires minimal exigé (FCFA) :</label>
-              <input type="number" id="prj-ca-min" class="form-control" value="350000000">
-            </div>
-            <div class="form-group">
-              <label class="form-label text-xs">Certification signw minimale :</label>
-              <select id="prj-tier-min" class="form-control">
-                <option value="Bronze">Niveau Bronze (≥ 55 pts)</option>
-                <option value="Argent" selected>Niveau Argent (≥ 70 pts)</option>
-                <option value="Or">Niveau Or (≥ 85 pts)</option>
-              </select>
-            </div>
-          </div>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+ <div class="form-group">
+ <label class="form-label text-xs">Chiffre d’affaires minimal exigé (FCFA) :</label>
+ <input type="number" id="prj-ca-min" class="form-control" value="350000000">
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Certification signw minimale :</label>
+ <select id="prj-tier-min" class="form-control">
+ <option value="Bronze">Niveau Bronze (≥ 55 pts)</option>
+ <option value="Argent" selected>Niveau Argent (≥ 70 pts)</option>
+ <option value="Or">Niveau Or (≥ 85 pts)</option>
+ </select>
+ </div>
+ </div>
 
-          <h5 style="margin: 20px 0 10px;">Engins de chantier obligatoires sur site :</h5>
-          <div style="background: var(--ink-50); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--ink-200); margin-bottom: 20px;">
-            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-              <input type="text" id="new-engin-name" class="form-control" placeholder="Type d'engin (ex: Niveleuse 140 CV)">
-              <input type="number" id="new-engin-qty" class="form-control" style="width: 100px;" value="1" min="1">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="addEnginRow()">+ Ajouter</button>
-            </div>
-            <div id="engins-list-container" style="display: flex; flex-direction: column; gap: 6px;">
-              <div class="badge" style="background: #fff; border: 1px solid var(--ink-300); padding: 6px 12px; justify-content: space-between;">
-                <span>Niveleuse (140 CV) - 1 unité</span>
-                <span style="color: var(--danger); cursor: pointer;" onclick="this.parentElement.remove()">✕</span>
-              </div>
-              <div class="badge" style="background: #fff; border: 1px solid var(--ink-300); padding: 6px 12px; justify-content: space-between;">
-                <span>Compacteur vibrant - 1 unité</span>
-                <span style="color: var(--danger); cursor: pointer;" onclick="this.parentElement.remove()">✕</span>
-              </div>
-            </div>
-          </div>
+ <h5 style="margin: 20px 0 10px;">Engins de chantier obligatoires sur site :</h5>
+ <div style="background: var(--ink-50); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--ink-200); margin-bottom: 20px;">
+ <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+ <input type="text" id="new-engin-name" class="form-control" placeholder="Type d'engin (ex: Niveleuse 140 CV)">
+ <input type="number" id="new-engin-qty" class="form-control" style="width: 100px;" value="1" min="1">
+ <button type="button" class="btn btn-secondary btn-sm" onclick="addEnginRow()">+ Ajouter</button>
+ </div>
+ <div id="engins-list-container" style="display: flex; flex-direction: column; gap: 6px;">
+ <div class="badge" style="background: #fff; border: 1px solid var(--ink-300); padding: 6px 12px; justify-content: space-between;">
+ <span>Niveleuse (140 CV) - 1 unité</span>
+ <span style="color: var(--danger); cursor: pointer;" onclick="this.parentElement.remove()"></span>
+ </div>
+ <div class="badge" style="background: #fff; border: 1px solid var(--ink-300); padding: 6px 12px; justify-content: space-between;">
+ <span>Compacteur vibrant - 1 unité</span>
+ <span style="color: var(--danger); cursor: pointer;" onclick="this.parentElement.remove()"></span>
+ </div>
+ </div>
+ </div>
 
-          <div style="display: flex; justify-content: space-between; margin-top: 24px;">
-            <button type="button" class="btn btn-secondary" onclick="goToStep(2)">← Précédent</button>
-            <button type="button" class="btn btn-primary" onclick="goToStep(4)">Étape 4 : Récapitulatif →</button>
-          </div>
-        </div>
+ <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+ <button type="button" class="btn btn-secondary" onclick="goToStep(2)">← Précédent</button>
+ <button type="button" class="btn btn-primary" onclick="goToStep(4)">Étape 4 : Récapitulatif →</button>
+ </div>
+ </div>
 
-        <!-- Étape 4 -->
-        <div id="step-pane-4" class="hidden">
-          <h4 style="margin-bottom: 16px;">4. Récapitulatif et publication officielle</h4>
+ <!-- Étape 4 -->
+ <div id="step-pane-4" class="hidden">
+ <h4 style="margin-bottom: 16px;">4. Récapitulatif et publication officielle</h4>
 
-          <div style="background: var(--ink-50); padding: 20px; border-radius: var(--radius-md); margin-bottom: 24px;" id="recap-box">
-            <!-- Rempli dynamique -->
-          </div>
+ <div style="background: var(--ink-50); padding: 20px; border-radius: var(--radius-md); margin-bottom: 24px;" id="recap-box">
+ <!-- Rempli dynamique -->
+ </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <button type="button" class="btn btn-secondary" onclick="goToStep(3)">← Précédent</button>
-            <button type="button" class="btn btn-gold btn-lg" onclick="publishProject()">
-              🚀 Publier l’appel d’offres immédiatement
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+ <div style="display: flex; justify-content: space-between; align-items: center;">
+ <button type="button" class="btn btn-secondary" onclick="goToStep(3)">← Précédent</button>
+ <button type="button" class="btn btn-primary" onclick="publishProject()">
+ Publier l’appel d’offres immédiatement
+ </button>
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['principal'])) return;
-    });
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['principal'])) return; }); function goToStep(step) {
+ for (let i = 1; i <= 4; i++) {
+ document.getElementById(`step-pane-${i}`).classList.add('hidden'); document.getElementById(`st-${i}`).classList.remove('active'); if (i < step) document.getElementById(`st-${i}`).classList.add('completed'); }
+ document.getElementById(`step-pane-${step}`).classList.remove('hidden'); document.getElementById(`st-${step}`).classList.add('active'); if (step === 4) {
+ buildRecap(); }
+ }
 
-    function goToStep(step) {
-      for (let i = 1; i <= 4; i++) {
-        document.getElementById(`step-pane-${i}`).classList.add('hidden');
-        document.getElementById(`st-${i}`).classList.remove('active');
-        if (i < step) document.getElementById(`st-${i}`).classList.add('completed');
-      }
-      document.getElementById(`step-pane-${step}`).classList.remove('hidden');
-      document.getElementById(`st-${step}`).classList.add('active');
+ function addEnginRow() {
+ const name = document.getElementById('new-engin-name').value.trim(); const qty = document.getElementById('new-engin-qty').value; if (!name) return; const container = document.getElementById('engins-list-container'); const item = document.createElement('div'); item.className = 'badge'; item.style.cssText = 'background: #fff; border: 1px solid var(--ink-300); padding: 6px 12px; justify-content: space-between;'; item.innerHTML = `<span>${name} - ${qty} unité(s)</span><span style="color: var(--danger); cursor: pointer;" onclick="this.parentElement.remove()"></span>`; container.appendChild(item); document.getElementById('new-engin-name').value = ''; }
 
-      if (step === 4) {
-        buildRecap();
-      }
-    }
+ function buildRecap() {
+ const titre = document.getElementById('prj-titre').value || 'Marché BTP'; const budget = parseInt(document.getElementById('prj-budget').value, 10) || 0; const region = document.getElementById('prj-region').value; const tier = document.getElementById('prj-tier-min').value; document.getElementById('recap-box').innerHTML = `
+ <div style="font-size: 0.8125rem; color: var(--ink-500); margin-bottom: 4px;">RÉCAPITULATIF DE L'APPEL D'OFFRES :</div>
+ <h3 style="margin: 0 0 8px; color: var(--brand-900);">${titre}</h3>
+ <div style="font-size: 1.25rem; font-weight: 700; color: var(--brand-700); margin-bottom: 12px;">${window.SignwUtils.formatFCFA(budget)}</div>
+ <div style="font-size: 0.875rem; color: var(--ink-700);">
+ Région d’exécution : <strong>${region}</strong> • Qualification minimale requise : <strong>Niveau ${tier}</strong>
+ </div>
+ `; }
 
-    function addEnginRow() {
-      const name = document.getElementById('new-engin-name').value.trim();
-      const qty = document.getElementById('new-engin-qty').value;
-      if (!name) return;
-
-      const container = document.getElementById('engins-list-container');
-      const item = document.createElement('div');
-      item.className = 'badge';
-      item.style.cssText = 'background: #fff; border: 1px solid var(--ink-300); padding: 6px 12px; justify-content: space-between;';
-      item.innerHTML = `<span>${name} - ${qty} unité(s)</span><span style="color: var(--danger); cursor: pointer;" onclick="this.parentElement.remove()">✕</span>`;
-      container.appendChild(item);
-
-      document.getElementById('new-engin-name').value = '';
-    }
-
-    function buildRecap() {
-      const titre = document.getElementById('prj-titre').value || 'Marché BTP';
-      const budget = parseInt(document.getElementById('prj-budget').value, 10) || 0;
-      const region = document.getElementById('prj-region').value;
-      const tier = document.getElementById('prj-tier-min').value;
-
-      document.getElementById('recap-box').innerHTML = `
-        <div style="font-size: 0.8125rem; color: var(--ink-500); margin-bottom: 4px;">RÉCAPITULATIF DE L'APPEL D'OFFRES :</div>
-        <h3 style="margin: 0 0 8px; color: var(--brand-900);">${titre}</h3>
-        <div style="font-size: 1.25rem; font-weight: 800; color: var(--brand-700); margin-bottom: 12px;">${window.SignwUtils.formatFCFA(budget)}</div>
-        <div style="font-size: 0.875rem; color: var(--ink-700);">
-          Région d’exécution : <strong>${region}</strong> • Qualification minimale requise : <strong>Niveau ${tier}</strong>
-        </div>
-      `;
-    }
-
-    function publishProject() {
-      const user = window.SignwAuth.getCurrentUser();
-      const principal = window.SignwStore.getPrincipalById(user.principalId) || window.SignwStore.getPrincipals()[0];
-
-      const titre = document.getElementById('prj-titre').value || 'Marché public de voirie';
-      const budget = parseInt(document.getElementById('prj-budget').value, 10) || 500000000;
-      const delai = parseInt(document.getElementById('prj-delai').value, 10) || 6;
-      const limite = document.getElementById('prj-limite').value || '2026-12-31';
-      const region = document.getElementById('prj-region').value;
-      const ville = document.getElementById('prj-ville').value || region;
-      const sec = document.getElementById('prj-secteur').value;
-      const sousSec = document.getElementById('prj-sous-secteur').value || 'Génie Civil';
-      const desc = document.getElementById('prj-desc').value || 'Travaux de réhabilitation';
-      const tier = document.getElementById('prj-tier-min').value;
-
-      const newPrj = window.SignwStore.createProject({
-        principalId: principal.id,
-        organisation: principal.organisation,
-        titre,
-        secteurId: sec,
-        sousSecteur: sousSec,
-        description: desc,
-        budgetFCFA: budget,
-        delaiMois: delai,
-        region,
-        ville,
-        dateLimite: limite,
-        exigences: {
-          caMinimum: budget * 0.7,
-          experienceMinAns: 5,
-          nbProjetsSimilaires: 2,
-          certificationMinimale: tier,
-          materielRequis: [
-            { type: 'Niveleuse 140 CV', quantiteMin: 1 },
-            { type: 'Compacteur vibrant', quantiteMin: 1 }
-          ],
-          personnelCle: ['Ingénieur de génie civil (> 8 ans)', 'Conducteur de travaux']
-        }
-      });
-
-      window.SignwUI.showToast('Appel d’offres publié avec succès !', 'success');
-      setTimeout(() => {
-        window.location.href = `adequation.html?prj=${newPrj.id}`;
-      }, 700);
-    }
-  </script>
+ function publishProject() {
+ const user = window.SignwAuth.getCurrentUser(); const principal = window.SignwStore.getPrincipalById(user.principalId) || window.SignwStore.getPrincipals()[0]; const titre = document.getElementById('prj-titre').value || 'Marché public de voirie'; const budget = parseInt(document.getElementById('prj-budget').value, 10) || 500000000; const delai = parseInt(document.getElementById('prj-delai').value, 10) || 6; const limite = document.getElementById('prj-limite').value || '2026-12-31'; const region = document.getElementById('prj-region').value; const ville = document.getElementById('prj-ville').value || region; const sec = document.getElementById('prj-secteur').value; const sousSec = document.getElementById('prj-sous-secteur').value || 'Génie Civil'; const desc = document.getElementById('prj-desc').value || 'Travaux de réhabilitation'; const tier = document.getElementById('prj-tier-min').value; const newPrj = window.SignwStore.createProject({
+ principalId: principal.id,
+ organisation: principal.organisation,
+ titre,
+ secteurId: sec,
+ sousSecteur: sousSec,
+ description: desc,
+ budgetFCFA: budget,
+ delaiMois: delai,
+ region,
+ ville,
+ dateLimite: limite,
+ exigences: {
+ caMinimum: budget * 0.7,
+ experienceMinAns: 5,
+ nbProjetsSimilaires: 2,
+ certificationMinimale: tier,
+ materielRequis: [
+ { type: 'Niveleuse 140 CV', quantiteMin: 1 },
+ { type: 'Compacteur vibrant', quantiteMin: 1 }
+ ],
+ personnelCle: ['Ingénieur de génie civil (> 8 ans)', 'Conducteur de travaux']
+ }
+ }); window.SignwUI.showToast('Appel d’offres publié avec succès !', 'success'); setTimeout(() => {
+ window.location.href = `adequation.html?prj=${newPrj.id}`; }, 700); }
+ </script>
 </body>
 </html>

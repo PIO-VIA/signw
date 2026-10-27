@@ -1,190 +1,164 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administration Générale — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Administration Générale — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <!-- En-tête -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <h2 style="margin: 0 0 4px;">Tableau de Bord Administrateur</h2>
-          <span class="text-muted text-sm">Supervision globale, décisions de certification et intégrité de la plateforme</span>
-        </div>
-        <div style="display: flex; gap: 10px;">
-          <a href="certifications.html" class="btn btn-gold btn-sm">⚖️ Décisions en attente</a>
-          <a href="form-builder.html" class="btn btn-primary btn-sm">⚙️ Constructeur de formulaires</a>
-        </div>
-      </div>
+ <main class="app-content">
+ <!-- En-tête -->
+ <div class="page-header">
+ <div>
+ <h2>Administration</h2>
+ <p>Supervision, décisions de certification et intégrité</p>
+ </div>
+ <div class="page-header-actions">
+ <a href="certifications.html" class="btn btn-primary btn-sm">Décisions en attente</a>
+ <a href="form-builder.html" class="btn btn-secondary btn-sm">Formulaires</a>
+ </div>
+ </div>
 
-      <!-- 4 KPI Globaux -->
-      <div class="grid grid-cols-4 gap-6" style="margin-bottom: 32px;">
-        <div class="kpi-card">
-          <span class="kpi-label">ENTREPRISES RÉFÉRENCÉES</span>
-          <span class="kpi-val" id="admin-kpi-agents">14</span>
-          <span class="text-xs text-muted">Dont 8 certifiées actives</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">DÉCISIONS EN ATTENTE (4 YEUX)</span>
-          <span class="kpi-val" style="color: var(--danger);" id="admin-kpi-pending-decisions">1</span>
-          <span class="text-xs text-muted">Avis d'auditeur à entériner</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">DOSSIERS À AFFECTER</span>
-          <span class="kpi-val" style="color: var(--warning);" id="admin-kpi-unassigned">2</span>
-          <span class="text-xs text-muted">Soumis en attente d'auditeur</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">VOLUME TOTAL SÉCURISÉ</span>
-          <span class="kpi-val" style="font-size: 1.5rem; color: var(--brand-700);">5,4 Md</span>
-          <span class="text-xs text-muted">FCFA de marchés publics</span>
-        </div>
-      </div>
+ <!-- 4 KPI Globaux -->
+ <div class="kpi-strip">
+ <div class="kpi-card">
+ <span class="kpi-label">ENTREPRISES RÉFÉRENCÉES</span>
+ <span class="kpi-val" id="admin-kpi-agents">14</span>
+ <span class="text-xs text-muted">Dont 8 certifiées actives</span>
+ </div>
+ <div class="kpi-card">
+ <span class="kpi-label">DÉCISIONS EN ATTENTE (4 YEUX)</span>
+ <span class="kpi-val" style="color: var(--danger);" id="admin-kpi-pending-decisions">1</span>
+ <span class="text-xs text-muted">Avis d'auditeur à entériner</span>
+ </div>
+ <div class="kpi-card">
+ <span class="kpi-label">DOSSIERS À AFFECTER</span>
+ <span class="kpi-val" style="color: var(--warning);" id="admin-kpi-unassigned">2</span>
+ <span class="text-xs text-muted">Soumis en attente d'auditeur</span>
+ </div>
+ <div class="kpi-card">
+ <span class="kpi-label">VOLUME TOTAL SÉCURISÉ</span>
+ <span class="kpi-val" style="font-size: 1.5rem; color: var(--brand-700);">5,4 Md</span>
+ <span class="text-xs text-muted">FCFA de marchés publics</span>
+ </div>
+ </div>
 
-      <!-- Entonnoir des Dossiers & Répartition Secteurs -->
-      <div class="grid grid-cols-2 gap-8" style="margin-bottom: 32px;">
-        <!-- Entonnoir Statuts -->
-        <div class="card" style="padding: 24px;">
-          <h4 style="margin: 0 0 16px;">Entonnoir des dossiers par statut</h4>
-          <div style="display: flex; flex-direction: column; gap: 12px;" id="funnel-container">
-            <!-- Injecté dynamique -->
-          </div>
-        </div>
+ <!-- Entonnoir des Dossiers & Répartition Secteurs -->
+ <div class="grid grid-cols-2 gap-8" style="margin-bottom: 32px;">
+ <!-- Entonnoir Statuts -->
+ <div class="card" style="padding: 24px;">
+ <h4 style="margin: 0 0 16px;">Entonnoir des dossiers par statut</h4>
+ <div style="display: flex; flex-direction: column; gap: 12px;" id="funnel-container">
+ <!-- Injecté dynamique -->
+ </div>
+ </div>
 
-        <!-- Répartition par Secteur -->
-        <div class="card" style="padding: 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h4 style="margin: 0;">Répartition par secteur</h4>
-            <a href="secteurs.html" class="text-xs text-brand font-bold">Gérer les secteurs →</a>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 14px;" id="sectors-distrib">
-            <!-- Injecté dynamique -->
-          </div>
-        </div>
-      </div>
+ <!-- Répartition par Secteur -->
+ <div class="card" style="padding: 24px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+ <h4 style="margin: 0;">Répartition par secteur</h4>
+ <a href="secteurs.html" class="text-xs text-brand font-bold">Gérer les secteurs →</a>
+ </div>
+ <div style="display: flex; flex-direction: column; gap: 14px;" id="sectors-distrib">
+ <!-- Injecté dynamique -->
+ </div>
+ </div>
+ </div>
 
-      <!-- Journal d'Audit Récent & Alertes -->
-      <div class="card" style="padding: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h4 style="margin: 0;">Journal d’audit récent (Traçabilité inaltérable)</h4>
-          <a href="journal.html" class="text-xs text-brand font-bold">Consulter le journal complet →</a>
-        </div>
+ <!-- Journal d'Audit Récent & Alertes -->
+ <div class="card" style="padding: 24px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+ <h4 style="margin: 0;">Journal d’audit récent (Traçabilité inaltérable)</h4>
+ <a href="journal.html" class="text-xs text-brand font-bold">Consulter le journal complet →</a>
+ </div>
 
-        <div class="table-container" style="border: none;">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Date & Heure</th>
-                <th>Acteur</th>
-                <th>Action</th>
-                <th>Cible</th>
-                <th>Détails</th>
-              </tr>
-            </thead>
-            <tbody id="admin-recent-journal">
-              <!-- Injecté dynamique -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
-  </div>
+ <div class="table-container" style="border: none;">
+ <table class="table">
+ <thead>
+ <tr>
+ <th>Date & Heure</th>
+ <th>Acteur</th>
+ <th>Action</th>
+ <th>Cible</th>
+ <th>Détails</th>
+ </tr>
+ </thead>
+ <tbody id="admin-recent-journal">
+ <!-- Injecté dynamique -->
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['admin'])) return;
-      renderAdminDash();
-    });
-
-    function renderAdminDash() {
-      const dossiers = window.SignwStore.getDossiers();
-      const agents = window.SignwStore.getAgents();
-      const sectors = window.SignwStore.getSectors();
-      const logs = window.SignwStore.getJournal().slice(0, 5);
-
-      const countDecisions = dossiers.filter(d => d.statut === 'en_decision').length;
-      const countUnassigned = dossiers.filter(d => d.statut === 'soumis' && !d.affecteAAuditeurId).length;
-
-      document.getElementById('admin-kpi-agents').textContent = agents.length;
-      document.getElementById('admin-kpi-pending-decisions').textContent = Math.max(1, countDecisions);
-      document.getElementById('admin-kpi-unassigned').textContent = Math.max(1, countUnassigned);
-
-      // Entonnoir
-      const statusCounts = {
-        'Brouillon': dossiers.filter(d => d.statut === 'brouillon').length,
-        'Soumis': dossiers.filter(d => d.statut === 'soumis').length,
-        'En vérification': dossiers.filter(d => d.statut === 'en_verification' || d.statut === 'pieces_incompletes').length,
-        'En décision': countDecisions || 1,
-        'Certifiés': dossiers.filter(d => d.statut.includes('certifie')).length
-      };
-
-      const maxVal = Math.max(...Object.values(statusCounts), 1);
-      const funnel = document.getElementById('funnel-container');
-      funnel.innerHTML = Object.entries(statusCounts).map(([st, count]) => `
-        <div>
-          <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; margin-bottom: 4px;">
-            <span>${st}</span>
-            <span><strong>${count}</strong> dossiers</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${(count / maxVal) * 100}%;"></div>
-          </div>
-        </div>
-      `).join('');
-
-      // Répartition secteurs
-      const sContainer = document.getElementById('sectors-distrib');
-      sContainer.innerHTML = sectors.map(sec => `
-        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--ink-50); padding: 10px 14px; border-radius: var(--radius-md);">
-          <div>
-            <strong>${sec.nom}</strong>
-            <div class="text-xs text-muted">${sec.description.substring(0, 45)}...</div>
-          </div>
-          <span class="badge ${sec.actif ? 'badge-certifie' : 'badge-brouillon'}">
-            ${sec.actif ? `${sec.nbAgents || 0} agents` : 'Bientôt'}
-          </span>
-        </div>
-      `).join('');
-
-      // Journal
-      const jTbody = document.getElementById('admin-recent-journal');
-      jTbody.innerHTML = logs.map(l => `
-        <tr>
-          <td><small class="text-muted">${l.date}</small></td>
-          <td class="font-bold">${l.acteur}</td>
-          <td><span class="badge badge-soumis">${l.action}</span></td>
-          <td>${l.cible}</td>
-          <td class="text-xs text-muted">${l.details}</td>
-        </tr>
-      `).join('');
-    }
-  </script>
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['admin'])) return; renderAdminDash(); }); function renderAdminDash() {
+ const dossiers = window.SignwStore.getDossiers(); const agents = window.SignwStore.getAgents(); const sectors = window.SignwStore.getSectors(); const logs = window.SignwStore.getJournal().slice(0, 5); const countDecisions = dossiers.filter(d => d.statut === 'en_decision').length; const countUnassigned = dossiers.filter(d => d.statut === 'soumis' && !d.affecteAAuditeurId).length; document.getElementById('admin-kpi-agents').textContent = agents.length; document.getElementById('admin-kpi-pending-decisions').textContent = Math.max(1, countDecisions); document.getElementById('admin-kpi-unassigned').textContent = Math.max(1, countUnassigned); // Entonnoir
+ const statusCounts = {
+ 'Brouillon': dossiers.filter(d => d.statut === 'brouillon').length,
+ 'Soumis': dossiers.filter(d => d.statut === 'soumis').length,
+ 'En vérification': dossiers.filter(d => d.statut === 'en_verification' || d.statut === 'pieces_incompletes').length,
+ 'En décision': countDecisions || 1,
+ 'Certifiés': dossiers.filter(d => d.statut.includes('certifie')).length
+ }; const maxVal = Math.max(...Object.values(statusCounts), 1); const funnel = document.getElementById('funnel-container'); funnel.innerHTML = Object.entries(statusCounts).map(([st, count]) => `
+ <div>
+ <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; margin-bottom: 4px;">
+ <span>${st}</span>
+ <span><strong>${count}</strong> dossiers</span>
+ </div>
+ <div class="progress-bar-bg">
+ <div class="progress-bar-fill" style="width: ${(count / maxVal) * 100}%;"></div>
+ </div>
+ </div>
+ `).join(''); // Répartition secteurs
+ const sContainer = document.getElementById('sectors-distrib'); sContainer.innerHTML = sectors.map(sec => `
+ <div style="display: flex; justify-content: space-between; align-items: center; background: var(--ink-50); padding: 10px 14px; border-radius: var(--radius-md);">
+ <div>
+ <strong>${sec.nom}</strong>
+ <div class="text-xs text-muted">${sec.description.substring(0, 45)}...</div>
+ </div>
+ <span class="badge ${sec.actif ? 'badge-certifie' : 'badge-brouillon'}">
+ ${sec.actif ? `${sec.nbAgents || 0} agents` : 'Bientôt'}
+ </span>
+ </div>
+ `).join(''); // Journal
+ const jTbody = document.getElementById('admin-recent-journal'); jTbody.innerHTML = logs.map(l => `
+ <tr>
+ <td><small class="text-muted">${l.date}</small></td>
+ <td class="font-bold">${l.acteur}</td>
+ <td><span class="badge badge-soumis">${l.action}</span></td>
+ <td>${l.cible}</td>
+ <td class="text-xs text-muted">${l.details}</td>
+ </tr>
+ `).join(''); }
+ </script>
 </body>
 </html>

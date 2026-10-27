@@ -1,215 +1,183 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tableau de Bord Agent — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Tableau de Bord Agent — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <!-- Sidebar injectée par layout.js -->
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <!-- Sidebar injectée par layout.js -->
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content" id="agent-dash-content">
-      <!-- Rendu dynamique JS -->
-    </main>
-  </div>
+ <main class="app-content" id="agent-dash-content">
+ <!-- Rendu dynamique JS -->
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['agent'])) return;
-      renderDashboard();
-    });
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['agent'])) return; renderDashboard(); }); function renderDashboard() {
+ const user = window.SignwAuth.getCurrentUser(); const agent = window.SignwStore.getAgentById(user.agentId) || window.SignwStore.getAgents()[0]; const dossiers = window.SignwStore.getDossiersByAgent(agent.id); const activeDossier = dossiers[0] || null; const pieces = activeDossier ? window.SignwStore.getPiecesByDossier(activeDossier.id) : []; const rejectedPieces = pieces.filter(p => p.statutPiece === 'rejetee' || p.statutPiece === 'complement_demande'); const missingPieces = pieces.filter(p => p.statutPiece === 'a_fournir' || p.statutPiece === 'rejetee'); const isPiecesIncompletes = activeDossier && activeDossier.statut === 'pieces_incompletes'; const isCertified = agent.statutCertification.includes('certifie'); const mount = document.getElementById('agent-dash-content'); // Déterminer la carte "Prochaine Action"
+ let nextActionHtml = ''; if (isPiecesIncompletes && rejectedPieces.length > 0) {
+ nextActionHtml = `
+ <div class="card" style="background: var(--warning-bg); border: 1px solid #F0D9A8; padding: 24px; margin-bottom: 28px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+ <div style="display: flex; gap: 16px; align-items: center;">
+ <div>
+ <h4 style="color: #9A5B00; margin: 0 0 4px;">Pièce complémentaire demandée par l’auditeur</h4>
+ <p style="font-size: 0.9375rem; color: var(--ink-900); margin: 0;">
+ ${rejectedPieces[0].nomFichier} a été rejetée. Motif : <em>${rejectedPieces[0].commentaireAuditeur}</em>
+ </p>
+ </div>
+ </div>
+ <a href="dossier.html?id=${activeDossier.id}" class="btn btn-primary">
+ Remplacer la pièce & Resoumettre →
+ </a>
+ </div>
+ </div>
+ `; } else if (!isCertified && activeDossier) {
+ nextActionHtml = `
+ <div class="card" style="background: var(--brand-100); border: 1px solid var(--brand-100); padding: 20px; margin-bottom: 28px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+ <div>
+ <h4 style="color: var(--brand-900); margin: 0 0 4px;">Dossier en cours d’instruction</h4>
+ <p class="text-sm text-muted" style="margin: 0;">Votre dossier BTP est pris en charge par l'équipe d'audit signw.</p>
+ </div>
+ <a href="dossier.html?id=${activeDossier.id}" class="btn btn-primary btn-sm">Consulter le dossier →</a>
+ </div>
+ </div>
+ `; } else {
+ nextActionHtml = `
+ <div class="card" style="background: var(--success-bg); border: 1px solid #B7E0C8; padding: 20px; margin-bottom: 28px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+ <div style="display: flex; gap: 12px; align-items: center;">
+ <div>
+ <h4 style="color: var(--success); margin: 0 0 4px;">Votre certification ${agent.niveau} est active !</h4>
+ <p class="text-sm text-muted" style="margin: 0;">Code officiel : <strong>${agent.codeCertificat}</strong> • Valable jusqu'au ${window.SignwUtils.formatDateFR(agent.dateExpiration)}</p>
+ </div>
+ </div>
+ <a href="certificats.html" class="btn btn-primary btn-sm">Voir / Imprimer le certificat →</a>
+ </div>
+ </div>
+ `; }
 
-    function renderDashboard() {
-      const user = window.SignwAuth.getCurrentUser();
-      const agent = window.SignwStore.getAgentById(user.agentId) || window.SignwStore.getAgents()[0];
-      const dossiers = window.SignwStore.getDossiersByAgent(agent.id);
-      const activeDossier = dossiers[0] || null;
-      const pieces = activeDossier ? window.SignwStore.getPiecesByDossier(activeDossier.id) : [];
+ // Stepper des étapes du dossier
+ const steps = ['brouillon', 'soumis', 'en_verification', 'en_decision', 'certifie']; const stepLabels = ['1. Brouillon', '2. Soumis', '3. Vérification', '4. Décision', '5. Certifié']; const currentStatut = activeDossier ? activeDossier.statut : 'brouillon'; const currentStepIdx = isCertified ? 4 : (currentStatut === 'en_decision' ? 3 : (currentStatut.includes('verification') || currentStatut === 'pieces_incompletes' ? 2 : (currentStatut === 'soumis' ? 1 : 0))); mount.innerHTML = `
+ <!-- Bandeau de bienvenue -->
+ <div style="margin-bottom: 24px;">
+ <h2 style="margin: 0 0 4px;">Bienvenue, ${user.nom}</h2>
+ <span class="text-muted text-sm">${agent.raisonSociale} • ${agent.ville} (${agent.region})</span>
+ </div>
 
-      const rejectedPieces = pieces.filter(p => p.statutPiece === 'rejetee' || p.statutPiece === 'complement_demande');
-      const missingPieces = pieces.filter(p => p.statutPiece === 'a_fournir' || p.statutPiece === 'rejetee');
+ ${nextActionHtml}
 
-      const isPiecesIncompletes = activeDossier && activeDossier.statut === 'pieces_incompletes';
-      const isCertified = agent.statutCertification.includes('certifie');
+ <!-- 4 KPI Cards -->
+ <div class="grid grid-cols-4 gap-6" style="margin-bottom: 32px;">
+ <div class="kpi-card">
+ <span class="kpi-label">STATUT ACTUEL</span>
+ <div>${window.SignwUtils.getStatusBadge(agent.statutCertification)}</div>
+ <div class="text-xs text-muted" style="margin-top: 4px;">Niveau : <strong>${agent.niveau || 'En attente'}</strong></div>
+ </div>
 
-      const mount = document.getElementById('agent-dash-content');
+ <div class="kpi-card">
+ <span class="kpi-label">SCORE DE CONFIANCE</span>
+ <div style="display: flex; justify-content: space-between; align-items: center;">
+ <span class="kpi-val">${agent.score}</span>
+ ${window.SignwUI.renderScoreGauge(agent.score, 48)}
+ </div>
+ <span class="text-xs text-muted">Sur 100 points auditables</span>
+ </div>
 
-      // Déterminer la carte "Prochaine Action"
-      let nextActionHtml = '';
-      if (isPiecesIncompletes && rejectedPieces.length > 0) {
-        nextActionHtml = `
-          <div class="card" style="background: var(--warning-bg); border: 2px solid #F39C12; padding: 24px; margin-bottom: 28px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-              <div style="display: flex; gap: 16px; align-items: center;">
-                <span style="font-size: 2.2rem;">⚠️</span>
-                <div>
-                  <h4 style="color: #9A5B00; margin: 0 0 4px;">ACTION URGENTE : Pièce complémentaire demandée par l’auditeur</h4>
-                  <p style="font-size: 0.9375rem; color: var(--ink-900); margin: 0;">
-                    ${rejectedPieces[0].nomFichier} a été rejetée. Motif : <em>${rejectedPieces[0].commentaireAuditeur}</em>
-                  </p>
-                </div>
-              </div>
-              <a href="dossier.html?id=${activeDossier.id}" class="btn btn-gold btn-lg">
-                Remplacer la pièce & Resoumettre →
-              </a>
-            </div>
-          </div>
-        `;
-      } else if (!isCertified && activeDossier) {
-        nextActionHtml = `
-          <div class="card" style="background: var(--brand-100); border: 1.5px solid var(--brand-500); padding: 20px; margin-bottom: 28px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-              <div>
-                <h4 style="color: var(--brand-900); margin: 0 0 4px;">Dossier en cours d’instruction</h4>
-                <p class="text-sm text-muted" style="margin: 0;">Votre dossier BTP est pris en charge par l'équipe d'audit signw.</p>
-              </div>
-              <a href="dossier.html?id=${activeDossier.id}" class="btn btn-primary btn-sm">Consulter le dossier →</a>
-            </div>
-          </div>
-        `;
-      } else {
-        nextActionHtml = `
-          <div class="card" style="background: var(--success-bg); border: 1.5px solid var(--success); padding: 20px; margin-bottom: 28px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-              <div style="display: flex; gap: 12px; align-items: center;">
-                <span style="font-size: 1.8rem;">🎉</span>
-                <div>
-                  <h4 style="color: var(--success); margin: 0 0 4px;">Votre certification ${agent.niveau} est active !</h4>
-                  <p class="text-sm text-muted" style="margin: 0;">Code officiel : <strong>${agent.codeCertificat}</strong> • Valable jusqu'au ${window.SignwUtils.formatDateFR(agent.dateExpiration)}</p>
-                </div>
-              </div>
-              <a href="certificats.html" class="btn btn-primary btn-sm">Voir / Imprimer le certificat →</a>
-            </div>
-          </div>
-        `;
-      }
+ <div class="kpi-card">
+ <span class="kpi-label">VALIDITÉ CERTIFICAT</span>
+ <span class="kpi-val">${isCertified ? '335' : '—'} <span style="font-size: 1rem; font-weight: normal;">jours</span></span>
+ <span class="text-xs text-muted">${agent.dateExpiration ? `Expire le ${window.SignwUtils.formatDateFR(agent.dateExpiration)}` : 'Non certifié'}</span>
+ </div>
 
-      // Stepper des étapes du dossier
-      const steps = ['brouillon', 'soumis', 'en_verification', 'en_decision', 'certifie'];
-      const stepLabels = ['1. Brouillon', '2. Soumis', '3. Vérification', '4. Décision', '5. Certifié'];
-      const currentStatut = activeDossier ? activeDossier.statut : 'brouillon';
-      const currentStepIdx = isCertified ? 4 : (currentStatut === 'en_decision' ? 3 : (currentStatut.includes('verification') || currentStatut === 'pieces_incompletes' ? 2 : (currentStatut === 'soumis' ? 1 : 0)));
+ <div class="kpi-card">
+ <span class="kpi-label">PIÈCES EN ATTENTE</span>
+ <span class="kpi-val" style="color: ${missingPieces.length > 0 ? 'var(--danger)' : 'var(--success)'};">${missingPieces.length}</span>
+ <span class="text-xs text-muted">${missingPieces.length > 0 ? 'À régulariser' : 'Toutes pièces conformes'}</span>
+ </div>
+ </div>
 
-      mount.innerHTML = `
-        <!-- Bandeau de bienvenue -->
-        <div style="margin-bottom: 24px;">
-          <h2 style="margin: 0 0 4px;">Bienvenue, ${user.nom}</h2>
-          <span class="text-muted text-sm">${agent.raisonSociale} • ${agent.ville} (${agent.region})</span>
-        </div>
+ <!-- Stepper de progression -->
+ <div class="card" style="padding: 24px; margin-bottom: 32px;">
+ <h4 style="margin: 0 0 16px;">Progression du dossier de qualification</h4>
+ <div class="stepper">
+ <div class="stepper-line"></div>
+ ${steps.map((st, idx) => {
+ const isActive = idx === currentStepIdx; const isDone = idx < currentStepIdx; return `
+ <div class="stepper-step ${isActive ? 'active' : ''} ${isDone ? 'completed' : ''}">
+ <div class="stepper-num">${isDone ? '' : idx + 1}</div>
+ <span class="stepper-label">${stepLabels[idx]}</span>
+ </div>
+ `; }).join('')}
+ </div>
+ </div>
 
-        ${nextActionHtml}
+ <!-- 2 Colonnes : Marchés recommandés + Fil d'activité -->
+ <div class="grid grid-cols-2 gap-8">
+ <!-- Marchés recommandés pour cet agent -->
+ <div class="card" style="padding: 24px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+ <h4 style="margin: 0;">Marchés recommandés pour vous</h4>
+ <a href="../../marches.html" class="text-xs text-brand font-bold" target="_blank">Tous les marchés →</a>
+ </div>
 
-        <!-- 4 KPI Cards -->
-        <div class="grid grid-cols-4 gap-6" style="margin-bottom: 32px;">
-          <div class="kpi-card">
-            <span class="kpi-label">STATUT ACTUEL</span>
-            <div>${window.SignwUtils.getStatusBadge(agent.statutCertification)}</div>
-            <div class="text-xs text-muted" style="margin-top: 4px;">Niveau : <strong>${agent.niveau || 'En attente'}</strong></div>
-          </div>
+ <div style="display: flex; flex-direction: column; gap: 12px;">
+ ${window.SignwStore.getProjects().slice(0, 3).map(p => `
+ <div style="background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 14px;">
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+ <strong style="font-size: 0.95rem;">${p.titre}</strong>
+ <span class="font-bold text-sm text-brand">${window.SignwUtils.formatFCFAShort(p.budgetFCFA)}</span>
+ </div>
+ <div class="text-xs text-muted" style="margin-bottom: 8px;"> ${p.organisation} • ${p.region}</div>
+ <a href="../../marche-detail.html?id=${p.id}" class="btn btn-secondary btn-sm" target="_blank">Consulter l'offre →</a>
+ </div>
+ `).join('')}
+ </div>
+ </div>
 
-          <div class="kpi-card">
-            <span class="kpi-label">SCORE DE CONFIANCE</span>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="kpi-val">${agent.score}</span>
-              ${window.SignwUI.renderScoreGauge(agent.score, 48)}
-            </div>
-            <span class="text-xs text-muted">Sur 100 points auditables</span>
-          </div>
-
-          <div class="kpi-card">
-            <span class="kpi-label">VALIDITÉ CERTIFICAT</span>
-            <span class="kpi-val">${isCertified ? '335' : '—'} <span style="font-size: 1rem; font-weight: normal;">jours</span></span>
-            <span class="text-xs text-muted">${agent.dateExpiration ? `Expire le ${window.SignwUtils.formatDateFR(agent.dateExpiration)}` : 'Non certifié'}</span>
-          </div>
-
-          <div class="kpi-card">
-            <span class="kpi-label">PIÈCES EN ATTENTE</span>
-            <span class="kpi-val" style="color: ${missingPieces.length > 0 ? 'var(--danger)' : 'var(--success)'};">${missingPieces.length}</span>
-            <span class="text-xs text-muted">${missingPieces.length > 0 ? 'À régulariser' : 'Toutes pièces conformes'}</span>
-          </div>
-        </div>
-
-        <!-- Stepper de progression -->
-        <div class="card" style="padding: 24px; margin-bottom: 32px;">
-          <h4 style="margin: 0 0 16px;">Progression du dossier de qualification</h4>
-          <div class="stepper">
-            <div class="stepper-line"></div>
-            ${steps.map((st, idx) => {
-              const isActive = idx === currentStepIdx;
-              const isDone = idx < currentStepIdx;
-              return `
-                <div class="stepper-step ${isActive ? 'active' : ''} ${isDone ? 'completed' : ''}">
-                  <div class="stepper-num">${isDone ? '✓' : idx + 1}</div>
-                  <span class="stepper-label">${stepLabels[idx]}</span>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-
-        <!-- 2 Colonnes : Marchés recommandés + Fil d'activité -->
-        <div class="grid grid-cols-2 gap-8">
-          <!-- Marchés recommandés pour cet agent -->
-          <div class="card" style="padding: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-              <h4 style="margin: 0;">Marchés recommandés pour vous</h4>
-              <a href="../../marches.html" class="text-xs text-brand font-bold" target="_blank">Tous les marchés →</a>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              ${window.SignwStore.getProjects().slice(0, 3).map(p => `
-                <div style="background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 14px;">
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
-                    <strong style="font-size: 0.95rem;">${p.titre}</strong>
-                    <span class="font-bold text-sm text-brand">${window.SignwUtils.formatFCFAShort(p.budgetFCFA)}</span>
-                  </div>
-                  <div class="text-xs text-muted" style="margin-bottom: 8px;">🏛️ ${p.organisation} • 📍 ${p.region}</div>
-                  <a href="../../marche-detail.html?id=${p.id}" class="btn btn-secondary btn-sm" target="_blank">Consulter l'offre →</a>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-
-          <!-- Fil d'activité / Historique -->
-          <div class="card" style="padding: 24px;">
-            <h4 style="margin: 0 0 16px;">Fil d’activité récent</h4>
-            <div style="display: flex; flex-direction: column; gap: 14px; border-left: 2px solid var(--ink-200); padding-left: 16px; margin-left: 6px;">
-              ${(activeDossier && activeDossier.historique ? activeDossier.historique : []).slice(-5).reverse().map(h => `
-                <div>
-                  <strong style="font-size: 0.875rem;">${h.action}</strong>
-                  <div class="text-xs text-muted">${h.date} • par ${h.acteur}</div>
-                  <p class="text-xs" style="margin: 2px 0 0; color: var(--ink-700);">${h.commentaire}</p>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </div>
-      `;
-    }
-  </script>
+ <!-- Fil d'activité / Historique -->
+ <div class="card" style="padding: 24px;">
+ <h4 style="margin: 0 0 16px;">Fil d’activité récent</h4>
+ <div style="display: flex; flex-direction: column; gap: 14px; padding-left: 16px; margin-left: 6px;">
+ ${(activeDossier && activeDossier.historique ? activeDossier.historique : []).slice(-5).reverse().map(h => `
+ <div>
+ <strong style="font-size: 0.875rem;">${h.action}</strong>
+ <div class="text-xs text-muted">${h.date} • par ${h.acteur}</div>
+ <p class="text-xs" style="margin: 2px 0 0; color: var(--ink-700);">${h.commentaire}</p>
+ </div>
+ `).join('')}
+ </div>
+ </div>
+ </div>
+ `; }
+ </script>
 </body>
 </html>

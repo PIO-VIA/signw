@@ -18,17 +18,15 @@ window.SignwUI = {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
 
-    const iconMap = {
-      success: '✓',
-      error: '✕',
-      warning: '⚠',
-      info: 'ℹ'
-    };
+    const iconName = { success: 'check', error: 'x', warning: 'alert', info: 'info' }[type] || 'info';
+    const iconHtml = window.SignwIcons
+      ? window.SignwIcons.render(iconName, { size: 18 })
+      : '';
 
     toast.innerHTML = `
-      <span class="toast-icon" style="font-weight: 800; font-size: 1.1rem;">${iconMap[type] || 'ℹ'}</span>
+      <span class="toast-icon" style="display:flex;color:inherit;">${iconHtml}</span>
       <div style="flex: 1; line-height: 1.4;">${message}</div>
-      <button type="button" class="btn-ghost btn-sm" style="padding: 2px 6px; font-size: 1rem; color: var(--ink-500);">&times;</button>
+      <button type="button" class="icon-btn" style="width:28px;height:28px;color:var(--ink-500);">${window.SignwIcons ? window.SignwIcons.render('x', { size: 16 }) : '&times;'}</button>
     `;
 
     const closeBtn = toast.querySelector('button');

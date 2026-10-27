@@ -1,104 +1,97 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mes Entreprises Favorites — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Mes Entreprises Favorites — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-          <h2 style="margin: 0 0 4px;">Entreprises Favorisées & Notes Privées</h2>
-          <span class="text-muted text-sm">Votre carnet d'adresses de prestataires pré-qualifiés avec annotations</span>
-        </div>
-        <a href="../../annuaire.html" class="btn btn-secondary btn-sm" target="_blank">+ Parcourir l'annuaire</a>
-      </div>
+ <main class="app-content">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <h2 style="margin: 0 0 4px;">Entreprises Favorisées & Notes Privées</h2>
+ <span class="text-muted text-sm">Votre carnet d'adresses de prestataires pré-qualifiés avec annotations</span>
+ </div>
+ <a href="../../annuaire.html" class="btn btn-secondary btn-sm" target="_blank">+ Parcourir l'annuaire</a>
+ </div>
 
-      <div class="grid grid-cols-2 gap-6" id="favoris-grid">
-        <!-- Rendu dynamique JS -->
-      </div>
-    </main>
-  </div>
+ <div class="grid grid-cols-2 gap-6" id="favoris-grid">
+ <!-- Rendu dynamique JS -->
+ </div>
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['principal'])) return;
-      renderFavorites();
-    });
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['principal'])) return; renderFavorites(); }); function renderFavorites() {
+ // 2 entreprises favorites par défaut pour la démo
+ const favAgents = [
+ {
+ agent: window.SignwStore.getAgentById('agt_001'),
+ note: 'Excellent retour sur la voirie de Deïdo. Engins récents en propriété. À privilégier pour le tronçon BIAO.'
+ },
+ {
+ agent: window.SignwStore.getAgentById('agt_005'),
+ note: 'Bonne réactivité locale à Bafoussam. Tarifs compétitifs pour les terrassements moyens.'
+ }
+ ]; const grid = document.getElementById('favoris-grid'); grid.innerHTML = favAgents.map(item => `
+ <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+ <div>
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+ <div style="display: flex; gap: 12px; align-items: center;">
+ <img src="../../${item.agent.logo || 'assets/img/company-logo-01.svg'}" alt="${item.agent.raisonSociale}" style="width: 48px; height: 48px; border-radius: 8px;">
+ <div>
+ <h4 style="margin: 0 0 2px;">${item.agent.raisonSociale}</h4>
+ <span class="text-xs text-muted"> ${item.agent.ville} • CA : ${window.SignwUtils.formatFCFAShort(item.agent.caMoyen3ans)}</span>
+ </div>
+ </div>
+ ${window.SignwUI.renderScoreGauge(item.agent.score, 46)}
+ </div>
 
-    function renderFavorites() {
-      // 2 entreprises favorites par défaut pour la démo
-      const favAgents = [
-        {
-          agent: window.SignwStore.getAgentById('agt_001'),
-          note: 'Excellent retour sur la voirie de Deïdo. Engins récents en propriété. À privilégier pour le tronçon BIAO.'
-        },
-        {
-          agent: window.SignwStore.getAgentById('agt_005'),
-          note: 'Bonne réactivité locale à Bafoussam. Tarifs compétitifs pour les terrassements moyens.'
-        }
-      ];
+ <div style="margin-bottom: 14px;">
+ ${window.SignwUtils.getTierBadge(item.agent.niveau)}
+ </div>
 
-      const grid = document.getElementById('favoris-grid');
-      grid.innerHTML = favAgents.map(item => `
-        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-              <div style="display: flex; gap: 12px; align-items: center;">
-                <img src="../../${item.agent.logo || 'assets/img/company-logo-01.svg'}" alt="${item.agent.raisonSociale}" style="width: 48px; height: 48px; border-radius: 8px;">
-                <div>
-                  <h4 style="margin: 0 0 2px;">${item.agent.raisonSociale}</h4>
-                  <span class="text-xs text-muted">📍 ${item.agent.ville} • CA : ${window.SignwUtils.formatFCFAShort(item.agent.caMoyen3ans)}</span>
-                </div>
-              </div>
-              ${window.SignwUI.renderScoreGauge(item.agent.score, 46)}
-            </div>
+ <div style="background: #FFF9E6; border: 1px solid #FFE499; border-radius: var(--radius-md); padding: 12px; margin-bottom: 16px;">
+ <div class="text-xs font-bold text-muted" style="margin-bottom: 4px;"> Note interne privée :</div>
+ <p class="text-xs" style="margin: 0; color: var(--ink-900); font-style: italic;">
+ "${item.note}"
+ </p>
+ </div>
+ </div>
 
-            <div style="margin-bottom: 14px;">
-              ${window.SignwUtils.getTierBadge(item.agent.niveau)}
-            </div>
-
-            <div style="background: #FFF9E6; border: 1px solid #FFE499; border-radius: var(--radius-md); padding: 12px; margin-bottom: 16px;">
-              <div class="text-xs font-bold text-muted" style="margin-bottom: 4px;">📝 Note interne privée :</div>
-              <p class="text-xs" style="margin: 0; color: var(--ink-900); font-style: italic;">
-                "${item.note}"
-              </p>
-            </div>
-          </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--ink-100); padding-top: 12px;">
-            <a href="../../agent-profil.html?id=${item.agent.id}" class="btn btn-secondary btn-sm" target="_blank">Fiche publique</a>
-            <a href="adequation.html?agt=${item.agent.id}" class="btn btn-primary btn-sm">Tester adéquation →</a>
-          </div>
-        </div>
-      `).join('');
-    }
-  </script>
+ <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px;">
+ <a href="../../agent-profil.html?id=${item.agent.id}" class="btn btn-secondary btn-sm" target="_blank">Fiche publique</a>
+ <a href="adequation.html?agt=${item.agent.id}" class="btn btn-primary btn-sm">Tester adéquation →</a>
+ </div>
+ </div>
+ `).join(''); }
+ </script>
 </body>
 </html>

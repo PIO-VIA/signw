@@ -1,381 +1,365 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fiche Entreprise Certifiée — signw</title>
-  <meta name="description" content="Profil public certifié et score de confiance signw.">
-  <link rel="icon" type="image/png" href="favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Fiche Entreprise Certifiée — signw</title>
+ <meta name="description" content="Profil public certifié et score de confiance signw.">
+ <link rel="icon" type="image/png" href="favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/pages.css">
+ <link rel="stylesheet" href="css/tokens.css">
+ <link rel="stylesheet" href="css/base.css">
+ <link rel="stylesheet" href="css/components.css">
+ <link rel="stylesheet" href="css/layout.css">
+ <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
 
-  <header id="public-header"></header>
+ <header id="public-header"></header>
 
-  <main class="container" style="padding-top: 40px; padding-bottom: 80px;" id="agent-profil-mount">
-    <!-- Rendu dynamique JS -->
-  </main>
+ <main class="container" style="padding-top: 40px; padding-bottom: 80px;" id="agent-profil-mount">
+ <!-- Rendu dynamique JS -->
+ </main>
 
-  <footer id="public-footer"></footer>
+ <footer id="public-footer"></footer>
 
-  <script src="js/data/seed.js"></script>
-  <script src="js/core/utils.js"></script>
-  <script src="js/core/store.js"></script>
-  <script src="js/core/auth.js"></script>
-  <script src="js/core/score.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/layout.js"></script>
+ <script src="js/data/seed.js"></script>
+ <script src="js/core/utils.js"></script>
+ <script src="js/core/store.js"></script>
+ <script src="js/core/auth.js"></script>
+ <script src="js/core/score.js"></script>
+ <script src="js/core/ui.js"></script>
+ <script src="js/core/icons.js"></script>
+ <script src="js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const agtId = urlParams.get('id') || 'agt_001';
-      const agent = window.SignwStore.getAgentById(agtId);
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ const urlParams = new URLSearchParams(window.location.search); const agtId = urlParams.get('id') || 'agt_001'; const agent = window.SignwStore.getAgentById(agtId); if (!agent) {
+ document.getElementById('agent-profil-mount').innerHTML = `
+ <div class="card text-center" style="padding: 48px;">
+ <h3>Entreprise introuvable</h3>
+ <p class="text-muted">Cet identifiant d'agent ne correspond à aucun profil certifié.</p>
+ <a href="annuaire.html" class="btn btn-primary">Retour à l'annuaire</a>
+ </div>
+ `; return; }
 
-      if (!agent) {
-        document.getElementById('agent-profil-mount').innerHTML = `
-          <div class="card text-center" style="padding: 48px;">
-            <h3>Entreprise introuvable</h3>
-            <p class="text-muted">Cet identifiant d'agent ne correspond à aucun profil certifié.</p>
-            <a href="annuaire.html" class="btn btn-primary">Retour à l'annuaire</a>
-          </div>
-        `;
-        return;
-      }
+ renderAgentProfile(agent); }); function renderAgentProfile(agt) {
+ const mount = document.getElementById('agent-profil-mount'); const cert = window.SignwStore.getCertificationByAgent(agt.id); const isCertified = agt.statutCertification.includes('certifie'); mount.innerHTML = `
+ <div style="margin-bottom: 24px;">
+ <a href="annuaire.html" class="text-sm text-muted">← Retour à l’annuaire des entreprises</a>
+ </div>
 
-      renderAgentProfile(agent);
-    });
+ <!-- Bannière Profil -->
+ <div class="card" style="padding: 36px; margin-bottom: 32px;">
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; margin-bottom: 28px;">
+ <div style="display: flex; gap: 20px; align-items: center;">
+ <img src="${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 72px; height: 72px; border-radius: 12px; border: 1px solid var(--ink-200);">
+ <div>
+ <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
+ <h1 style="font-size: clamp(1.35rem, 3vw, 2.1rem); margin: 0; word-break: break-word;">${agt.raisonSociale}</h1>
+ ${window.SignwUtils.getTierBadge(agt.niveau)}
+ </div>
+ <div style="font-size: 0.95rem; color: var(--ink-500); word-break: break-word;">
+ Forme juridique : <strong>${agt.formeJuridique}</strong> • RCCM : <strong>${agt.rccm}</strong> • NIU : <strong>${agt.niu}</strong>
+ </div>
+ <div style="font-size: 0.875rem; color: var(--ink-500); margin-top: 4px; word-break: break-word;">
+ ${agt.adresse || agt.ville} (${agt.region}) • Site web : <a href="https://${agt.siteWeb}" target="_blank">${agt.siteWeb}</a>
+ </div>
+ </div>
+ </div>
 
-    function renderAgentProfile(agt) {
-      const mount = document.getElementById('agent-profil-mount');
-      const cert = window.SignwStore.getCertificationByAgent(agt.id);
-      const isCertified = agt.statutCertification.includes('certifie');
+ <!-- Jauge et Actions -->
+ <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+ <div style="text-align: center;">
+ <div class="text-xs text-muted" style="margin-bottom: 4px; font-weight: 700;">SCORE DE CONFIANCE</div>
+ ${window.SignwUI.renderScoreGauge(agt.score, 68)}
+ </div>
 
-      mount.innerHTML = `
-        <div style="margin-bottom: 24px;">
-          <a href="annuaire.html" class="text-sm text-muted">← Retour à l’annuaire des entreprises</a>
-        </div>
+ <div style="display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 180px;">
+ <a href="app/principal/adequation.html?agt=${agt.id}" class="btn btn-primary btn-sm">
+ Tester l’adéquation projet
+ </a>
+ <button class="btn btn-secondary btn-sm" onclick="saveToFavorites('${agt.id}')">
+ ⭐ Ajouter aux favoris
+ </button>
+ ${agt.codeCertificat ? `
+ <a href="verifier.html?code=${agt.codeCertificat}" class="btn btn-ghost btn-sm text-xs">
+ Vérifier le certificat (${agt.codeCertificat})
+ </a>
+ ` : ''}
+ </div>
+ </div>
+ </div>
 
-        <!-- Bannière Profil -->
-        <div class="card" style="padding: 36px; margin-bottom: 32px;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; margin-bottom: 28px;">
-            <div style="display: flex; gap: 20px; align-items: center;">
-              <img src="${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 72px; height: 72px; border-radius: 12px; border: 1px solid var(--ink-200);">
-              <div>
-                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
-                  <h1 style="font-size: clamp(1.35rem, 3vw, 2.1rem); margin: 0; word-break: break-word;">${agt.raisonSociale}</h1>
-                  ${window.SignwUtils.getTierBadge(agt.niveau)}
-                </div>
-                <div style="font-size: 0.95rem; color: var(--ink-500); word-break: break-word;">
-                  Forme juridique : <strong>${agt.formeJuridique}</strong> • RCCM : <strong>${agt.rccm}</strong> • NIU : <strong>${agt.niu}</strong>
-                </div>
-                <div style="font-size: 0.875rem; color: var(--ink-500); margin-top: 4px; word-break: break-word;">
-                  📍 ${agt.adresse || agt.ville} (${agt.region}) • Site web : <a href="https://${agt.siteWeb}" target="_blank">${agt.siteWeb}</a>
-                </div>
-              </div>
-            </div>
+ <!-- 4 Métriques d'en-tête -->
+ <div class="agent-metrics-grid" style="border-top: 1px solid var(--ink-200); padding-top: 20px;">
+ <div>
+ <div class="text-xs text-muted">CHIFFRE D'AFFAIRES MOYEN (3 ANS)</div>
+ <div style="font-size: 1.25rem; font-weight: 700; color: var(--brand-700);">${window.SignwUtils.formatFCFA(agt.caMoyen3ans)}</div>
+ </div>
+ <div>
+ <div class="text-xs text-muted">EFFECTIF SALARIÉ DÉCLARÉ</div>
+ <div style="font-size: 1.25rem; font-weight: 700;">${agt.effectif} permanents</div>
+ </div>
+ <div>
+ <div class="text-xs text-muted">ANCIENNETÉ DU PRESTATAIRE</div>
+ <div style="font-size: 1.25rem; font-weight: 700;">${new Date().getFullYear() - agt.anneeCreation} ans (${agt.anneeCreation})</div>
+ </div>
+ <div>
+ <div class="text-xs text-muted">STATUT DU CERTIFICAT</div>
+ <div style="margin-top: 4px;">${window.SignwUtils.getStatusBadge(agt.statutCertification)}</div>
+ </div>
+ </div>
+ </div>
 
-            <!-- Jauge et Actions -->
-            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-              <div style="text-align: center;">
-                <div class="text-xs text-muted" style="margin-bottom: 4px; font-weight: 700;">SCORE DE CONFIANCE</div>
-                ${window.SignwUI.renderScoreGauge(agt.score, 68)}
-              </div>
+ <!-- Layout Grille 2 colonnes : Onglets détaillés + Encadré de confiance -->
+ <div class="agent-profile-layout">
 
-              <div style="display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 180px;">
-                <a href="app/principal/adequation.html?agt=${agt.id}" class="btn btn-primary btn-sm">
-                  ⚡ Tester l’adéquation projet
-                </a>
-                <button class="btn btn-secondary btn-sm" onclick="saveToFavorites('${agt.id}')">
-                  ⭐ Ajouter aux favoris
-                </button>
-                ${agt.codeCertificat ? `
-                  <a href="verifier.html?code=${agt.codeCertificat}" class="btn btn-ghost btn-sm text-xs">
-                    🔍 Vérifier le certificat (${agt.codeCertificat})
-                  </a>
-                ` : ''}
-              </div>
-            </div>
-          </div>
+ <!-- Colonne Gauche : Onglets -->
+ <div class="card" style="padding: 28px;">
+ <div class="tabs-nav">
+ <button class="tab-btn active" data-tab="tab-overview">Vue d'ensemble</button>
+ <button class="tab-btn" data-tab="tab-audit">Détail de l'audit (5 Piliers)</button>
+ <button class="tab-btn" data-tab="tab-ref">Références vérifiées</button>
+ <button class="tab-btn" data-tab="tab-mat">Parc de matériel</button>
+ <button class="tab-btn" data-tab="tab-hist">Historique de qualification</button>
+ </div>
 
-          <!-- 4 Métriques d'en-tête -->
-          <div class="agent-metrics-grid" style="border-top: 1px solid var(--ink-200); padding-top: 20px;">
-            <div>
-              <div class="text-xs text-muted">CHIFFRE D'AFFAIRES MOYEN (3 ANS)</div>
-              <div style="font-size: 1.25rem; font-weight: 800; color: var(--brand-700);">${window.SignwUtils.formatFCFA(agt.caMoyen3ans)}</div>
-            </div>
-            <div>
-              <div class="text-xs text-muted">EFFECTIF SALARIÉ DÉCLARÉ</div>
-              <div style="font-size: 1.25rem; font-weight: 700;">${agt.effectif} permanents</div>
-            </div>
-            <div>
-              <div class="text-xs text-muted">ANCIENNETÉ DU PRESTATAIRE</div>
-              <div style="font-size: 1.25rem; font-weight: 700;">${new Date().getFullYear() - agt.anneeCreation} ans (${agt.anneeCreation})</div>
-            </div>
-            <div>
-              <div class="text-xs text-muted">STATUT DU CERTIFICAT</div>
-              <div style="margin-top: 4px;">${window.SignwUtils.getStatusBadge(agt.statutCertification)}</div>
-            </div>
-          </div>
-        </div>
+ <!-- Tab 1 : Vue d'ensemble -->
+ <div class="tab-pane" id="tab-overview">
+ <h4 style="margin-bottom: 12px;">Présentation de l'entreprise</h4>
+ <p style="font-size: 1rem; line-height: 1.7; color: var(--ink-700); margin-bottom: 24px;">
+ ${agt.description}
+ </p>
 
-        <!-- Layout Grille 2 colonnes : Onglets détaillés + Encadré de confiance -->
-        <div class="agent-profile-layout">
+ <h5 style="margin-bottom: 12px;">Spécialités certifiées :</h5>
+ <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+ ${(agt.specialites || []).map(sp => `<span class="badge" style="background: var(--brand-100); color: var(--brand-900); font-size: 0.8125rem;">${sp}</span>`).join('')}
+ </div>
 
-          <!-- Colonne Gauche : Onglets -->
-          <div class="card" style="padding: 28px;">
-            <div class="tabs-nav">
-              <button class="tab-btn active" data-tab="tab-overview">Vue d'ensemble</button>
-              <button class="tab-btn" data-tab="tab-audit">Détail de l'audit (5 Piliers)</button>
-              <button class="tab-btn" data-tab="tab-ref">Références vérifiées</button>
-              <button class="tab-btn" data-tab="tab-mat">Parc de matériel</button>
-              <button class="tab-btn" data-tab="tab-hist">Historique de qualification</button>
-            </div>
+ <div style="background: var(--ink-50); padding: 20px; border-radius: var(--radius-md);">
+ <div class="font-bold text-sm" style="margin-bottom: 6px;">Coordonnées officielles vérifiées :</div>
+ <div class="text-xs text-muted">
+ Siège social : ${agt.adresse || agt.ville} • Tél : +237 699 12 34 56 • Email vérifié : contact@${agt.siteWeb || 'signw.cm'}
+ </div>
+ </div>
+ </div>
 
-            <!-- Tab 1 : Vue d'ensemble -->
-            <div class="tab-pane" id="tab-overview">
-              <h4 style="margin-bottom: 12px;">Présentation de l'entreprise</h4>
-              <p style="font-size: 1rem; line-height: 1.7; color: var(--ink-700); margin-bottom: 24px;">
-                ${agt.description}
-              </p>
+ <!-- Tab 2 : Audit & 5 Piliers -->
+ <div class="tab-pane hidden" id="tab-audit">
+ <h4 style="margin-bottom: 8px;">Détail de la notation par pilier de confiance</h4>
+ <p class="text-sm text-muted" style="margin-bottom: 24px;">
+ Chaque pilier fait l'objet d'un examen contradictoire par l'équipe d'auditeurs signw sur pièces originales et visite de site.
+ </p>
 
-              <h5 style="margin-bottom: 12px;">Spécialités certifiées :</h5>
-              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
-                ${(agt.specialites || []).map(sp => `<span class="badge" style="background: var(--brand-100); color: var(--brand-900); font-size: 0.8125rem;">${sp}</span>`).join('')}
-              </div>
+ <div style="margin-bottom: 32px;">
+ ${window.SignwUI.renderPillarBars(agt.piliers)}
+ </div>
 
-              <div style="background: var(--ink-50); padding: 20px; border-radius: var(--radius-md);">
-                <div class="font-bold text-sm" style="margin-bottom: 6px;">Coordonnées officielles vérifiées :</div>
-                <div class="text-xs text-muted">
-                  📍 Siège social : ${agt.adresse || agt.ville} • Tél : +237 699 12 34 56 • Email vérifié : contact@${agt.siteWeb || 'signw.cm'}
-                </div>
-              </div>
-            </div>
+ <h5 style="margin-bottom: 14px;">Contrôle des pièces justificatives :</h5>
+ <div class="table-container">
+ <table class="table">
+ <thead>
+ <tr>
+ <th>Justificatif réglementaire</th>
+ <th>Statut du contrôle</th>
+ <th>Date d’audit</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>Extrait RCCM & Enregistrement Greffe TPI</td>
+ <td><span class="badge badge-certifie"> Conforme</span></td>
+ <td>14/01/2026</td>
+ </tr>
+ <tr>
+ <td>Quitus fiscal délivré par la DGI</td>
+ <td><span class="badge badge-certifie"> Conforme</span></td>
+ <td>14/01/2026</td>
+ </tr>
+ <tr>
+ <td>Attestation de non-faillite délivrée par le Tribunal</td>
+ <td><span class="badge badge-certifie"> Conforme</span></td>
+ <td>14/01/2026</td>
+ </tr>
+ <tr>
+ <td>Bilans financiers certifiés avec visa ONECCA (3 ans)</td>
+ <td><span class="badge badge-certifie"> Conforme</span></td>
+ <td>25/01/2026</td>
+ </tr>
+ <tr>
+ <td>Attestation de solvabilité bancaire (1er ordre)</td>
+ <td><span class="badge badge-certifie"> Conforme</span></td>
+ <td>25/01/2026</td>
+ </tr>
+ <tr>
+ <td>PV de réception de chantiers antérieurs</td>
+ <td><span class="badge badge-certifie"> Conforme</span></td>
+ <td>28/01/2026</td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ <small class="text-muted" style="margin-top: 8px; display: block;">
+ Conformément à notre politique de confidentialité, les documents comptables internes ne sont pas téléchargeables par le public.
+ </small>
+ </div>
 
-            <!-- Tab 2 : Audit & 5 Piliers -->
-            <div class="tab-pane hidden" id="tab-audit">
-              <h4 style="margin-bottom: 8px;">Détail de la notation par pilier de confiance</h4>
-              <p class="text-sm text-muted" style="margin-bottom: 24px;">
-                Chaque pilier fait l'objet d'un examen contradictoire par l'équipe d'auditeurs signw sur pièces originales et visite de site.
-              </p>
+ <!-- Tab 3 : Références -->
+ <div class="tab-pane hidden" id="tab-ref">
+ <h4 style="margin-bottom: 16px;">Chantiers majeurs vérifiés par signw</h4>
+ <div class="table-container">
+ <table class="table">
+ <thead>
+ <tr>
+ <th>Intitulé du projet</th>
+ <th>Maître d'ouvrage</th>
+ <th>Montant</th>
+ <th>Année</th>
+ <th>Contrôle signw</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td class="font-bold">Réhabilitation voirie urbaine Deïdo (4 km)</td>
+ <td>Communauté Urbaine de Douala</td>
+ <td class="text-brand font-bold">520 M FCFA</td>
+ <td>2024</td>
+ <td><span class="badge badge-certifie"> PV réception validé</span></td>
+ </tr>
+ <tr>
+ <td class="font-bold">Construction du collège d'enseignement technique d'Edéa</td>
+ <td>MINEDUB / MINTP</td>
+ <td class="text-brand font-bold">280 M FCFA</td>
+ <td>2023</td>
+ <td><span class="badge badge-certifie"> PV réception validé</span></td>
+ </tr>
+ <tr>
+ <td class="font-bold">Aménagement dalot et drainage pluvial Bonabéri</td>
+ <td>MINDUH</td>
+ <td class="text-brand font-bold">340 M FCFA</td>
+ <td>2025</td>
+ <td><span class="badge badge-certifie"> PV réception validé</span></td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
 
-              <div style="margin-bottom: 32px;">
-                ${window.SignwUI.renderPillarBars(agt.piliers)}
-              </div>
+ <!-- Tab 4 : Matériel -->
+ <div class="tab-pane hidden" id="tab-mat">
+ <h4 style="margin-bottom: 16px;">Engins et matériels lourds audités en propriété</h4>
+ <div class="table-container">
+ <table class="table">
+ <thead>
+ <tr>
+ <th>Désignation de l'engin</th>
+ <th>Marque & Modèle</th>
+ <th>Quantité</th>
+ <th>Propriété / Location</th>
+ <th>Audit physique</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td class="font-bold">Pelle hydraulique sur chenilles (22T)</td>
+ <td>Caterpillar 320D</td>
+ <td>2</td>
+ <td>Propriétaire (Cartes grises)</td>
+ <td><span class="badge badge-certifie"> Contrôlé</span></td>
+ </tr>
+ <tr>
+ <td class="font-bold">Niveleuse avec ripper (140 CV)</td>
+ <td>Komatsu GD555</td>
+ <td>1</td>
+ <td>Propriétaire</td>
+ <td><span class="badge badge-certifie"> Contrôlé</span></td>
+ </tr>
+ <tr>
+ <td class="font-bold">Compacteur vibrant mixte</td>
+ <td>Bomag BW 213</td>
+ <td>2</td>
+ <td>Propriétaire</td>
+ <td><span class="badge badge-certifie"> Contrôlé</span></td>
+ </tr>
+ <tr>
+ <td class="font-bold">Camions bennes 20 m³</td>
+ <td>Mercedes Actros 3340</td>
+ <td>6</td>
+ <td>Propriétaire</td>
+ <td><span class="badge badge-certifie"> Contrôlé</span></td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
 
-              <h5 style="margin-bottom: 14px;">Contrôle des pièces justificatives :</h5>
-              <div class="table-container">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Justificatif réglementaire</th>
-                      <th>Statut du contrôle</th>
-                      <th>Date d’audit</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Extrait RCCM & Enregistrement Greffe TPI</td>
-                      <td><span class="badge badge-certifie">✓ Conforme</span></td>
-                      <td>14/01/2026</td>
-                    </tr>
-                    <tr>
-                      <td>Quitus fiscal délivré par la DGI</td>
-                      <td><span class="badge badge-certifie">✓ Conforme</span></td>
-                      <td>14/01/2026</td>
-                    </tr>
-                    <tr>
-                      <td>Attestation de non-faillite délivrée par le Tribunal</td>
-                      <td><span class="badge badge-certifie">✓ Conforme</span></td>
-                      <td>14/01/2026</td>
-                    </tr>
-                    <tr>
-                      <td>Bilans financiers certifiés avec visa ONECCA (3 ans)</td>
-                      <td><span class="badge badge-certifie">✓ Conforme</span></td>
-                      <td>25/01/2026</td>
-                    </tr>
-                    <tr>
-                      <td>Attestation de solvabilité bancaire (1er ordre)</td>
-                      <td><span class="badge badge-certifie">✓ Conforme</span></td>
-                      <td>25/01/2026</td>
-                    </tr>
-                    <tr>
-                      <td>PV de réception de chantiers antérieurs</td>
-                      <td><span class="badge badge-certifie">✓ Conforme</span></td>
-                      <td>28/01/2026</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <small class="text-muted" style="margin-top: 8px; display: block;">
-                🔒 Conformément à notre politique de confidentialité, les documents comptables internes ne sont pas téléchargeables par le public.
-              </small>
-            </div>
+ <!-- Tab 5 : Historique -->
+ <div class="tab-pane hidden" id="tab-hist">
+ <h4 style="margin-bottom: 16px;">Historique de certification de l’entreprise</h4>
+ <div style="display: flex; flex-direction: column; gap: 16px; padding-left: 20px; margin-left: 8px;">
+ <div>
+ <div class="font-bold">Attribution Certification Niveau Or (${agt.codeCertificat || 'SGW-2026-00481'})</div>
+ <div class="text-xs text-muted">Délivrée le ${window.SignwUtils.formatDateFR(agt.dateCertification || '2026-02-14')} • Score : ${agt.score}/100</div>
+ <p class="text-sm" style="margin-top: 4px; color: var(--ink-700);">Validation finale conjointe par la Commission d'Audit et l'administrateur signw.</p>
+ </div>
+ <div>
+ <div class="font-bold">Audit d'inspection terrain du parc matériel</div>
+ <div class="text-xs text-muted">Effectué le 28 janvier 2026 à Douala-Bonabéri</div>
+ <p class="text-sm" style="margin-top: 4px; color: var(--ink-700);">Contrôle sur site des engins déclarés et de l'outillage de maintenance.</p>
+ </div>
+ <div>
+ <div class="font-bold">Dépôt du dossier initial de qualification BTP</div>
+ <div class="text-xs text-muted">15 janvier 2026</div>
+ <p class="text-sm" style="margin-top: 4px; color: var(--ink-700);">Enregistrement des pièces justificatives administratives et comptables.</p>
+ </div>
+ </div>
+ </div>
 
-            <!-- Tab 3 : Références -->
-            <div class="tab-pane hidden" id="tab-ref">
-              <h4 style="margin-bottom: 16px;">Chantiers majeurs vérifiés par signw</h4>
-              <div class="table-container">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Intitulé du projet</th>
-                      <th>Maître d'ouvrage</th>
-                      <th>Montant</th>
-                      <th>Année</th>
-                      <th>Contrôle signw</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="font-bold">Réhabilitation voirie urbaine Deïdo (4 km)</td>
-                      <td>Communauté Urbaine de Douala</td>
-                      <td class="text-brand font-bold">520 M FCFA</td>
-                      <td>2024</td>
-                      <td><span class="badge badge-certifie">✓ PV réception validé</span></td>
-                    </tr>
-                    <tr>
-                      <td class="font-bold">Construction du collège d'enseignement technique d'Edéa</td>
-                      <td>MINEDUB / MINTP</td>
-                      <td class="text-brand font-bold">280 M FCFA</td>
-                      <td>2023</td>
-                      <td><span class="badge badge-certifie">✓ PV réception validé</span></td>
-                    </tr>
-                    <tr>
-                      <td class="font-bold">Aménagement dalot et drainage pluvial Bonabéri</td>
-                      <td>MINDUH</td>
-                      <td class="text-brand font-bold">340 M FCFA</td>
-                      <td>2025</td>
-                      <td><span class="badge badge-certifie">✓ PV réception validé</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+ </div>
 
-            <!-- Tab 4 : Matériel -->
-            <div class="tab-pane hidden" id="tab-mat">
-              <h4 style="margin-bottom: 16px;">Engins et matériels lourds audités en propriété</h4>
-              <div class="table-container">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Désignation de l'engin</th>
-                      <th>Marque & Modèle</th>
-                      <th>Quantité</th>
-                      <th>Propriété / Location</th>
-                      <th>Audit physique</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="font-bold">Pelle hydraulique sur chenilles (22T)</td>
-                      <td>Caterpillar 320D</td>
-                      <td>2</td>
-                      <td>Propriétaire (Cartes grises)</td>
-                      <td><span class="badge badge-certifie">✓ Contrôlé</span></td>
-                    </tr>
-                    <tr>
-                      <td class="font-bold">Niveleuse avec ripper (140 CV)</td>
-                      <td>Komatsu GD555</td>
-                      <td>1</td>
-                      <td>Propriétaire</td>
-                      <td><span class="badge badge-certifie">✓ Contrôlé</span></td>
-                    </tr>
-                    <tr>
-                      <td class="font-bold">Compacteur vibrant mixte</td>
-                      <td>Bomag BW 213</td>
-                      <td>2</td>
-                      <td>Propriétaire</td>
-                      <td><span class="badge badge-certifie">✓ Contrôlé</span></td>
-                    </tr>
-                    <tr>
-                      <td class="font-bold">Camions bennes 20 m³</td>
-                      <td>Mercedes Actros 3340</td>
-                      <td>6</td>
-                      <td>Propriétaire</td>
-                      <td><span class="badge badge-certifie">✓ Contrôlé</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+ <!-- Colonne Droite : Encadré de confiance -->
+ <div style="display: flex; flex-direction: column; gap: 20px;">
+ <div class="card" style="padding: 24px; background: #FAFBFD; border: 1.5px solid var(--gold-500);">
+ <h5 style="color: var(--brand-900); margin-bottom: 14px;"> Pourquoi lui faire confiance ?</h5>
+ <ul style="display: flex; flex-direction: column; gap: 12px; font-size: 0.875rem; color: var(--ink-700); list-style: none;">
+ <li>
+ <strong>1. Solvabilité bancaire confirmée :</strong>
+ <div class="text-xs text-muted">Ligne de caution de soumission active supérieure à 500M FCFA.</div>
+ </li>
+ <li>
+ <strong>2. Parc d'engins audité en propre :</strong>
+ <div class="text-xs text-muted">Cartes grises originales vérifiées auprès des autorités de transport.</div>
+ </li>
+ <li>
+ <strong>3. 0 litige fiscal ou social :</strong>
+ <div class="text-xs text-muted">Quitus fiscal DGI et attestation CNPS en règle pour l'exercice 2026.</div>
+ </li>
+ </ul>
+ </div>
 
-            <!-- Tab 5 : Historique -->
-            <div class="tab-pane hidden" id="tab-hist">
-              <h4 style="margin-bottom: 16px;">Historique de certification de l’entreprise</h4>
-              <div style="display: flex; flex-direction: column; gap: 16px; border-left: 2px solid var(--ink-200); padding-left: 20px; margin-left: 8px;">
-                <div>
-                  <div class="font-bold">Attribution Certification Niveau Or (${agt.codeCertificat || 'SGW-2026-00481'})</div>
-                  <div class="text-xs text-muted">Délivrée le ${window.SignwUtils.formatDateFR(agt.dateCertification || '2026-02-14')} • Score : ${agt.score}/100</div>
-                  <p class="text-sm" style="margin-top: 4px; color: var(--ink-700);">Validation finale conjointe par la Commission d'Audit et l'administrateur signw.</p>
-                </div>
-                <div>
-                  <div class="font-bold">Audit d'inspection terrain du parc matériel</div>
-                  <div class="text-xs text-muted">Effectué le 28 janvier 2026 à Douala-Bonabéri</div>
-                  <p class="text-sm" style="margin-top: 4px; color: var(--ink-700);">Contrôle sur site des engins déclarés et de l'outillage de maintenance.</p>
-                </div>
-                <div>
-                  <div class="font-bold">Dépôt du dossier initial de qualification BTP</div>
-                  <div class="text-xs text-muted">15 janvier 2026</div>
-                  <p class="text-sm" style="margin-top: 4px; color: var(--ink-700);">Enregistrement des pièces justificatives administratives et comptables.</p>
-                </div>
-              </div>
-            </div>
+ <!-- Bloc Code de vérification public -->
+ <div class="card" style="padding: 20px; text-align: center;">
+ <div class="text-xs text-muted" style="margin-bottom: 4px;">CERTIFICAT NUMÉRIQUE SIGNW</div>
+ <code style="font-size: 1.1rem; font-weight: 700; color: var(--brand-700); display: block; margin-bottom: 8px;">
+ ${agt.codeCertificat || 'SGW-2026-00481'}
+ </code>
+ <img src="assets/img/qr-placeholder.svg" alt="QR Code" style="width: 100px; height: 100px; margin: 0 auto 12px;">
+ <a href="verifier.html?code=${agt.codeCertificat || 'SGW-2026-00481'}" class="btn btn-secondary btn-sm w-full">
+ Vérifier l’authenticité en ligne
+ </a>
+ </div>
+ </div>
 
-          </div>
+ </div>
+ `; window.SignwUI.initTabs(); }
 
-          <!-- Colonne Droite : Encadré de confiance -->
-          <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div class="card" style="padding: 24px; background: #FAFBFD; border: 1.5px solid var(--gold-500);">
-              <h5 style="color: var(--brand-900); margin-bottom: 14px;">🛡️ Pourquoi lui faire confiance ?</h5>
-              <ul style="display: flex; flex-direction: column; gap: 12px; font-size: 0.875rem; color: var(--ink-700); list-style: none;">
-                <li>
-                  <strong>1. Solvabilité bancaire confirmée :</strong>
-                  <div class="text-xs text-muted">Ligne de caution de soumission active supérieure à 500M FCFA.</div>
-                </li>
-                <li>
-                  <strong>2. Parc d'engins audité en propre :</strong>
-                  <div class="text-xs text-muted">Cartes grises originales vérifiées auprès des autorités de transport.</div>
-                </li>
-                <li>
-                  <strong>3. 0 litige fiscal ou social :</strong>
-                  <div class="text-xs text-muted">Quitus fiscal DGI et attestation CNPS en règle pour l'exercice 2026.</div>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Bloc Code de vérification public -->
-            <div class="card" style="padding: 20px; text-align: center;">
-              <div class="text-xs text-muted" style="margin-bottom: 4px;">CERTIFICAT NUMÉRIQUE SIGNW</div>
-              <code style="font-size: 1.1rem; font-weight: 800; color: var(--brand-700); display: block; margin-bottom: 8px;">
-                ${agt.codeCertificat || 'SGW-2026-00481'}
-              </code>
-              <img src="assets/img/qr-placeholder.svg" alt="QR Code" style="width: 100px; height: 100px; margin: 0 auto 12px;">
-              <a href="verifier.html?code=${agt.codeCertificat || 'SGW-2026-00481'}" class="btn btn-secondary btn-sm w-full">
-                Vérifier l’authenticité en ligne
-              </a>
-            </div>
-          </div>
-
-        </div>
-      `;
-
-      window.SignwUI.initTabs();
-    }
-
-    function saveToFavorites(agentId) {
-      window.SignwUI.showToast('Entreprise ajoutée à vos favoris avec succès !', 'success');
-    }
-  </script>
+ function saveToFavorites(agentId) {
+ window.SignwUI.showToast('Entreprise ajoutée à vos favoris avec succès !', 'success'); }
+ </script>
 </body>
 </html>

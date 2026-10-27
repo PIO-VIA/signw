@@ -1,305 +1,249 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestion des Secteurs d’Activité — signw Admin</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Gestion des Secteurs d’Activité — signw Admin</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <!-- En-tête -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <h2 style="margin: 0 0 4px;">Secteurs d’Activité & Formulaires</h2>
-          <span class="text-muted text-sm">Gestion des filières économiques qualifiables et accès aux formulaires d'audit</span>
-        </div>
-        <div style="display: flex; gap: 10px;">
-          <a href="form-builder.html" class="btn btn-secondary btn-sm">⚙️ Ouvrir le Constructeur de Formulaires</a>
-          <button class="btn btn-primary btn-sm" onclick="openNewSectorModal()">
-            ➕ Ajouter un secteur
-          </button>
-        </div>
-      </div>
+ <main class="app-content">
+ <!-- En-tête -->
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+ <div>
+ <h2 style="margin: 0 0 4px;">Secteurs d’Activité & Formulaires</h2>
+ <span class="text-muted text-sm">Gestion des filières économiques qualifiables et accès aux formulaires d'audit</span>
+ </div>
+ <div style="display: flex; gap: 10px;">
+ <a href="form-builder.html" class="btn btn-secondary btn-sm btn-wrap">Constructeur de formulaires</a>
+ <button class="btn btn-primary btn-sm" onclick="openNewSectorModal()">
+ Ajouter un secteur
+ </button>
+ </div>
+ </div>
 
-      <!-- Info callout -->
-      <div class="card" style="background: var(--brand-50); border: 1px solid var(--brand-200); padding: 16px 20px; margin-bottom: 24px;">
-        <div style="display: flex; gap: 12px; align-items: flex-start;">
-          <span style="font-size: 1.25rem;">💡</span>
-          <div>
-            <strong>Effet immédiat en temps réel :</strong> Tout nouveau secteur créé ou activé ici devient instantanément disponible dans l'annuaire public, sur la page d'accueil et dans l'espace Agent pour déposer un nouveau dossier de certification.
-          </div>
-        </div>
-      </div>
+ <!-- Info callout -->
+ <div class="card" style="background: var(--brand-50); border: 1px solid var(--brand-200); padding: 16px 20px; margin-bottom: 24px;">
+ <div style="display: flex; gap: 12px; align-items: flex-start;">
+ <div>
+ <strong>Effet immédiat en temps réel :</strong> Tout nouveau secteur créé ou activé ici devient instantanément disponible dans l'annuaire public, sur la page d'accueil et dans l'espace Agent pour déposer un nouveau dossier de certification.
+ </div>
+ </div>
+ </div>
 
-      <!-- Grille des secteurs -->
-      <div class="grid grid-cols-3 gap-6" id="sectors-grid">
-        <!-- Rendu dynamique JS -->
-      </div>
-    </main>
-  </div>
+ <!-- Grille des secteurs -->
+ <div class="grid grid-cols-3 gap-6" id="sectors-grid">
+ <!-- Rendu dynamique JS -->
+ </div>
+ </main>
+ </div>
 
-  <!-- Modal Création de Secteur -->
-  <div class="modal-backdrop" id="modal-new-sector" style="display: none;">
-    <div class="modal-card" style="max-width: 580px;">
-      <div class="modal-header">
-        <h4 style="margin: 0;">Créer un nouveau secteur d'activité</h4>
-        <button class="modal-close-btn" onclick="closeNewSectorModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <form id="new-sector-form" onsubmit="handleCreateSector(event)">
-          <div class="form-group">
-            <label class="form-label">Nom du secteur <span style="color: var(--danger)">*</span></label>
-            <input type="text" id="ns-nom" class="form-control" placeholder="ex: Éducation & Formation Professionnelle" required oninput="generateSectorSlug(this.value)">
-          </div>
+ <!-- Modal Création de Secteur -->
+ <div class="modal-backdrop" id="modal-new-sector" style="display: none;">
+ <div class="modal-card" style="max-width: 580px;">
+ <div class="modal-header">
+ <h4 style="margin: 0;">Créer un nouveau secteur d'activité</h4>
+ <button class="modal-close-btn" onclick="closeNewSectorModal()"></button>
+ </div>
+ <div class="modal-body">
+ <form id="new-sector-form" onsubmit="handleCreateSector(event)">
+ <div class="form-group">
+ <label class="form-label">Nom du secteur <span style="color: var(--danger)">*</span></label>
+ <input type="text" id="ns-nom" class="form-control" placeholder="ex: Éducation & Formation Professionnelle" required oninput="generateSectorSlug(this.value)">
+ </div>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div class="form-group">
-              <label class="form-label">Identifiant unique (slug) <span style="color: var(--danger)">*</span></label>
-              <input type="text" id="ns-slug" class="form-control" placeholder="sec_education" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Statut initial</label>
-              <select id="ns-statut" class="form-control">
-                <option value="actif">Actif (Ouvert aux candidatures)</option>
-                <option value="bientot">Bientôt disponible (Vitrine)</option>
-              </select>
-            </div>
-          </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div class="form-group">
+ <label class="form-label">Identifiant unique (slug) <span style="color: var(--danger)">*</span></label>
+ <input type="text" id="ns-slug" class="form-control" placeholder="sec_education" required>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Statut initial</label>
+ <select id="ns-statut" class="form-control">
+ <option value="actif">Actif (Ouvert aux candidatures)</option>
+ <option value="bientot">Bientôt disponible (Vitrine)</option>
+ </select>
+ </div>
+ </div>
 
-          <div class="form-group">
-            <label class="form-label">Icône représentative <span style="color: var(--danger)">*</span></label>
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+ <div class="form-group">
+ <label class="form-label">Icône représentative <span style="color: var(--danger)">*</span></label>
+ <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
               <input type="text" id="ns-icon" class="form-control" style="width: 70px; text-align: center; font-size: 1.4rem;" value="🎓" required>
-              <span class="text-xs text-muted">Choisissez une icône ci-dessous ou saisissez un emoji :</span>
-            </div>
-            <!-- Grille d'icônes rapides -->
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; background: var(--ink-50); padding: 10px; border-radius: var(--radius-sm);">
+ <span class="text-xs text-muted">Choisissez une icône ci-dessous ou saisissez un emoji :</span>
+ </div>
+ <!-- Grille d'icônes rapides -->
+ <div style="display: flex; gap: 8px; flex-wrap: wrap; background: var(--ink-50); padding: 10px; border-radius: var(--radius-sm);">
               <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('🎓')">🎓 Éducation</button>
               <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('🧪')">🧪 Recherche</button>
               <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('💧')">💧 Eau & Forages</button>
               <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('🚢')">🚢 Maritime</button>
-              <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('🛡️')">🛡️ Sécurité</button>
-              <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('♻️')">♻️ Environnement</button>
+              <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('🛡')">🛡 Sécurité</button>
+              <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('♻')">♻ Environnement</button>
               <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('🏭')">🏭 Industrie</button>
-              <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('✈️')">✈️ Aérien</button>
-            </div>
-          </div>
+              <button type="button" class="btn-ghost btn-sm" onclick="selectSectorIcon('✈')">✈ Aérien</button>
+ </div>
+ </div>
 
-          <div class="form-group">
-            <label class="form-label">Couleur thématique</label>
-            <div style="display: flex; gap: 12px; align-items: center;">
-              <input type="color" id="ns-color" value="#7A1B34" style="width: 50px; height: 38px; border-radius: var(--radius-sm); border: 1px solid var(--ink-200); cursor: pointer;">
-              <span class="text-xs text-muted">Sert d'accentuation sur les badges et fiches publiques</span>
-            </div>
-          </div>
+ <div class="form-group">
+ <label class="form-label">Couleur thématique</label>
+ <div style="display: flex; gap: 12px; align-items: center;">
+ <input type="color" id="ns-color" value="#7A1B34" style="width: 50px; height: 38px; border-radius: var(--radius-sm); border: 1px solid var(--ink-200); cursor: pointer;">
+ <span class="text-xs text-muted">Sert d'accentuation sur les badges et fiches publiques</span>
+ </div>
+ </div>
 
-          <div class="form-group">
-            <label class="form-label">Description du secteur <span style="color: var(--danger)">*</span></label>
-            <textarea id="ns-desc" class="form-control" rows="3" placeholder="Établissements scolaires, équipements didactiques, universités, centres d'apprentissage..." required></textarea>
-          </div>
+ <div class="form-group">
+ <label class="form-label">Description du secteur <span style="color: var(--danger)">*</span></label>
+ <textarea id="ns-desc" class="form-control" rows="3" placeholder="Établissements scolaires, équipements didactiques, universités, centres d'apprentissage..." required></textarea>
+ </div>
 
-          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="closeNewSectorModal()">Annuler</button>
-            <button type="submit" class="btn btn-primary btn-sm">Créer le secteur & son formulaire</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+ <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+ <button type="button" class="btn btn-secondary btn-sm" onclick="closeNewSectorModal()">Annuler</button>
+ <button type="submit" class="btn btn-primary btn-sm">Créer le secteur & son formulaire</button>
+ </div>
+ </form>
+ </div>
+ </div>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['admin'])) return;
-      loadSectors();
-    });
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['admin'])) return; loadSectors(); }); function loadSectors() {
+ const sectors = window.SignwStore.getSectors(); const dossiers = window.SignwStore.getDossiers(); const schemas = window.SignwStore.getFormSchemas(); const grid = document.getElementById('sectors-grid'); grid.innerHTML = sectors.map(sec => {
+ const sectorDossiers = dossiers.filter(d => d.secteurId === sec.id); const schema = schemas.find(s => s.secteurId === sec.id) || { version: 1 }; const isActif = sec.actif !== false && sec.statut !== 'bientot'; return `
+ <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; padding: 24px; position: relative;">
+ <div>
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+ <div style="display: flex; align-items: center; gap: 10px;">
+ <span style="font-size: 2rem;">${sec.icon || ''}</span>
+ <div>
+ <h4 style="margin: 0; font-size: 1.1rem;">${sec.nom}</h4>
+ <span class="text-xs text-muted">ID: ${sec.id}</span>
+ </div>
+ </div>
+ <span class="badge ${isActif ? 'badge-certifie' : 'badge-brouillon'}">
+ ${isActif ? 'Actif' : 'Bientôt'}
+ </span>
+ </div>
 
-    function loadSectors() {
-      const sectors = window.SignwStore.getSectors();
-      const dossiers = window.SignwStore.getDossiers();
-      const schemas = window.SignwStore.getFormSchemas();
-      const grid = document.getElementById('sectors-grid');
+ <p class="text-sm text-muted" style="line-height: 1.5; margin-bottom: 20px; min-height: 42px;">
+ ${sec.description}
+ </p>
 
-      grid.innerHTML = sectors.map(sec => {
-        const sectorDossiers = dossiers.filter(d => d.secteurId === sec.id);
-        const schema = schemas.find(s => s.secteurId === sec.id) || { version: 1 };
-        const isActif = sec.actif !== false && sec.statut !== 'bientot';
+ <div style="display: flex; justify-content: space-between; align-items: center; background: var(--ink-50); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+ <div>
+ <div class="text-xs text-muted">Dossiers candidats</div>
+ <strong>${sectorDossiers.length} entreprise(s)</strong>
+ </div>
+ <div style="text-align: right;">
+ <div class="text-xs text-muted">Formulaire</div>
+ <strong style="color: var(--brand-700);">Version ${schema.version || 1}.0</strong>
+ </div>
+ </div>
+ </div>
 
-        return `
-          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; padding: 24px; position: relative; border-top: 4px solid ${sec.couleur || 'var(--brand-700)'};">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <span style="font-size: 2rem;">${sec.icon || '🏗️'}</span>
-                  <div>
-                    <h4 style="margin: 0; font-size: 1.1rem;">${sec.nom}</h4>
-                    <span class="text-xs text-muted">ID: ${sec.id}</span>
-                  </div>
-                </div>
-                <span class="badge ${isActif ? 'badge-certifie' : 'badge-brouillon'}">
-                  ${isActif ? 'Actif' : 'Bientôt'}
-                </span>
-              </div>
+ <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+ <a href="form-builder.html?secteur=${sec.id}" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">
+  Formulaire
+ </a>
+ <button class="btn btn-secondary btn-sm" onclick="toggleSectorStatus('${sec.id}')" title="${isActif ? 'Désactiver' : 'Activer'}">
+ ${isActif ? 'Désactiver' : 'Activer'}
+ </button>
+ </div>
+ </div>
+ `; }).join(''); }
 
-              <p class="text-sm text-muted" style="line-height: 1.5; margin-bottom: 20px; min-height: 42px;">
-                ${sec.description}
-              </p>
-
-              <div style="display: flex; justify-content: space-between; align-items: center; background: var(--ink-50); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 20px;">
-                <div>
-                  <div class="text-xs text-muted">Dossiers candidats</div>
-                  <strong>${sectorDossiers.length} entreprise(s)</strong>
-                </div>
-                <div style="text-align: right;">
-                  <div class="text-xs text-muted">Formulaire</div>
-                  <strong style="color: var(--brand-700);">Version ${schema.version || 1}.0</strong>
-                </div>
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <a href="form-builder.html?secteur=${sec.id}" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">
-                ⚙️ Formulaire
-              </a>
-              <button class="btn btn-secondary btn-sm" onclick="toggleSectorStatus('${sec.id}')" title="${isActif ? 'Désactiver' : 'Activer'}">
-                ${isActif ? 'Désactiver' : 'Activer'}
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function generateSectorSlug(val) {
-      const slugInput = document.getElementById('ns-slug');
-      if (!val) {
-        slugInput.value = '';
-        return;
-      }
-      const clean = 'sec_' + val.toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, '_')
-        .replace(/_+/g, '_')
-        .replace(/^_|_$/g, '')
-        .substring(0, 18);
-      slugInput.value = clean;
-    }
+ function generateSectorSlug(val) {
+ const slugInput = document.getElementById('ns-slug'); if (!val) {
+ slugInput.value = ''; return; }
+ const clean = 'sec_' + val.toLowerCase()
+ .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+ .replace(/[^a-z0-9]/g, '_')
+ .replace(/_+/g, '_')
+ .replace(/^_|_$/g, '')
+ .substring(0, 18); slugInput.value = clean; }
 
     function selectSectorIcon(icon) {
-      document.getElementById('ns-icon').value = icon;
-    }
+      document.getElementById('ns-icon').value = icon; }
 
-    function openNewSectorModal() {
-      document.getElementById('modal-new-sector').style.display = 'flex';
-      document.getElementById('new-sector-form').reset();
-      document.getElementById('ns-color').value = '#7A1B34';
-      document.getElementById('ns-icon').value = '🎓';
-    }
+ function openNewSectorModal() {
+ document.getElementById('modal-new-sector').style.display = 'flex'; document.getElementById('new-sector-form').reset(); document.getElementById('ns-color').value = '#7A1B34'; document.getElementById('ns-icon').value = '🎓'; }
 
-    function closeNewSectorModal() {
-      document.getElementById('modal-new-sector').style.display = 'none';
-    }
+ function closeNewSectorModal() {
+ document.getElementById('modal-new-sector').style.display = 'none'; }
 
-    function handleCreateSector(e) {
-      e.preventDefault();
-      const nom = document.getElementById('ns-nom').value.trim();
-      const id = document.getElementById('ns-slug').value.trim();
-      const icon = document.getElementById('ns-icon').value.trim() || '📁';
-      const statut = document.getElementById('ns-statut').value;
-      const couleur = document.getElementById('ns-color').value;
-      const description = document.getElementById('ns-desc').value.trim();
+ function handleCreateSector(e) {
+ e.preventDefault(); const nom = document.getElementById('ns-nom').value.trim(); const id = document.getElementById('ns-slug').value.trim(); const icon = document.getElementById('ns-icon').value.trim() || '📁'; const statut = document.getElementById('ns-statut').value; const couleur = document.getElementById('ns-color').value; const description = document.getElementById('ns-desc').value.trim(); // Vérifier unicité ID
+ const existing = window.SignwStore.getSectorById(id); if (existing) {
+ window.SignwUI.showToast(`Un secteur avec l'identifiant ${id} existe déjà.`, 'error'); return; }
 
-      // Vérifier unicité ID
-      const existing = window.SignwStore.getSectorById(id);
-      if (existing) {
-        window.SignwUI.showToast(`Un secteur avec l'identifiant ${id} existe déjà.`, 'error');
-        return;
-      }
+ // Créer le secteur
+ const newSec = window.SignwStore.addSector({
+ id,
+ nom,
+ icon,
+ couleur,
+ description,
+ statut,
+ actif: statut === 'actif',
+ nbAgents: 0
+ }); // Créer 3 champs par défaut pour ce nouveau secteur comme demandé en Section 11 étape 6
+ const schema = {
+ id: `form_${id}_v1`,
+ secteurId: id,
+ nom: `Formulaire de qualification — ${nom}`,
+ version: 1,
+ sections: [
+ {
+ id: 'sec_adm_' + id,
+ titre: '1. Conformité administrative',
+ description: 'Enregistrement légal au Cameroun',
+ pilier: 'admin',
+ champs: [
+ { id: 'f_rs_' + id, type: 'texte', label: 'Raison sociale de l\'établissement', obligatoire: true, poids: 10, pilier: 'admin' },
+ { id: 'f_rccm_' + id, type: 'fichier', label: 'Extrait RCCM / Agrément ministériel', obligatoire: true, piecesAcceptees: ['pdf'], tailleMaxMo: 10, poids: 10, pilier: 'admin' }
+ ]
+ },
+ {
+ id: 'sec_tech_' + id,
+ titre: '2. Capacités techniques & spécialité',
+ description: 'Infrastructures, matériels ou compétences spécifiques',
+ pilier: 'tech',
+ champs: [
+ { id: 'f_cap_' + id, type: 'texte_long', label: 'Description des infrastructures & capacités opérationnelles', obligatoire: true, poids: 8, pilier: 'tech' }
+ ]
+ }
+ ]
+ }; window.SignwStore.saveFormSchema(schema); closeNewSectorModal(); loadSectors(); window.SignwUI.showToast(`Secteur "${nom}" créé avec succès et activé ! Formulaire initialisé.`, 'success'); }
 
-      // Créer le secteur
-      const newSec = window.SignwStore.addSector({
-        id,
-        nom,
-        icon,
-        couleur,
-        description,
-        statut,
-        actif: statut === 'actif',
-        nbAgents: 0
-      });
-
-      // Créer 3 champs par défaut pour ce nouveau secteur comme demandé en Section 11 étape 6
-      const schema = {
-        id: `form_${id}_v1`,
-        secteurId: id,
-        nom: `Formulaire de qualification — ${nom}`,
-        version: 1,
-        sections: [
-          {
-            id: 'sec_adm_' + id,
-            titre: '1. Conformité administrative',
-            description: 'Enregistrement légal au Cameroun',
-            pilier: 'admin',
-            champs: [
-              { id: 'f_rs_' + id, type: 'texte', label: 'Raison sociale de l\'établissement', obligatoire: true, poids: 10, pilier: 'admin' },
-              { id: 'f_rccm_' + id, type: 'fichier', label: 'Extrait RCCM / Agrément ministériel', obligatoire: true, piecesAcceptees: ['pdf'], tailleMaxMo: 10, poids: 10, pilier: 'admin' }
-            ]
-          },
-          {
-            id: 'sec_tech_' + id,
-            titre: '2. Capacités techniques & spécialité',
-            description: 'Infrastructures, matériels ou compétences spécifiques',
-            pilier: 'tech',
-            champs: [
-              { id: 'f_cap_' + id, type: 'texte_long', label: 'Description des infrastructures & capacités opérationnelles', obligatoire: true, poids: 8, pilier: 'tech' }
-            ]
-          }
-        ]
-      };
-      window.SignwStore.saveFormSchema(schema);
-
-      closeNewSectorModal();
-      loadSectors();
-      window.SignwUI.showToast(`Secteur "${nom}" créé avec succès et activé ! Formulaire initialisé.`, 'success');
-    }
-
-    function toggleSectorStatus(secId) {
-      const sec = window.SignwStore.getSectorById(secId);
-      if (!sec) return;
-
-      const current = sec.actif !== false && sec.statut !== 'bientot';
-      sec.actif = !current;
-      sec.statut = sec.actif ? 'actif' : 'bientot';
-      window.SignwStore.save();
-      window.SignwStore.addJournalEntry('Admin signw', 'Modification secteur', sec.nom, `Statut passé à ${sec.statut}`);
-
-      loadSectors();
-      window.SignwUI.showToast(`Le secteur ${sec.nom} est désormais ${sec.actif ? 'actif' : 'en statut bientôt disponible'}.`, 'info');
-    }
-  </script>
+ function toggleSectorStatus(secId) {
+ const sec = window.SignwStore.getSectorById(secId); if (!sec) return; const current = sec.actif !== false && sec.statut !== 'bientot'; sec.actif = !current; sec.statut = sec.actif ? 'actif' : 'bientot'; window.SignwStore.save(); window.SignwStore.addJournalEntry('Admin signw', 'Modification secteur', sec.nom, `Statut passé à ${sec.statut}`); loadSectors(); window.SignwUI.showToast(`Le secteur ${sec.nom} est désormais ${sec.actif ? 'actif' : 'en statut bientôt disponible'}.`, 'info'); }
+ </script>
 </body>
 </html>

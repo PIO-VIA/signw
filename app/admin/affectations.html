@@ -1,359 +1,260 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Affectation des Dossiers aux Auditeurs — signw Admin</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Affectation des Dossiers aux Auditeurs — signw Admin</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <!-- En-tête -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <h2 style="margin: 0 0 4px;">Affectation des Dossiers d’Audit</h2>
-          <span class="text-muted text-sm">Répartition équilibrée de la charge d'instruction et respect du SLA de 15 jours ouvrés</span>
-        </div>
-        <div style="display: flex; gap: 10px;">
-          <button class="btn btn-primary btn-sm" onclick="openBatchAssignModal()" id="btn-batch-assign" disabled>
-            👥 Affecter la sélection (<span id="batch-count">0</span>)
-          </button>
-        </div>
-      </div>
+ <main class="app-content">
+ <!-- En-tête -->
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+ <div>
+ <h2 style="margin: 0 0 4px;">Affectation des Dossiers d’Audit</h2>
+ <span class="text-muted text-sm">Répartition équilibrée de la charge d'instruction et respect du SLA de 15 jours ouvrés</span>
+ </div>
+ <div style="display: flex; gap: 10px;">
+ <button class="btn btn-primary btn-sm" onclick="openBatchAssignModal()" id="btn-batch-assign" disabled>
+ Affecter la sélection (<span id="batch-count">0</span>)
+ </button>
+ </div>
+ </div>
 
-      <!-- Charge des Auditeurs (Cards de monitoring de charge) -->
-      <div style="margin-bottom: 24px;">
-        <h4 style="margin: 0 0 12px; font-size: 1rem;">Charge actuelle du pôle d'audit</h4>
-        <div class="grid grid-cols-3 gap-6" id="auditors-workload-grid">
-          <!-- Rendu dynamique JS -->
-        </div>
-      </div>
+ <!-- Charge des Auditeurs (Cards de monitoring de charge) -->
+ <div style="margin-bottom: 24px;">
+ <h4 style="margin: 0 0 12px; font-size: 1rem;">Charge actuelle du pôle d'audit</h4>
+ <div class="grid grid-cols-3 gap-6" id="auditors-workload-grid">
+ <!-- Rendu dynamique JS -->
+ </div>
+ </div>
 
-      <!-- Filtres & Table des dossiers à affecter -->
-      <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
-        <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: space-between;">
-          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-            <div>
-              <select id="filter-sector" class="form-control" onchange="filterDossiers()" style="width: 200px;">
-                <option value="">Tous les secteurs</option>
-              </select>
-            </div>
-            <div>
-              <select id="filter-state" class="form-control" onchange="filterDossiers()" style="width: 220px;">
-                <option value="unassigned">Non affectés uniquement</option>
-                <option value="all_submitted">Tous les dossiers en cours</option>
-              </select>
-            </div>
-          </div>
-          <span class="text-xs text-muted" id="unassigned-count-label">0 dossier(s) en attente</span>
-        </div>
-      </div>
+ <!-- Filtres & Table des dossiers à affecter -->
+ <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
+ <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: space-between;">
+ <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+ <div>
+ <select id="filter-sector" class="form-control" onchange="filterDossiers()" style="width: 200px;">
+ <option value="">Tous les secteurs</option>
+ </select>
+ </div>
+ <div>
+ <select id="filter-state" class="form-control" onchange="filterDossiers()" style="width: 220px;">
+ <option value="unassigned">Non affectés uniquement</option>
+ <option value="all_submitted">Tous les dossiers en cours</option>
+ </select>
+ </div>
+ </div>
+ <span class="text-xs text-muted" id="unassigned-count-label">0 dossier(s) en attente</span>
+ </div>
+ </div>
 
-      <!-- Tableau des dossiers -->
-      <div class="card" style="padding: 0; overflow: hidden;">
-        <div class="table-container">
-          <table class="table" style="margin: 0;">
-            <thead>
-              <tr>
-                <th style="width: 40px; text-align: center;">
-                  <input type="checkbox" id="check-all" onchange="toggleSelectAll(this.checked)">
-                </th>
-                <th>Dossier / Réf</th>
-                <th>Entreprise candidate</th>
-                <th>Secteur</th>
-                <th>Date soumission</th>
-                <th>Échéance SLA (15 j)</th>
-                <th>Auditeur assigné</th>
-                <th style="text-align: right;">Action</th>
-              </tr>
-            </thead>
-            <tbody id="affectations-tbody">
-              <!-- Rendu JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
-  </div>
+ <!-- Tableau des dossiers -->
+ <div class="card" style="padding: 0; overflow: hidden;">
+ <div class="table-container">
+ <table class="table" style="margin: 0;">
+ <thead>
+ <tr>
+ <th style="width: 40px; text-align: center;">
+ <input type="checkbox" id="check-all" onchange="toggleSelectAll(this.checked)">
+ </th>
+ <th>Dossier / Réf</th>
+ <th>Entreprise candidate</th>
+ <th>Secteur</th>
+ <th>Date soumission</th>
+ <th>Échéance SLA (15 j)</th>
+ <th>Auditeur assigné</th>
+ <th style="text-align: right;">Action</th>
+ </tr>
+ </thead>
+ <tbody id="affectations-tbody">
+ <!-- Rendu JS -->
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </main>
+ </div>
 
-  <!-- Modal Affectation Rapide -->
-  <div class="modal-backdrop" id="modal-assign" style="display: none;">
-    <div class="modal-card" style="max-width: 500px;">
-      <div class="modal-header">
-        <h4 style="margin: 0;" id="modal-assign-title">Affecter le dossier à un auditeur</h4>
-        <button class="modal-close-btn" onclick="closeAssignModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <p class="text-sm text-muted" id="modal-assign-desc">Sélectionnez l'auditeur qui prendra la responsabilité de l'instruction contradictoire des pièces.</p>
+ <!-- Modal Affectation Rapide -->
+ <div class="modal-backdrop" id="modal-assign" style="display: none;">
+ <div class="modal-card" style="max-width: 500px;">
+ <div class="modal-header">
+ <h4 style="margin: 0;" id="modal-assign-title">Affecter le dossier à un auditeur</h4>
+ <button class="modal-close-btn" onclick="closeAssignModal()"></button>
+ </div>
+ <div class="modal-body">
+ <p class="text-sm text-muted" id="modal-assign-desc">Sélectionnez l'auditeur qui prendra la responsabilité de l'instruction contradictoire des pièces.</p>
 
-        <div class="form-group">
-          <label class="form-label">Auditeur signw <span style="color: var(--danger)">*</span></label>
-          <select id="assign-auditor-select" class="form-control" required>
-            <!-- Rendu JS -->
-          </select>
-        </div>
+ <div class="form-group">
+ <label class="form-label">Auditeur signw <span style="color: var(--danger)">*</span></label>
+ <select id="assign-auditor-select" class="form-control" required>
+ <!-- Rendu JS -->
+ </select>
+ </div>
 
-        <div class="form-group">
-          <label class="form-label">Priorité d'instruction</label>
-          <select id="assign-priority-select" class="form-control">
-            <option value="normale">Normale (SLA standard 15 jours)</option>
-            <option value="haute">Haute (Appel d'offres imminent)</option>
-            <option value="urgente">Urgente (Saisie directe commission)</option>
-          </select>
-        </div>
+ <div class="form-group">
+ <label class="form-label">Priorité d'instruction</label>
+ <select id="assign-priority-select" class="form-control">
+ <option value="normale">Normale (SLA standard 15 jours)</option>
+ <option value="haute">Haute (Appel d'offres imminent)</option>
+ <option value="urgente">Urgente (Saisie directe commission)</option>
+ </select>
+ </div>
 
-        <div class="form-group">
-          <label class="form-label">Note d'instruction pour l'auditeur (optionnel)</label>
-          <textarea id="assign-note" class="form-control" rows="2" placeholder="Consigne spécifique sur la vérification des bilans ou du matériel..."></textarea>
-        </div>
+ <div class="form-group">
+ <label class="form-label">Note d'instruction pour l'auditeur (optionnel)</label>
+ <textarea id="assign-note" class="form-control" rows="2" placeholder="Consigne spécifique sur la vérification des bilans ou du matériel..."></textarea>
+ </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="closeAssignModal()">Annuler</button>
-          <button type="button" class="btn btn-primary btn-sm" onclick="confirmAssign()">Confirmer l'affectation</button>
-        </div>
-      </div>
-    </div>
-  </div>
+ <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+ <button type="button" class="btn btn-secondary btn-sm" onclick="closeAssignModal()">Annuler</button>
+ <button type="button" class="btn btn-primary btn-sm" onclick="confirmAssign()">Confirmer l'affectation</button>
+ </div>
+ </div>
+ </div>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    let selectedDossierIds = new Set();
-    let currentAssignTarget = null; // null si lot, ou string dossierId
+ <script>
+ let selectedDossierIds = new Set(); let currentAssignTarget = null; // null si lot, ou string dossierId
 
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['admin'])) return;
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['admin'])) return; populateSectorFilter(); loadAuditorsWorkload(); filterDossiers(); }); function populateSectorFilter() {
+ const sectors = window.SignwStore.getSectors(); const sel = document.getElementById('filter-sector'); sel.innerHTML = '<option value="">Tous les secteurs</option>' +
+ sectors.map(s => `<option value="${s.id}">${s.nom}</option>`).join(''); }
 
-      populateSectorFilter();
-      loadAuditorsWorkload();
-      filterDossiers();
-    });
+ function getAuditors() {
+ return window.SignwStore.getUsers().filter(u => u.role === 'auditeur'); }
 
-    function populateSectorFilter() {
-      const sectors = window.SignwStore.getSectors();
-      const sel = document.getElementById('filter-sector');
-      sel.innerHTML = '<option value="">Tous les secteurs</option>' +
-        sectors.map(s => `<option value="${s.id}">${s.nom}</option>`).join('');
-    }
+ function loadAuditorsWorkload() {
+ const auditors = getAuditors(); const dossiers = window.SignwStore.getDossiers(); const grid = document.getElementById('auditors-workload-grid'); grid.innerHTML = auditors.map(aud => {
+ const inProgress = dossiers.filter(d => d.affecteAAuditeurId === aud.id && (d.statut === 'en_verification' || d.statut === 'pieces_incompletes')); const completed = dossiers.filter(d => d.affecteAAuditeurId === aud.id && (d.statut.includes('certifie') || d.statut === 'rejete' || d.statut === 'en_decision')); const maxSafe = 5; const pct = Math.min(100, Math.round((inProgress.length / maxSafe) * 100)); let barColor = 'var(--success)'; if (inProgress.length >= 4) barColor = 'var(--danger)'; else if (inProgress.length >= 2) barColor = 'var(--warning)'; return `
+ <div class="card" style="padding: 16px 20px;">
+ <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+ <img src="../../${aud.avatar || 'assets/img/avatar-04.svg'}" alt="${aud.nom}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">
+ <div>
+ <strong style="font-size: 0.95rem;">${aud.nom}</strong>
+ <div class="text-xs text-muted">${aud.specialite || 'Spécialiste BTP & Génie Civil'}</div>
+ </div>
+ </div>
 
-    function getAuditors() {
-      return window.SignwStore.getUsers().filter(u => u.role === 'auditeur');
-    }
+ <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; margin-bottom: 6px;">
+ <span>Charge active : <strong>${inProgress.length} dossier(s)</strong></span>
+ <span class="text-muted">${completed.length} traité(s)</span>
+ </div>
 
-    function loadAuditorsWorkload() {
-      const auditors = getAuditors();
-      const dossiers = window.SignwStore.getDossiers();
-      const grid = document.getElementById('auditors-workload-grid');
+ <div class="progress-bar-bg" style="height: 6px;">
+ <div class="progress-bar-fill" style="width: ${pct}%; background: ${barColor};"></div>
+ </div>
+ </div>
+ `; }).join(''); }
 
-      grid.innerHTML = auditors.map(aud => {
-        const inProgress = dossiers.filter(d => d.affecteAAuditeurId === aud.id && (d.statut === 'en_verification' || d.statut === 'pieces_incompletes'));
-        const completed = dossiers.filter(d => d.affecteAAuditeurId === aud.id && (d.statut.includes('certifie') || d.statut === 'rejete' || d.statut === 'en_decision'));
+ function filterDossiers() {
+ const sectorId = document.getElementById('filter-sector').value; const stateFilter = document.getElementById('filter-state').value; const allDossiers = window.SignwStore.getDossiers(); const filtered = allDossiers.filter(d => {
+ if (sectorId && d.secteurId !== sectorId) return false; if (stateFilter === 'unassigned') {
+ return d.statut === 'soumis' || (d.statut === 'en_verification' && !d.affecteAAuditeurId); } else {
+ return ['soumis', 'en_verification', 'pieces_incompletes'].includes(d.statut); }
+ }); document.getElementById('unassigned-count-label').textContent = `${filtered.length} dossier(s) éligible(s)`; renderDossiersTable(filtered); }
 
-        const maxSafe = 5;
-        const pct = Math.min(100, Math.round((inProgress.length / maxSafe) * 100));
-        let barColor = 'var(--success)';
-        if (inProgress.length >= 4) barColor = 'var(--danger)';
-        else if (inProgress.length >= 2) barColor = 'var(--warning)';
+ function renderDossiersTable(dossiers) {
+ const tbody = document.getElementById('affectations-tbody'); const agents = window.SignwStore.getAgents(); const sectors = window.SignwStore.getSectors(); const auditors = getAuditors(); if (dossiers.length === 0) {
+ tbody.innerHTML = `
+ <tr>
+ <td colspan="8" style="text-align: center; padding: 40px; color: var(--ink-500);">
+ Aucun dossier en attente d'affectation pour ces filtres. Tout est à jour !
+ </td>
+ </tr>
+ `; return; }
 
-        return `
-          <div class="card" style="padding: 16px 20px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-              <img src="../../${aud.avatar || 'assets/img/avatar-04.svg'}" alt="${aud.nom}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">
-              <div>
-                <strong style="font-size: 0.95rem;">${aud.nom}</strong>
-                <div class="text-xs text-muted">${aud.specialite || 'Spécialiste BTP & Génie Civil'}</div>
-              </div>
-            </div>
+ tbody.innerHTML = dossiers.map(d => {
+ const agt = agents.find(a => a.id === d.agentId) || { raisonSociale: 'Entreprise candidate', ville: 'Cameroun' }; const sec = sectors.find(s => s.id === d.secteurId) || { nom: d.secteurId, icon: '' }; const aud = auditors.find(a => a.id === d.affecteAAuditeurId); const isChecked = selectedDossierIds.has(d.id); return `
+ <tr>
+ <td style="text-align: center;">
+ <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSelectDossier('${d.id}', this.checked)">
+ </td>
+ <td>
+ <strong>${d.id}</strong>
+ <div class="text-xs text-muted">v${d.formVersion || 1}</div>
+ </td>
+ <td>
+ <div style="font-weight: 600;">${agt.raisonSociale}</div>
+ <div class="text-xs text-muted"> ${agt.ville}</div>
+ </td>
+ <td>
+ <span>${sec.icon} ${sec.nom}</span>
+ </td>
+ <td><small class="text-muted">${d.soumisLe || d.creeLe || '2026-03-01'}</small></td>
+ <td>
+ <span class="badge badge-terrain" style="font-size: 0.75rem;">15 j ouvrés</span>
+ </td>
+ <td>
+ ${aud ? `
+ <div style="display: flex; align-items: center; gap: 6px;">
+ <span style="font-size: 0.8125rem; font-weight: 600;">${aud.nom}</span>
+ </div>
+ ` : `
+ <span class="badge badge-danger">Non affecté</span>
+ `}
+ </td>
+ <td style="text-align: right;">
+ <button class="btn btn-secondary btn-sm" onclick="openSingleAssignModal('${d.id}')">
+ ${aud ? 'Réaffecter' : 'Affecter'}
+ </button>
+ </td>
+ </tr>
+ `; }).join(''); }
 
-            <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; margin-bottom: 6px;">
-              <span>Charge active : <strong>${inProgress.length} dossier(s)</strong></span>
-              <span class="text-muted">${completed.length} traité(s)</span>
-            </div>
+ function toggleSelectDossier(id, checked) {
+ if (checked) selectedDossierIds.add(id); else selectedDossierIds.delete(id); updateBatchButton(); }
 
-            <div class="progress-bar-bg" style="height: 6px;">
-              <div class="progress-bar-fill" style="width: ${pct}%; background: ${barColor};"></div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+ function toggleSelectAll(checked) {
+ const inputs = document.querySelectorAll('#affectations-tbody input[type="checkbox"]'); inputs.forEach(inp => {
+ inp.checked = checked; const rowId = inp.getAttribute('onchange').match(/'([^']+)'/)[1]; if (checked) selectedDossierIds.add(rowId); else selectedDossierIds.delete(rowId); }); updateBatchButton(); }
 
-    function filterDossiers() {
-      const sectorId = document.getElementById('filter-sector').value;
-      const stateFilter = document.getElementById('filter-state').value;
-      const allDossiers = window.SignwStore.getDossiers();
+ function updateBatchButton() {
+ const count = selectedDossierIds.size; document.getElementById('batch-count').textContent = count; document.getElementById('btn-batch-assign').disabled = (count === 0); }
 
-      const filtered = allDossiers.filter(d => {
-        if (sectorId && d.secteurId !== sectorId) return false;
-        if (stateFilter === 'unassigned') {
-          return d.statut === 'soumis' || (d.statut === 'en_verification' && !d.affecteAAuditeurId);
-        } else {
-          return ['soumis', 'en_verification', 'pieces_incompletes'].includes(d.statut);
-        }
-      });
+ function populateAuditorSelect() {
+ const auditors = getAuditors(); const dossiers = window.SignwStore.getDossiers(); const sel = document.getElementById('assign-auditor-select'); sel.innerHTML = auditors.map(aud => {
+ const count = dossiers.filter(d => d.affecteAAuditeurId === aud.id && (d.statut === 'en_verification' || d.statut === 'pieces_incompletes')).length; return `<option value="${aud.id}">${aud.nom} — (${count} dossier(s) en cours)</option>`; }).join(''); }
 
-      document.getElementById('unassigned-count-label').textContent = `${filtered.length} dossier(s) éligible(s)`;
-      renderDossiersTable(filtered);
-    }
+ function openSingleAssignModal(dossierId) {
+ currentAssignTarget = dossierId; populateAuditorSelect(); document.getElementById('modal-assign-title').textContent = `Affecter le dossier ${dossierId}`; document.getElementById('modal-assign').style.display = 'flex'; }
 
-    function renderDossiersTable(dossiers) {
-      const tbody = document.getElementById('affectations-tbody');
-      const agents = window.SignwStore.getAgents();
-      const sectors = window.SignwStore.getSectors();
-      const auditors = getAuditors();
+ function openBatchAssignModal() {
+ if (selectedDossierIds.size === 0) return; currentAssignTarget = null; populateAuditorSelect(); document.getElementById('modal-assign-title').textContent = `Affecter ${selectedDossierIds.size} dossier(s) en lot`; document.getElementById('modal-assign').style.display = 'flex'; }
 
-      if (dossiers.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8" style="text-align: center; padding: 40px; color: var(--ink-500);">
-              Aucun dossier en attente d'affectation pour ces filtres. Tout est à jour !
-            </td>
-          </tr>
-        `;
-        return;
-      }
+ function closeAssignModal() {
+ document.getElementById('modal-assign').style.display = 'none'; currentAssignTarget = null; }
 
-      tbody.innerHTML = dossiers.map(d => {
-        const agt = agents.find(a => a.id === d.agentId) || { raisonSociale: 'Entreprise candidate', ville: 'Cameroun' };
-        const sec = sectors.find(s => s.id === d.secteurId) || { nom: d.secteurId, icon: '📁' };
-        const aud = auditors.find(a => a.id === d.affecteAAuditeurId);
-
-        const isChecked = selectedDossierIds.has(d.id);
-
-        return `
-          <tr>
-            <td style="text-align: center;">
-              <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSelectDossier('${d.id}', this.checked)">
-            </td>
-            <td>
-              <strong>${d.id}</strong>
-              <div class="text-xs text-muted">v${d.formVersion || 1}</div>
-            </td>
-            <td>
-              <div style="font-weight: 600;">${agt.raisonSociale}</div>
-              <div class="text-xs text-muted">📍 ${agt.ville}</div>
-            </td>
-            <td>
-              <span>${sec.icon} ${sec.nom}</span>
-            </td>
-            <td><small class="text-muted">${d.soumisLe || d.creeLe || '2026-03-01'}</small></td>
-            <td>
-              <span class="badge badge-terrain" style="font-size: 0.75rem;">15 j ouvrés</span>
-            </td>
-            <td>
-              ${aud ? `
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <span style="font-size: 0.8125rem; font-weight: 600;">${aud.nom}</span>
-                </div>
-              ` : `
-                <span class="badge badge-danger">Non affecté</span>
-              `}
-            </td>
-            <td style="text-align: right;">
-              <button class="btn btn-secondary btn-sm" onclick="openSingleAssignModal('${d.id}')">
-                ${aud ? 'Réaffecter' : 'Affecter'}
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function toggleSelectDossier(id, checked) {
-      if (checked) selectedDossierIds.add(id);
-      else selectedDossierIds.delete(id);
-      updateBatchButton();
-    }
-
-    function toggleSelectAll(checked) {
-      const inputs = document.querySelectorAll('#affectations-tbody input[type="checkbox"]');
-      inputs.forEach(inp => {
-        inp.checked = checked;
-        const rowId = inp.getAttribute('onchange').match(/'([^']+)'/)[1];
-        if (checked) selectedDossierIds.add(rowId);
-        else selectedDossierIds.delete(rowId);
-      });
-      updateBatchButton();
-    }
-
-    function updateBatchButton() {
-      const count = selectedDossierIds.size;
-      document.getElementById('batch-count').textContent = count;
-      document.getElementById('btn-batch-assign').disabled = (count === 0);
-    }
-
-    function populateAuditorSelect() {
-      const auditors = getAuditors();
-      const dossiers = window.SignwStore.getDossiers();
-      const sel = document.getElementById('assign-auditor-select');
-
-      sel.innerHTML = auditors.map(aud => {
-        const count = dossiers.filter(d => d.affecteAAuditeurId === aud.id && (d.statut === 'en_verification' || d.statut === 'pieces_incompletes')).length;
-        return `<option value="${aud.id}">${aud.nom} — (${count} dossier(s) en cours)</option>`;
-      }).join('');
-    }
-
-    function openSingleAssignModal(dossierId) {
-      currentAssignTarget = dossierId;
-      populateAuditorSelect();
-      document.getElementById('modal-assign-title').textContent = `Affecter le dossier ${dossierId}`;
-      document.getElementById('modal-assign').style.display = 'flex';
-    }
-
-    function openBatchAssignModal() {
-      if (selectedDossierIds.size === 0) return;
-      currentAssignTarget = null;
-      populateAuditorSelect();
-      document.getElementById('modal-assign-title').textContent = `Affecter ${selectedDossierIds.size} dossier(s) en lot`;
-      document.getElementById('modal-assign').style.display = 'flex';
-    }
-
-    function closeAssignModal() {
-      document.getElementById('modal-assign').style.display = 'none';
-      currentAssignTarget = null;
-    }
-
-    function confirmAssign() {
-      const auditorId = document.getElementById('assign-auditor-select').value;
-      const auditor = window.SignwStore.getUserById(auditorId);
-      if (!auditor) return;
-
-      const targets = currentAssignTarget ? [currentAssignTarget] : Array.from(selectedDossierIds);
-
-      targets.forEach(dId => {
-        window.SignwStore.assignAuditor(dId, auditorId, 'Admin signw');
-      });
-
-      closeAssignModal();
-      selectedDossierIds.clear();
-      updateBatchButton();
-      loadAuditorsWorkload();
-      filterDossiers();
-
-      window.SignwUI.showToast(`${targets.length} dossier(s) affecté(s) à ${auditor.nom}.`, 'success');
-    }
-  </script>
+ function confirmAssign() {
+ const auditorId = document.getElementById('assign-auditor-select').value; const auditor = window.SignwStore.getUserById(auditorId); if (!auditor) return; const targets = currentAssignTarget ? [currentAssignTarget] : Array.from(selectedDossierIds); targets.forEach(dId => {
+ window.SignwStore.assignAuditor(dId, auditorId, 'Admin signw'); }); closeAssignModal(); selectedDossierIds.clear(); updateBatchButton(); loadAuditorsWorkload(); filterDossiers(); window.SignwUI.showToast(`${targets.length} dossier(s) affecté(s) à ${auditor.nom}.`, 'success'); }
+ </script>
 </body>
 </html>

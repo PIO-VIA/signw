@@ -1,182 +1,168 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comparateur de Prestataires — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Comparateur de Prestataires — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <h2 style="margin: 0 0 4px;">Comparateur Côte à Côte de Prestataires</h2>
-          <span class="text-muted text-sm">Comparez objectivement 2 à 3 entreprises sur leurs critères audités</span>
-        </div>
-        <div>
-          <a href="../../annuaire.html" class="btn btn-secondary btn-sm" target="_blank">+ Sélectionner d'autres entreprises</a>
-        </div>
-      </div>
+ <main class="app-content">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+ <div>
+ <h2 style="margin: 0 0 4px;">Comparateur Côte à Côte de Prestataires</h2>
+ <span class="text-muted text-sm">Comparez objectivement 2 à 3 entreprises sur leurs critères audités</span>
+ </div>
+ <div>
+ <a href="../../annuaire.html" class="btn btn-secondary btn-sm btn-wrap" target="_blank">+ Autres entreprises</a>
+ </div>
+ </div>
 
-      <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 32px;" id="comparator-mount">
-        <!-- Rendu dynamique JS -->
-      </div>
-    </main>
-  </div>
+ <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 32px;" id="comparator-mount">
+ <!-- Rendu dynamique JS -->
+ </div>
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['principal', 'admin'])) return;
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['principal', 'admin'])) return; const urlParams = new URLSearchParams(window.location.search); const agentsParam = urlParams.get('agents'); let agentIds = agentsParam ? agentsParam.split(',') : ['agt_001', 'agt_003', 'agt_005']; renderComparator(agentIds.slice(0, 3)); }); function renderComparator(agentIds) {
+ const agents = agentIds.map(id => window.SignwStore.getAgentById(id)).filter(Boolean); const mount = document.getElementById('comparator-mount'); if (agents.length < 2) {
+ mount.innerHTML = `
+ <div class="text-center" style="padding: 48px;">
+ <h4>Sélectionnez au moins 2 entreprises à comparer</h4>
+ <p class="text-muted">Rendez-vous sur l'annuaire pour cocher les prestataires.</p>
+ <a href="../../annuaire.html" class="btn btn-primary">Ouvrir l'annuaire</a>
+ </div>
+ `; return; }
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const agentsParam = urlParams.get('agents');
-      let agentIds = agentsParam ? agentsParam.split(',') : ['agt_001', 'agt_003', 'agt_005'];
+ mount.innerHTML = `
+ <div class="table-container" style="border: none;">
+ <table class="table" style="table-layout: fixed;">
+ <thead>
+ <tr style="background: var(--ink-50);">
+ <th style="width: 240px; padding: 20px;">Critère d'évaluation</th>
+ ${agents.map(a => `
+ <th style="padding: 20px; text-align: center; vertical-align: top;">
+ <img src="../../${a.logo || 'assets/img/company-logo-01.svg'}" alt="${a.raisonSociale}" style="width: 50px; height: 50px; border-radius: 8px; margin: 0 auto 8px;">
+ <div style="font-size: 1.05rem; font-weight: 700; color: var(--ink-900);">${a.raisonSociale}</div>
+ <div class="text-xs text-muted" style="margin: 2px 0 6px;"> ${a.ville} (${a.region})</div>
+ ${window.SignwUtils.getTierBadge(a.niveau)}
+ </th>
+ `).join('')}
+ </tr>
+ </thead>
+ <tbody>
+ <!-- Score de confiance -->
+ <tr>
+ <td class="font-bold">Score de Confiance Global</td>
+ ${agents.map(a => `
+ <td style="text-align: center;">
+ <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+ ${window.SignwUI.renderScoreGauge(a.score, 48)}
+ <span style="font-size: 1.25rem; font-weight: 700; color: var(--brand-700);">${a.score} / 100</span>
+ </div>
+ </td>
+ `).join('')}
+ </tr>
 
-      renderComparator(agentIds.slice(0, 3));
-    });
+ <!-- Chiffre d'affaires moyen -->
+ <tr>
+ <td class="font-bold">Chiffre d’affaires moyen (3 ans)</td>
+ ${agents.map(a => `
+ <td style="text-align: center; font-weight: 700; font-size: 1rem;">
+ ${window.SignwUtils.formatFCFA(a.caMoyen3ans)}
+ </td>
+ `).join('')}
+ </tr>
 
-    function renderComparator(agentIds) {
-      const agents = agentIds.map(id => window.SignwStore.getAgentById(id)).filter(Boolean);
-      const mount = document.getElementById('comparator-mount');
+ <!-- Effectif permanent -->
+ <tr>
+ <td class="font-bold">Effectif salarié déclaré</td>
+ ${agents.map(a => `
+ <td style="text-align: center;">
+ <strong>${a.effectif}</strong> salariés permanents
+ </td>
+ `).join('')}
+ </tr>
 
-      if (agents.length < 2) {
-        mount.innerHTML = `
-          <div class="text-center" style="padding: 48px;">
-            <h4>Sélectionnez au moins 2 entreprises à comparer</h4>
-            <p class="text-muted">Rendez-vous sur l'annuaire pour cocher les prestataires.</p>
-            <a href="../../annuaire.html" class="btn btn-primary">Ouvrir l'annuaire</a>
-          </div>
-        `;
-        return;
-      }
+ <!-- Ancienneté -->
+ <tr>
+ <td class="font-bold">Ancienneté d’exercice</td>
+ ${agents.map(a => `
+ <td style="text-align: center;">
+ ${new Date().getFullYear() - a.anneeCreation} ans (depuis ${a.anneeCreation})
+ </td>
+ `).join('')}
+ </tr>
 
-      mount.innerHTML = `
-        <div class="table-container" style="border: none;">
-          <table class="table" style="table-layout: fixed;">
-            <thead>
-              <tr style="background: var(--ink-50);">
-                <th style="width: 240px; padding: 20px;">Critère d'évaluation</th>
-                ${agents.map(a => `
-                  <th style="padding: 20px; text-align: center; vertical-align: top;">
-                    <img src="../../${a.logo || 'assets/img/company-logo-01.svg'}" alt="${a.raisonSociale}" style="width: 50px; height: 50px; border-radius: 8px; margin: 0 auto 8px;">
-                    <div style="font-size: 1.05rem; font-weight: 800; color: var(--ink-900);">${a.raisonSociale}</div>
-                    <div class="text-xs text-muted" style="margin: 2px 0 6px;">📍 ${a.ville} (${a.region})</div>
-                    ${window.SignwUtils.getTierBadge(a.niveau)}
-                  </th>
-                `).join('')}
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Score de confiance -->
-              <tr>
-                <td class="font-bold">Score de Confiance Global</td>
-                ${agents.map(a => `
-                  <td style="text-align: center;">
-                    <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
-                      ${window.SignwUI.renderScoreGauge(a.score, 48)}
-                      <span style="font-size: 1.25rem; font-weight: 800; color: var(--brand-700);">${a.score} / 100</span>
-                    </div>
-                  </td>
-                `).join('')}
-              </tr>
+ <!-- Piliers de notation -->
+ <tr style="background: var(--ink-50);">
+ <td colspan="${agents.length + 1}" class="font-bold text-xs" style="letter-spacing: 1px; color: var(--brand-900);">
+ DÉTAIL DES 5 PILIERS DE L'AUDIT
+ </td>
+ </tr>
+ <tr>
+ <td>1. Conformité administrative (20 pts)</td>
+ ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.admin || 75}%</td>`).join('')}
+ </tr>
+ <tr>
+ <td>2. Capacité financière (25 pts)</td>
+ ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.fin || 70}%</td>`).join('')}
+ </tr>
+ <tr>
+ <td>3. Capacité technique & matériel (25 pts)</td>
+ ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.tech || 75}%</td>`).join('')}
+ </tr>
+ <tr>
+ <td>4. Références & expérience (20 pts)</td>
+ ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.ref || 70}%</td>`).join('')}
+ </tr>
+ <tr>
+ <td>5. Ressources humaines (10 pts)</td>
+ ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.rh || 70}%</td>`).join('')}
+ </tr>
 
-              <!-- Chiffre d'affaires moyen -->
-              <tr>
-                <td class="font-bold">Chiffre d’affaires moyen (3 ans)</td>
-                ${agents.map(a => `
-                  <td style="text-align: center; font-weight: 700; font-size: 1rem;">
-                    ${window.SignwUtils.formatFCFA(a.caMoyen3ans)}
-                  </td>
-                `).join('')}
-              </tr>
-
-              <!-- Effectif permanent -->
-              <tr>
-                <td class="font-bold">Effectif salarié déclaré</td>
-                ${agents.map(a => `
-                  <td style="text-align: center;">
-                    <strong>${a.effectif}</strong> salariés permanents
-                  </td>
-                `).join('')}
-              </tr>
-
-              <!-- Ancienneté -->
-              <tr>
-                <td class="font-bold">Ancienneté d’exercice</td>
-                ${agents.map(a => `
-                  <td style="text-align: center;">
-                    ${new Date().getFullYear() - a.anneeCreation} ans (depuis ${a.anneeCreation})
-                  </td>
-                `).join('')}
-              </tr>
-
-              <!-- Piliers de notation -->
-              <tr style="background: var(--ink-50);">
-                <td colspan="${agents.length + 1}" class="font-bold text-xs" style="letter-spacing: 1px; color: var(--brand-900);">
-                  DÉTAIL DES 5 PILIERS DE L'AUDIT
-                </td>
-              </tr>
-              <tr>
-                <td>1. Conformité administrative (20 pts)</td>
-                ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.admin || 75}%</td>`).join('')}
-              </tr>
-              <tr>
-                <td>2. Capacité financière (25 pts)</td>
-                ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.fin || 70}%</td>`).join('')}
-              </tr>
-              <tr>
-                <td>3. Capacité technique & matériel (25 pts)</td>
-                ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.tech || 75}%</td>`).join('')}
-              </tr>
-              <tr>
-                <td>4. Références & expérience (20 pts)</td>
-                ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.ref || 70}%</td>`).join('')}
-              </tr>
-              <tr>
-                <td>5. Ressources humaines (10 pts)</td>
-                ${agents.map(a => `<td style="text-align: center; font-weight: 600;">${a.piliers?.rh || 70}%</td>`).join('')}
-              </tr>
-
-              <!-- Actions -->
-              <tr>
-                <td>Actions rapides</td>
-                ${agents.map(a => `
-                  <td style="text-align: center;">
-                    <a href="adequation.html?agt=${a.id}" class="btn btn-primary btn-sm">
-                      Tester adéquation →
-                    </a>
-                  </td>
-                `).join('')}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-  </script>
+ <!-- Actions -->
+ <tr>
+ <td>Actions rapides</td>
+ ${agents.map(a => `
+ <td style="text-align: center;">
+ <a href="adequation.html?agt=${a.id}" class="btn btn-primary btn-sm">
+ Tester adéquation →
+ </a>
+ </td>
+ `).join('')}
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ `; }
+ </script>
 </body>
 </html>

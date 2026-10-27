@@ -63,12 +63,12 @@ window.SignwFormBuilder = {
           </div>
 
           <!-- Actions de publication -->
-          <div style="display: flex; gap: 8px;">
-            <button class="btn btn-secondary btn-sm" onclick="SignwFormBuilder.resetToDefault()">
-              ↺ Modèle BTP standard
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-secondary btn-sm btn-wrap" onclick="SignwFormBuilder.resetToDefault()">
+              Modèle BTP
             </button>
-            <button class="btn btn-gold btn-sm" onclick="SignwFormBuilder.publish()">
-              🚀 Publier la version ${this.schema.version + 1}
+            <button class="btn btn-gold btn-sm btn-wrap" onclick="SignwFormBuilder.publish()">
+              Publier v${this.schema.version + 1}
             </button>
           </div>
         </div>
@@ -92,7 +92,7 @@ window.SignwFormBuilder = {
           <h4 style="margin-bottom: 12px;">Schéma JSON brut</h4>
           <p class="text-sm text-muted">Ce schéma JSON définit dynamiquement le formulaire présenté à tous les agents du secteur.</p>
           <textarea id="fb-json-textarea" class="form-control" style="font-family: var(--font-mono); font-size: 0.8125rem; min-height: 500px; margin-bottom: 16px;">${JSON.stringify(this.schema, null, 2)}</textarea>
-          <button class="btn btn-primary btn-sm" onclick="SignwFormBuilder.applyJson()">Appliquer les modifications JSON</button>
+          <button class="btn btn-primary btn-sm btn-wrap" onclick="SignwFormBuilder.applyJson()">Appliquer le JSON</button>
         </div>
       `;
     }
@@ -146,7 +146,7 @@ window.SignwFormBuilder = {
             <span>📊</span> Tableau répétable
           </div>
 
-          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--ink-200);">
+          <div style="margin-top: 24px; padding-top: 16px;">
             <button class="btn btn-secondary btn-sm w-full" onclick="SignwFormBuilder.addSection()">
               + Nouvelle section
             </button>

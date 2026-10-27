@@ -1,162 +1,139 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mes Dossiers — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Mes Dossiers — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-          <h2 style="margin: 0 0 4px;">Mes Dossiers de Certification</h2>
-          <span class="text-muted text-sm">Consultez l'état d'avancement et l'historique de vos demandes de qualification</span>
-        </div>
-        <a href="dossier.html" class="btn btn-primary">
-          + Créer un nouveau dossier
-        </a>
-      </div>
+ <main class="app-content">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <h2 style="margin: 0 0 4px;">Mes Dossiers de Certification</h2>
+ <span class="text-muted text-sm">Consultez l'état d'avancement et l'historique de vos demandes de qualification</span>
+ </div>
+ <a href="dossier.html" class="btn btn-primary">
+ + Créer un nouveau dossier
+ </a>
+ </div>
 
-      <div class="card" style="padding: 0; overflow: hidden;">
-        <div class="table-container" style="border: none;">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Réf Dossier</th>
-                <th>Secteur d’activité</th>
-                <th>Version</th>
-                <th>Statut actuel</th>
-                <th>Score provisoire</th>
-                <th>Créé le</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="mes-dossiers-table">
-              <!-- Rendu dynamique JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+ <div class="card" style="padding: 0; overflow: hidden;">
+ <div class="table-container" style="border: none;">
+ <table class="table">
+ <thead>
+ <tr>
+ <th>Réf Dossier</th>
+ <th>Secteur d’activité</th>
+ <th>Version</th>
+ <th>Statut actuel</th>
+ <th>Score provisoire</th>
+ <th>Créé le</th>
+ <th>Actions</th>
+ </tr>
+ </thead>
+ <tbody id="mes-dossiers-table">
+ <!-- Rendu dynamique JS -->
+ </tbody>
+ </table>
+ </div>
+ </div>
 
-      <!-- Drawer Détail Dossier -->
-      <div class="drawer-overlay" id="dossier-drawer" onclick="SignwUI.closeDrawer('dossier-drawer')">
-        <div class="drawer" onclick="event.stopPropagation()">
-          <div style="padding: 24px; border-bottom: 1px solid var(--ink-200); display: flex; justify-content: space-between; align-items: center;">
-            <h4 style="margin: 0;" id="drawer-title">Détail du Dossier</h4>
-            <button class="btn-ghost btn-sm" onclick="SignwUI.closeDrawer('dossier-drawer')">&times;</button>
-          </div>
-          <div style="padding: 24px; overflow-y: auto; flex: 1;" id="drawer-content">
-            <!-- Injecté dynamiquement -->
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+ <!-- Drawer Détail Dossier -->
+ <div class="drawer-overlay" id="dossier-drawer" onclick="SignwUI.closeDrawer('dossier-drawer')">
+ <div class="drawer" onclick="event.stopPropagation()">
+ <div style="padding: 24px; border-bottom: 1px solid var(--ink-200); display: flex; justify-content: space-between; align-items: center;">
+ <h4 style="margin: 0;" id="drawer-title">Détail du Dossier</h4>
+ <button class="btn-ghost btn-sm" onclick="SignwUI.closeDrawer('dossier-drawer')">&times;</button>
+ </div>
+ <div style="padding: 24px; overflow-y: auto; flex: 1;" id="drawer-content">
+ <!-- Injecté dynamiquement -->
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['agent'])) return;
-      renderTable();
-    });
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['agent'])) return; renderTable(); }); function renderTable() {
+ const user = window.SignwAuth.getCurrentUser(); const agent = window.SignwStore.getAgentById(user.agentId) || window.SignwStore.getAgents()[0]; const dossiers = window.SignwStore.getDossiersByAgent(agent.id); const tbody = document.getElementById('mes-dossiers-table'); if (dossiers.length === 0) {
+ tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted" style="padding: 32px;">Aucun dossier pour le moment. Cliquez sur "Créer un nouveau dossier".</td></tr>`; return; }
 
-    function renderTable() {
-      const user = window.SignwAuth.getCurrentUser();
-      const agent = window.SignwStore.getAgentById(user.agentId) || window.SignwStore.getAgents()[0];
-      const dossiers = window.SignwStore.getDossiersByAgent(agent.id);
-      const tbody = document.getElementById('mes-dossiers-table');
+ tbody.innerHTML = dossiers.map(d => {
+ const sec = window.SignwStore.getSectorById(d.secteurId); return `
+ <tr>
+ <td><strong style="color: var(--brand-700);">${d.id}</strong></td>
+ <td>${sec ? sec.nom : d.secteurId}</td>
+ <td>v${d.formVersion}</td>
+ <td>${window.SignwUtils.getStatusBadge(d.statut)}</td>
+ <td><strong>${d.scoreProvisoire || 0}</strong> / 100</td>
+ <td>${d.creeLe}</td>
+ <td>
+ <div style="display: flex; gap: 8px;">
+ <a href="dossier.html?id=${d.id}" class="btn btn-secondary btn-sm">Éditer</a>
+ <button class="btn btn-ghost btn-sm" onclick="openDossierDrawer('${d.id}')">Historique →</button>
+ </div>
+ </td>
+ </tr>
+ `; }).join(''); }
 
-      if (dossiers.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted" style="padding: 32px;">Aucun dossier pour le moment. Cliquez sur "Créer un nouveau dossier".</td></tr>`;
-        return;
-      }
+ function openDossierDrawer(dossierId) {
+ const d = window.SignwStore.getDossierById(dossierId); if (!d) return; const sec = window.SignwStore.getSectorById(d.secteurId); const pieces = window.SignwStore.getPiecesByDossier(d.id); document.getElementById('drawer-title').textContent = `Dossier ${d.id}`; document.getElementById('drawer-content').innerHTML = `
+ <div style="margin-bottom: 20px;">
+ <div class="text-xs text-muted">SECTEUR & STATUT :</div>
+ <h3 style="margin: 4px 0 8px;">${sec ? sec.nom : d.secteurId}</h3>
+ <div>${window.SignwUtils.getStatusBadge(d.statut)}</div>
+ </div>
 
-      tbody.innerHTML = dossiers.map(d => {
-        const sec = window.SignwStore.getSectorById(d.secteurId);
-        return `
-          <tr>
-            <td><strong style="color: var(--brand-700);">${d.id}</strong></td>
-            <td>${sec ? sec.nom : d.secteurId}</td>
-            <td>v${d.formVersion}</td>
-            <td>${window.SignwUtils.getStatusBadge(d.statut)}</td>
-            <td><strong>${d.scoreProvisoire || 0}</strong> / 100</td>
-            <td>${d.creeLe}</td>
-            <td>
-              <div style="display: flex; gap: 8px;">
-                <a href="dossier.html?id=${d.id}" class="btn btn-secondary btn-sm">Éditer</a>
-                <button class="btn btn-ghost btn-sm" onclick="openDossierDrawer('${d.id}')">Historique →</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
+ <div style="background: var(--ink-50); padding: 14px; border-radius: var(--radius-md); margin-bottom: 24px;">
+ <div class="text-xs text-muted">PIÈCES DÉPOSÉES (${pieces.length}) :</div>
+ <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+ ${pieces.map(p => `
+ <div style="display: flex; justify-content: space-between; font-size: 0.8125rem;">
+ <span> ${p.nomFichier}</span>
+ <span class="badge ${p.statutPiece === 'validee' ? 'badge-certifie' : (p.statutPiece === 'rejetee' ? 'badge-rejete' : 'badge-en_verification')}">${p.statutPiece}</span>
+ </div>
+ `).join('')}
+ </div>
+ </div>
 
-    function openDossierDrawer(dossierId) {
-      const d = window.SignwStore.getDossierById(dossierId);
-      if (!d) return;
-
-      const sec = window.SignwStore.getSectorById(d.secteurId);
-      const pieces = window.SignwStore.getPiecesByDossier(d.id);
-
-      document.getElementById('drawer-title').textContent = `Dossier ${d.id}`;
-      document.getElementById('drawer-content').innerHTML = `
-        <div style="margin-bottom: 20px;">
-          <div class="text-xs text-muted">SECTEUR & STATUT :</div>
-          <h3 style="margin: 4px 0 8px;">${sec ? sec.nom : d.secteurId}</h3>
-          <div>${window.SignwUtils.getStatusBadge(d.statut)}</div>
-        </div>
-
-        <div style="background: var(--ink-50); padding: 14px; border-radius: var(--radius-md); margin-bottom: 24px;">
-          <div class="text-xs text-muted">PIÈCES DÉPOSÉES (${pieces.length}) :</div>
-          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
-            ${pieces.map(p => `
-              <div style="display: flex; justify-content: space-between; font-size: 0.8125rem;">
-                <span>📄 ${p.nomFichier}</span>
-                <span class="badge ${p.statutPiece === 'validee' ? 'badge-certifie' : (p.statutPiece === 'rejetee' ? 'badge-rejete' : 'badge-en_verification')}">${p.statutPiece}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <h5 style="margin-bottom: 12px;">Journal chronologique du dossier :</h5>
-        <div style="display: flex; flex-direction: column; gap: 14px; border-left: 2px solid var(--ink-200); padding-left: 16px; margin-left: 6px;">
-          ${(d.historique || []).slice().reverse().map(h => `
-            <div>
-              <strong style="font-size: 0.875rem;">${h.action}</strong>
-              <div class="text-xs text-muted">${h.date} • ${h.acteur}</div>
-              <p class="text-xs" style="margin: 4px 0 0; color: var(--ink-700);">${h.commentaire}</p>
-            </div>
-          `).join('')}
-        </div>
-      `;
-
-      window.SignwUI.openDrawer('dossier-drawer');
-    }
-  </script>
+ <h5 style="margin-bottom: 12px;">Journal chronologique du dossier :</h5>
+ <div style="display: flex; flex-direction: column; gap: 14px; padding-left: 16px; margin-left: 6px;">
+ ${(d.historique || []).slice().reverse().map(h => `
+ <div>
+ <strong style="font-size: 0.875rem;">${h.action}</strong>
+ <div class="text-xs text-muted">${h.date} • ${h.acteur}</div>
+ <p class="text-xs" style="margin: 4px 0 0; color: var(--ink-700);">${h.commentaire}</p>
+ </div>
+ `).join('')}
+ </div>
+ `; window.SignwUI.openDrawer('dossier-drawer'); }
+ </script>
 </body>
 </html>

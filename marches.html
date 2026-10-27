@@ -1,244 +1,211 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marchés Publics & Appels d’Offres — signw</title>
-  <meta name="description" content="Consultez les marchés publics et avis d’appels d’offres vérifiés au Cameroun.">
-  <link rel="icon" type="image/png" href="favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Marchés Publics & Appels d’Offres — signw</title>
+ <meta name="description" content="Consultez les marchés publics et avis d’appels d’offres vérifiés au Cameroun.">
+ <link rel="icon" type="image/png" href="favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/pages.css">
+ <link rel="stylesheet" href="css/tokens.css">
+ <link rel="stylesheet" href="css/base.css">
+ <link rel="stylesheet" href="css/components.css">
+ <link rel="stylesheet" href="css/layout.css">
+ <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
 
-  <header id="public-header"></header>
+ <header id="public-header"></header>
 
-  <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
-    <!-- En-tête -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
-      <div>
-        <span class="badge badge-soumis" style="margin-bottom: 8px;">Avis d’Appels d’Offres</span>
-        <h1>Marchés Publics & Projets Sécurisés</h1>
-        <p class="lead" style="margin: 0;">Consultez les marchés ouverts aux prestataires certifiés et vérifiez l'adéquation technique requise.</p>
-      </div>
+ <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
+ <!-- En-tête -->
+ <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
+ <div>
+ <span class="badge badge-soumis" style="margin-bottom: 8px;">Avis d’Appels d’Offres</span>
+ <h1>Marchés Publics & Projets Sécurisés</h1>
+ <p class="lead" style="margin: 0;">Consultez les marchés ouverts aux prestataires certifiés et vérifiez l'adéquation technique requise.</p>
+ </div>
 
-      <div style="display: flex; gap: 8px;">
-        <button class="btn btn-sm btn-primary" id="view-mode-cards" onclick="setViewMode('cards')">☷ Cartes</button>
-        <button class="btn btn-sm btn-secondary" id="view-mode-table" onclick="setViewMode('table')">☰ Tableau</button>
-      </div>
-    </div>
+ <div style="display: flex; gap: 8px;">
+ <button class="btn btn-sm btn-primary" id="view-mode-cards" onclick="setViewMode('cards')"> Cartes</button>
+ <button class="btn btn-sm btn-secondary" id="view-mode-table" onclick="setViewMode('table')"> Tableau</button>
+ </div>
+ </div>
 
-    <!-- Barre de recherche et filtres -->
-    <div class="card" style="padding: 20px; margin-bottom: 32px;">
-      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 16px; align-items: flex-end;">
-        <div>
-          <label class="form-label text-xs">Recherche mot-clé :</label>
-          <input type="text" id="filter-search" class="form-control" placeholder="Titre, référence DAO, ville..." oninput="applyFilters()">
-        </div>
-        <div>
-          <label class="form-label text-xs">Secteur :</label>
-          <select id="filter-sector" class="form-control" onchange="applyFilters()">
-            <option value="all">Tous les secteurs</option>
-            <option value="sec_btp">BTP & Construction</option>
-            <option value="sec_energie">Énergie & Électrification</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label text-xs">Région :</label>
-          <select id="filter-region" class="form-control" onchange="applyFilters()">
-            <option value="all">Toutes les régions</option>
-            <option value="Ouest">Ouest</option>
-            <option value="Centre">Centre</option>
-            <option value="Littoral">Littoral</option>
-            <option value="Sud">Sud</option>
-            <option value="Sud-Ouest">Sud-Ouest</option>
-            <option value="Nord">Nord</option>
-            <option value="Est">Est</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label text-xs">Certif. minimale :</label>
-          <select id="filter-tier" class="form-control" onchange="applyFilters()">
-            <option value="all">Toutes</option>
-            <option value="Bronze">Bronze ou +</option>
-            <option value="Argent">Argent ou +</option>
-            <option value="Or">Or uniquement</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label text-xs">Trier par :</label>
-          <select id="filter-sort" class="form-control" onchange="applyFilters()">
-            <option value="recent">Plus récents</option>
-            <option value="budget_desc">Budget décroissant</option>
-            <option value="date_limite">Date limite proche</option>
-          </select>
-        </div>
-      </div>
-    </div>
+ <!-- Barre de recherche et filtres -->
+ <div class="card" style="padding: 20px; margin-bottom: 32px;">
+ <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 16px; align-items: flex-end;">
+ <div>
+ <label class="form-label text-xs">Recherche mot-clé :</label>
+ <input type="text" id="filter-search" class="form-control" placeholder="Titre, référence DAO, ville..." oninput="applyFilters()">
+ </div>
+ <div>
+ <label class="form-label text-xs">Secteur :</label>
+ <select id="filter-sector" class="form-control" onchange="applyFilters()">
+ <option value="all">Tous les secteurs</option>
+ <option value="sec_btp">BTP & Construction</option>
+ <option value="sec_energie">Énergie & Électrification</option>
+ </select>
+ </div>
+ <div>
+ <label class="form-label text-xs">Région :</label>
+ <select id="filter-region" class="form-control" onchange="applyFilters()">
+ <option value="all">Toutes les régions</option>
+ <option value="Ouest">Ouest</option>
+ <option value="Centre">Centre</option>
+ <option value="Littoral">Littoral</option>
+ <option value="Sud">Sud</option>
+ <option value="Sud-Ouest">Sud-Ouest</option>
+ <option value="Nord">Nord</option>
+ <option value="Est">Est</option>
+ </select>
+ </div>
+ <div>
+ <label class="form-label text-xs">Certif. minimale :</label>
+ <select id="filter-tier" class="form-control" onchange="applyFilters()">
+ <option value="all">Toutes</option>
+ <option value="Bronze">Bronze ou +</option>
+ <option value="Argent">Argent ou +</option>
+ <option value="Or">Or uniquement</option>
+ </select>
+ </div>
+ <div>
+ <label class="form-label text-xs">Trier par :</label>
+ <select id="filter-sort" class="form-control" onchange="applyFilters()">
+ <option value="recent">Plus récents</option>
+ <option value="budget_desc">Budget décroissant</option>
+ <option value="date_limite">Date limite proche</option>
+ </select>
+ </div>
+ </div>
+ </div>
 
-    <!-- Zone d'affichage des marchés -->
-    <div id="marches-mount-point">
-      <!-- Rendu dynamique JS -->
-    </div>
-  </main>
+ <!-- Zone d'affichage des marchés -->
+ <div id="marches-mount-point">
+ <!-- Rendu dynamique JS -->
+ </div>
+ </main>
 
-  <footer id="public-footer"></footer>
+ <footer id="public-footer"></footer>
 
-  <script src="js/data/seed.js"></script>
-  <script src="js/core/utils.js"></script>
-  <script src="js/core/store.js"></script>
-  <script src="js/core/auth.js"></script>
-  <script src="js/core/score.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/layout.js"></script>
+ <script src="js/data/seed.js"></script>
+ <script src="js/core/utils.js"></script>
+ <script src="js/core/store.js"></script>
+ <script src="js/core/auth.js"></script>
+ <script src="js/core/score.js"></script>
+ <script src="js/core/ui.js"></script>
+ <script src="js/core/icons.js"></script>
+ <script src="js/core/layout.js"></script>
 
-  <script>
-    let viewMode = 'cards';
-    let filteredProjects = [];
+ <script>
+ let viewMode = 'cards'; let filteredProjects = []; document.addEventListener('DOMContentLoaded', () => {
+ applyFilters(); }); function setViewMode(mode) {
+ viewMode = mode; document.getElementById('view-mode-cards').className = `btn btn-sm ${mode === 'cards' ? 'btn-primary' : 'btn-secondary'}`; document.getElementById('view-mode-table').className = `btn btn-sm ${mode === 'table' ? 'btn-primary' : 'btn-secondary'}`; render(); }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      applyFilters();
-    });
+ function applyFilters() {
+ const q = (document.getElementById('filter-search').value || '').toLowerCase().trim(); const sec = document.getElementById('filter-sector').value; const reg = document.getElementById('filter-region').value; const tier = document.getElementById('filter-tier').value; const sort = document.getElementById('filter-sort').value; let list = window.SignwStore.getProjects().filter(p => p.statut !== 'brouillon'); if (q) {
+ list = list.filter(p => p.titre.toLowerCase().includes(q) || p.reference.toLowerCase().includes(q) || (p.ville && p.ville.toLowerCase().includes(q))); }
+ if (sec !== 'all') {
+ list = list.filter(p => p.secteurId === sec); }
+ if (reg !== 'all') {
+ list = list.filter(p => p.region === reg); }
+ if (tier !== 'all') {
+ list = list.filter(p => p.exigences && p.exigences.certificationMinimale === tier); }
 
-    function setViewMode(mode) {
-      viewMode = mode;
-      document.getElementById('view-mode-cards').className = `btn btn-sm ${mode === 'cards' ? 'btn-primary' : 'btn-secondary'}`;
-      document.getElementById('view-mode-table').className = `btn btn-sm ${mode === 'table' ? 'btn-primary' : 'btn-secondary'}`;
-      render();
-    }
+ if (sort === 'budget_desc') {
+ list.sort((a, b) => b.budgetFCFA - a.budgetFCFA); } else if (sort === 'date_limite') {
+ list.sort((a, b) => new Date(a.dateLimite) - new Date(b.dateLimite)); } else {
+ list.sort((a, b) => new Date(b.datePublication) - new Date(a.datePublication)); }
 
-    function applyFilters() {
-      const q = (document.getElementById('filter-search').value || '').toLowerCase().trim();
-      const sec = document.getElementById('filter-sector').value;
-      const reg = document.getElementById('filter-region').value;
-      const tier = document.getElementById('filter-tier').value;
-      const sort = document.getElementById('filter-sort').value;
+ filteredProjects = list; render(); }
 
-      let list = window.SignwStore.getProjects().filter(p => p.statut !== 'brouillon');
+ function render() {
+ const mount = document.getElementById('marches-mount-point'); if (!mount) return; if (filteredProjects.length === 0) {
+ mount.innerHTML = `
+ <div class="card text-center" style="padding: 48px;">
+ <img src="assets/img/empty-no-results.svg" alt="Aucun résultat" style="max-height: 160px; margin: 0 auto 16px;">
+ <h4>Aucun marché ne correspond à ces critères</h4>
+ <p class="text-muted">Essayez de réinitialiser vos filtres ou de modifier votre terme de recherche.</p>
+ </div>
+ `; return; }
 
-      if (q) {
-        list = list.filter(p => p.titre.toLowerCase().includes(q) || p.reference.toLowerCase().includes(q) || (p.ville && p.ville.toLowerCase().includes(q)));
-      }
-      if (sec !== 'all') {
-        list = list.filter(p => p.secteurId === sec);
-      }
-      if (reg !== 'all') {
-        list = list.filter(p => p.region === reg);
-      }
-      if (tier !== 'all') {
-        list = list.filter(p => p.exigences && p.exigences.certificationMinimale === tier);
-      }
+ if (viewMode === 'cards') {
+ mount.innerHTML = `
+ <div class="grid grid-cols-3 gap-6">
+ ${filteredProjects.map(p => `
+ <div class="card card-hover" style="display: flex; flex-direction: column; justify-content: space-between;">
+ <div>
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+ <span class="badge" style="background: var(--brand-100); color: var(--brand-900); font-size: 0.75rem;">${p.reference}</span>
+ <span class="badge ${p.statut === 'publie' ? 'badge-certifie' : 'badge-brouillon'}">${p.statut.toUpperCase()}</span>
+ </div>
 
-      if (sort === 'budget_desc') {
-        list.sort((a, b) => b.budgetFCFA - a.budgetFCFA);
-      } else if (sort === 'date_limite') {
-        list.sort((a, b) => new Date(a.dateLimite) - new Date(b.dateLimite));
-      } else {
-        list.sort((a, b) => new Date(b.datePublication) - new Date(a.datePublication));
-      }
+ <h3 style="font-size: 1.15rem; margin-bottom: 8px; line-height: 1.3;">
+ <a href="marche-detail.html?id=${p.id}" style="color: var(--ink-900);">${p.titre}</a>
+ </h3>
 
-      filteredProjects = list;
-      render();
-    }
+ <div style="font-size: 0.8125rem; color: var(--ink-500); margin-bottom: 16px;">
+  ${p.organisation} • ${p.ville || p.region}
+ </div>
 
-    function render() {
-      const mount = document.getElementById('marches-mount-point');
-      if (!mount) return;
+ <div style="background: var(--ink-50); padding: 12px; border-radius: var(--radius-md); margin-bottom: 16px;">
+ <div style="font-size: 0.75rem; color: var(--ink-500);">BUDGET ESTIMÉ :</div>
+ <div style="font-size: 1.25rem; font-weight: 700; color: var(--brand-700);">${window.SignwUtils.formatFCFA(p.budgetFCFA)}</div>
+ </div>
 
-      if (filteredProjects.length === 0) {
-        mount.innerHTML = `
-          <div class="card text-center" style="padding: 48px;">
-            <img src="assets/img/empty-no-results.svg" alt="Aucun résultat" style="max-height: 160px; margin: 0 auto 16px;">
-            <h4>Aucun marché ne correspond à ces critères</h4>
-            <p class="text-muted">Essayez de réinitialiser vos filtres ou de modifier votre terme de recherche.</p>
-          </div>
-        `;
-        return;
-      }
+ <div style="font-size: 0.8125rem; display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px;">
+ <div>⏱ <strong>Délai :</strong> ${p.delaiMois} mois</div>
+ <div> <strong>Certif. exigée :</strong> Niveau ${p.exigences ? p.exigences.certificationMinimale : 'Bronze'}</div>
+ <div> <strong>Date limite :</strong> ${window.SignwUtils.formatDateFR(p.dateLimite)}</div>
+ </div>
+ </div>
 
-      if (viewMode === 'cards') {
-        mount.innerHTML = `
-          <div class="grid grid-cols-3 gap-6">
-            ${filteredProjects.map(p => `
-              <div class="card card-hover" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                    <span class="badge" style="background: var(--brand-100); color: var(--brand-900); font-size: 0.75rem;">${p.reference}</span>
-                    <span class="badge ${p.statut === 'publie' ? 'badge-certifie' : 'badge-brouillon'}">${p.statut.toUpperCase()}</span>
-                  </div>
-
-                  <h3 style="font-size: 1.15rem; margin-bottom: 8px; line-height: 1.3;">
-                    <a href="marche-detail.html?id=${p.id}" style="color: var(--ink-900);">${p.titre}</a>
-                  </h3>
-
-                  <div style="font-size: 0.8125rem; color: var(--ink-500); margin-bottom: 16px;">
-                    🏛️ ${p.organisation} • 📍 ${p.ville || p.region}
-                  </div>
-
-                  <div style="background: var(--ink-50); padding: 12px; border-radius: var(--radius-md); margin-bottom: 16px;">
-                    <div style="font-size: 0.75rem; color: var(--ink-500);">BUDGET ESTIMÉ :</div>
-                    <div style="font-size: 1.25rem; font-weight: 800; color: var(--brand-700);">${window.SignwUtils.formatFCFA(p.budgetFCFA)}</div>
-                  </div>
-
-                  <div style="font-size: 0.8125rem; display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px;">
-                    <div>⏱️ <strong>Délai :</strong> ${p.delaiMois} mois</div>
-                    <div>🏆 <strong>Certif. exigée :</strong> Niveau ${p.exigences ? p.exigences.certificationMinimale : 'Bronze'}</div>
-                    <div>📅 <strong>Date limite :</strong> ${window.SignwUtils.formatDateFR(p.dateLimite)}</div>
-                  </div>
-                </div>
-
-                <div style="border-top: 1px solid var(--ink-100); padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
-                  <span class="text-xs text-muted">${(p.candidaturesAgentIds || []).length} candidat(s)</span>
-                  <a href="marche-detail.html?id=${p.id}" class="btn btn-primary btn-sm">Détails & Adéquation →</a>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        `;
-      } else {
-        mount.innerHTML = `
-          <div class="table-container">
-            <table class="table table-clickable">
-              <thead>
-                <tr>
-                  <th>Réf & Titre</th>
-                  <th>Maître d'ouvrage</th>
-                  <th>Budget</th>
-                  <th>Région</th>
-                  <th>Certif. requise</th>
-                  <th>Date limite</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                ${filteredProjects.map(p => `
-                  <tr onclick="window.location.href='marche-detail.html?id=${p.id}'">
-                    <td>
-                      <div class="font-bold">${p.titre}</div>
-                      <small class="text-muted">${p.reference}</small>
-                    </td>
-                    <td>${p.organisation}</td>
-                    <td class="font-bold text-brand">${window.SignwUtils.formatFCFAShort(p.budgetFCFA)}</td>
-                    <td>${p.region}</td>
-                    <td><span class="badge badge-tier-${(p.exigences?.certificationMinimale || 'bronze').toLowerCase()}">${p.exigences?.certificationMinimale || 'Bronze'}</span></td>
-                    <td>${window.SignwUtils.formatDateFR(p.dateLimite)}</td>
-                    <td><a href="marche-detail.html?id=${p.id}" class="btn btn-secondary btn-sm">Voir →</a></td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        `;
-      }
-    }
-  </script>
+ <div style="border-top: 1px solid var(--ink-100); padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+ <span class="text-xs text-muted">${(p.candidaturesAgentIds || []).length} candidat(s)</span>
+ <a href="marche-detail.html?id=${p.id}" class="btn btn-primary btn-sm">Détails & Adéquation →</a>
+ </div>
+ </div>
+ `).join('')}
+ </div>
+ `; } else {
+ mount.innerHTML = `
+ <div class="table-container">
+ <table class="table table-clickable">
+ <thead>
+ <tr>
+ <th>Réf & Titre</th>
+ <th>Maître d'ouvrage</th>
+ <th>Budget</th>
+ <th>Région</th>
+ <th>Certif. requise</th>
+ <th>Date limite</th>
+ <th></th>
+ </tr>
+ </thead>
+ <tbody>
+ ${filteredProjects.map(p => `
+ <tr onclick="window.location.href='marche-detail.html?id=${p.id}'">
+ <td>
+ <div class="font-bold">${p.titre}</div>
+ <small class="text-muted">${p.reference}</small>
+ </td>
+ <td>${p.organisation}</td>
+ <td class="font-bold text-brand">${window.SignwUtils.formatFCFAShort(p.budgetFCFA)}</td>
+ <td>${p.region}</td>
+ <td><span class="badge badge-tier-${(p.exigences?.certificationMinimale || 'bronze').toLowerCase()}">${p.exigences?.certificationMinimale || 'Bronze'}</span></td>
+ <td>${window.SignwUtils.formatDateFR(p.dateLimite)}</td>
+ <td><a href="marche-detail.html?id=${p.id}" class="btn btn-secondary btn-sm">Voir →</a></td>
+ </tr>
+ `).join('')}
+ </tbody>
+ </table>
+ </div>
+ `; }
+ }
+ </script>
 </body>
 </html>

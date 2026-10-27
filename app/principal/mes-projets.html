@@ -1,113 +1,96 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mes Projets & Marchés — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Mes Projets & Marchés — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <div>
-          <h2 style="margin: 0 0 4px;">Gestion de mes Marchés Publics</h2>
-          <span class="text-muted text-sm">Suivi des appels d’offres, candidatures et attribution</span>
-        </div>
-        <a href="nouveau-projet.html" class="btn btn-primary">+ Nouveau marché</a>
-      </div>
+ <main class="app-content">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <h2 style="margin: 0 0 4px;">Gestion de mes Marchés Publics</h2>
+ <span class="text-muted text-sm">Suivi des appels d’offres, candidatures et attribution</span>
+ </div>
+ <a href="nouveau-projet.html" class="btn btn-primary">+ Nouveau marché</a>
+ </div>
 
-      <div class="card" style="padding: 0; overflow: hidden;">
-        <div class="table-container" style="border: none;">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Réf & Intitulé</th>
-                <th>Budget (FCFA)</th>
-                <th>Délai</th>
-                <th>Statut</th>
-                <th>Candidats</th>
-                <th>Date limite</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="principal-projects-table">
-              <!-- Rendu dynamique JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </main>
-  </div>
+ <div class="card" style="padding: 0; overflow: hidden;">
+ <div class="table-container" style="border: none;">
+ <table class="table">
+ <thead>
+ <tr>
+ <th>Réf & Intitulé</th>
+ <th>Budget (FCFA)</th>
+ <th>Délai</th>
+ <th>Statut</th>
+ <th>Candidats</th>
+ <th>Date limite</th>
+ <th>Actions</th>
+ </tr>
+ </thead>
+ <tbody id="principal-projects-table">
+ <!-- Rendu dynamique JS -->
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['principal'])) return;
-      renderProjects();
-    });
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['principal'])) return; renderProjects(); }); function renderProjects() {
+ const user = window.SignwAuth.getCurrentUser(); const principal = window.SignwStore.getPrincipalById(user.principalId) || window.SignwStore.getPrincipals()[0]; const allProjects = window.SignwStore.getProjects(); const myProjects = allProjects.filter(p => p.principalId === principal.id || p.organisation === principal.organisation); const list = myProjects.length > 0 ? myProjects : allProjects; const tbody = document.getElementById('principal-projects-table'); tbody.innerHTML = list.map(p => `
+ <tr>
+ <td>
+ <strong style="color: var(--ink-900); font-size: 0.95rem;">${p.titre}</strong>
+ <div class="text-xs text-muted">${p.reference} • ${p.region}</div>
+ </td>
+ <td class="font-bold text-brand">${window.SignwUtils.formatFCFA(p.budgetFCFA)}</td>
+ <td>${p.delaiMois} mois</td>
+ <td><span class="badge ${p.statut === 'publie' ? 'badge-certifie' : 'badge-brouillon'}">${p.statut.toUpperCase()}</span></td>
+ <td><strong>${(p.candidaturesAgentIds || []).length}</strong> entreprise(s)</td>
+ <td>${window.SignwUtils.formatDateFR(p.dateLimite)}</td>
+ <td>
+ <div style="display: flex; gap: 6px;">
+ <a href="adequation.html?prj=${p.id}" class="btn btn-primary btn-sm">Auditer</a>
+ <button class="btn btn-secondary btn-sm" onclick="handleToggleStatus('${p.id}')">
+ ${p.statut === 'publie' ? 'Clore' : 'Publier'}
+ </button>
+ </div>
+ </td>
+ </tr>
+ `).join(''); }
 
-    function renderProjects() {
-      const user = window.SignwAuth.getCurrentUser();
-      const principal = window.SignwStore.getPrincipalById(user.principalId) || window.SignwStore.getPrincipals()[0];
-      const allProjects = window.SignwStore.getProjects();
-      const myProjects = allProjects.filter(p => p.principalId === principal.id || p.organisation === principal.organisation);
-      const list = myProjects.length > 0 ? myProjects : allProjects;
-
-      const tbody = document.getElementById('principal-projects-table');
-      tbody.innerHTML = list.map(p => `
-        <tr>
-          <td>
-            <strong style="color: var(--ink-900); font-size: 0.95rem;">${p.titre}</strong>
-            <div class="text-xs text-muted">${p.reference} • ${p.region}</div>
-          </td>
-          <td class="font-bold text-brand">${window.SignwUtils.formatFCFA(p.budgetFCFA)}</td>
-          <td>${p.delaiMois} mois</td>
-          <td><span class="badge ${p.statut === 'publie' ? 'badge-certifie' : 'badge-brouillon'}">${p.statut.toUpperCase()}</span></td>
-          <td><strong>${(p.candidaturesAgentIds || []).length}</strong> entreprise(s)</td>
-          <td>${window.SignwUtils.formatDateFR(p.dateLimite)}</td>
-          <td>
-            <div style="display: flex; gap: 6px;">
-              <a href="adequation.html?prj=${p.id}" class="btn btn-primary btn-sm">Auditer</a>
-              <button class="btn btn-secondary btn-sm" onclick="handleToggleStatus('${p.id}')">
-                ${p.statut === 'publie' ? 'Clore' : 'Publier'}
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function handleToggleStatus(projectId) {
-      const p = window.SignwStore.getProjectById(projectId);
-      if (!p) return;
-      const next = p.statut === 'publie' ? 'clos' : 'publie';
-      window.SignwStore.updateProject(p.id, { statut: next });
-      window.SignwUI.showToast(`Statut du projet mis à jour : ${next.toUpperCase()}`, 'info');
-      renderProjects();
-    }
-  </script>
+ function handleToggleStatus(projectId) {
+ const p = window.SignwStore.getProjectById(projectId); if (!p) return; const next = p.statut === 'publie' ? 'clos' : 'publie'; window.SignwStore.updateProject(p.id, { statut: next }); window.SignwUI.showToast(`Statut du projet mis à jour : ${next.toUpperCase()}`, 'info'); renderProjects(); }
+ </script>
 </body>
 </html>

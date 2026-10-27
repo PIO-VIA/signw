@@ -1,314 +1,253 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Annuaire des Entreprises Certifiées — signw</title>
-  <meta name="description" content="Consultez l'annuaire public des prestataires et entreprises certifiées sur preuves au Cameroun.">
-  <link rel="icon" type="image/png" href="favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Annuaire des Entreprises Certifiées — signw</title>
+ <meta name="description" content="Consultez l'annuaire public des prestataires et entreprises certifiées sur preuves au Cameroun.">
+ <link rel="icon" type="image/png" href="favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/pages.css">
+ <link rel="stylesheet" href="css/tokens.css">
+ <link rel="stylesheet" href="css/base.css">
+ <link rel="stylesheet" href="css/components.css">
+ <link rel="stylesheet" href="css/layout.css">
+ <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
 
-  <header id="public-header"></header>
+ <header id="public-header"></header>
 
-  <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
-    <!-- En-tête -->
-    <div style="margin-bottom: 32px;">
-      <span class="badge badge-certifie" style="margin-bottom: 8px;">Transparence publique</span>
-      <h1>Annuaire des Entreprises Certifiées</h1>
-      <p class="lead" style="max-width: 780px;">
-        Vérifiez la solvabilité financière, le matériel audité et le niveau de confiance de tous les prestataires référencés.
-      </p>
-    </div>
+ <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
+ <!-- En-tête -->
+ <div style="margin-bottom: 32px;">
+ <span class="badge badge-certifie" style="margin-bottom: 8px;">Transparence publique</span>
+ <h1>Annuaire des Entreprises Certifiées</h1>
+ <p class="lead" style="max-width: 780px;">
+ Vérifiez la solvabilité financière, le matériel audité et le niveau de confiance de tous les prestataires référencés.
+ </p>
+ </div>
 
-    <!-- Layout Grille 2 colonnes : Filtres latéraux + Grille d'agents -->
-    <div style="display: grid; grid-template-columns: 280px 1fr; gap: 32px; align-items: start;">
+ <!-- Layout Grille 2 colonnes : Filtres latéraux + Grille d'agents -->
+ <div style="display: grid; grid-template-columns: 280px 1fr; gap: 32px; align-items: start;">
 
-      <!-- Colonne 1 : Filtres latéraux -->
-      <div class="card" style="padding: 24px; position: sticky; top: 96px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h4 style="margin: 0;">Filtres</h4>
-          <button class="btn-ghost btn-sm text-xs" onclick="resetFilters()">Effacer</button>
-        </div>
+ <!-- Colonne 1 : Filtres latéraux -->
+ <div class="card" style="padding: 24px; position: sticky; top: 96px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+ <h4 style="margin: 0;">Filtres</h4>
+ <button class="btn-ghost btn-sm text-xs" onclick="resetFilters()">Effacer</button>
+ </div>
 
-        <div class="form-group">
-          <label class="form-label text-xs">Recherche par nom / mot-clé :</label>
-          <input type="text" id="filter-search" class="form-control" placeholder="Ex: BâtiPlus, Douala..." oninput="applyFilters()">
-        </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Recherche par nom / mot-clé :</label>
+ <input type="text" id="filter-search" class="form-control" placeholder="Ex: BâtiPlus, Douala..." oninput="applyFilters()">
+ </div>
 
-        <div class="form-group">
-          <label class="form-label text-xs">Secteur d'activité :</label>
-          <select id="filter-sector" class="form-control" onchange="applyFilters()">
-            <option value="all">Tous les secteurs</option>
-            <option value="sec_btp">BTP & Construction</option>
-            <option value="sec_energie">Énergie</option>
-            <option value="sec_agri">Agriculture</option>
-          </select>
-        </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Secteur d'activité :</label>
+ <select id="filter-sector" class="form-control" onchange="applyFilters()">
+ <option value="all">Tous les secteurs</option>
+ <option value="sec_btp">BTP & Construction</option>
+ <option value="sec_energie">Énergie</option>
+ <option value="sec_agri">Agriculture</option>
+ </select>
+ </div>
 
-        <div class="form-group">
-          <label class="form-label text-xs">Région :</label>
-          <select id="filter-region" class="form-control" onchange="applyFilters()">
-            <option value="all">Toutes les régions</option>
-            <option value="Littoral">Littoral (Douala)</option>
-            <option value="Centre">Centre (Yaoundé)</option>
-            <option value="Ouest">Ouest (Bafoussam)</option>
-            <option value="Sud">Sud (Kribi)</option>
-            <option value="Nord">Nord (Garoua)</option>
-            <option value="Extrême-Nord">Extrême-Nord</option>
-            <option value="Nord-Ouest">Nord-Ouest</option>
-            <option value="Est">Est</option>
-          </select>
-        </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Région :</label>
+ <select id="filter-region" class="form-control" onchange="applyFilters()">
+ <option value="all">Toutes les régions</option>
+ <option value="Littoral">Littoral (Douala)</option>
+ <option value="Centre">Centre (Yaoundé)</option>
+ <option value="Ouest">Ouest (Bafoussam)</option>
+ <option value="Sud">Sud (Kribi)</option>
+ <option value="Nord">Nord (Garoua)</option>
+ <option value="Extrême-Nord">Extrême-Nord</option>
+ <option value="Nord-Ouest">Nord-Ouest</option>
+ <option value="Est">Est</option>
+ </select>
+ </div>
 
-        <div class="form-group">
-          <label class="form-label text-xs">Niveau de certification :</label>
-          <select id="filter-tier" class="form-control" onchange="applyFilters()">
-            <option value="all">Tous les niveaux</option>
-            <option value="Or">Niveau Or (≥ 85)</option>
-            <option value="Argent">Niveau Argent (70-84)</option>
-            <option value="Bronze">Niveau Bronze (55-69)</option>
-            <option value="Avec réserves">Avec réserves</option>
-          </select>
-        </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Niveau de certification :</label>
+ <select id="filter-tier" class="form-control" onchange="applyFilters()">
+ <option value="all">Tous les niveaux</option>
+ <option value="Or">Niveau Or (≥ 85)</option>
+ <option value="Argent">Niveau Argent (70-84)</option>
+ <option value="Bronze">Niveau Bronze (55-69)</option>
+ <option value="Avec réserves">Avec réserves</option>
+ </select>
+ </div>
 
-        <div class="form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <label class="form-label text-xs">Score minimal :</label>
-            <strong id="score-val-label" style="font-size: 0.8125rem; color: var(--brand-700);">0 / 100</strong>
-          </div>
-          <input type="range" id="filter-score" min="0" max="95" step="5" value="0" style="width: 100%; accent-color: var(--brand-700);" oninput="document.getElementById('score-val-label').textContent = this.value + ' / 100'; applyFilters();">
-        </div>
+ <div class="form-group">
+ <div style="display: flex; justify-content: space-between; align-items: center;">
+ <label class="form-label text-xs">Score minimal :</label>
+ <strong id="score-val-label" style="font-size: 0.8125rem; color: var(--brand-700);">0 / 100</strong>
+ </div>
+ <input type="range" id="filter-score" min="0" max="95" step="5" value="0" style="width: 100%; accent-color: var(--brand-700);" oninput="document.getElementById('score-val-label').textContent = this.value + ' / 100'; applyFilters();">
+ </div>
 
-        <div class="form-group" style="margin-bottom: 0;">
-          <label class="form-label text-xs">Chiffre d’affaires minimal :</label>
-          <select id="filter-ca" class="form-control" onchange="applyFilters()">
-            <option value="0">Indifférent</option>
-            <option value="300000000">≥ 300 Millions FCFA</option>
-            <option value="600000000">≥ 600 Millions FCFA</option>
-            <option value="1000000000">≥ 1 Milliard FCFA</option>
-          </select>
-        </div>
-      </div>
+ <div class="form-group" style="margin-bottom: 0;">
+ <label class="form-label text-xs">Chiffre d’affaires minimal :</label>
+ <select id="filter-ca" class="form-control" onchange="applyFilters()">
+ <option value="0">Indifférent</option>
+ <option value="300000000">≥ 300 Millions FCFA</option>
+ <option value="600000000">≥ 600 Millions FCFA</option>
+ <option value="1000000000">≥ 1 Milliard FCFA</option>
+ </select>
+ </div>
+ </div>
 
-      <!-- Colonne 2 : Résultats -->
-      <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-          <div id="results-count" class="font-bold text-sm text-muted">Chargement des entreprises...</div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="text-xs text-muted">Trier par :</span>
-            <select id="sort-select" class="form-control" style="width: 180px; padding: 6px 10px;" onchange="applyFilters()">
-              <option value="score_desc">Score décroissant</option>
-              <option value="ca_desc">CA décroissant</option>
-              <option value="nom_asc">Nom alphabétique</option>
-            </select>
-          </div>
-        </div>
+ <!-- Colonne 2 : Résultats -->
+ <div>
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+ <div id="results-count" class="font-bold text-sm text-muted">Chargement des entreprises...</div>
+ <div style="display: flex; align-items: center; gap: 8px;">
+ <span class="text-xs text-muted">Trier par :</span>
+ <select id="sort-select" class="form-control" style="width: 180px; padding: 6px 10px;" onchange="applyFilters()">
+ <option value="score_desc">Score décroissant</option>
+ <option value="ca_desc">CA décroissant</option>
+ <option value="nom_asc">Nom alphabétique</option>
+ </select>
+ </div>
+ </div>
 
-        <div class="grid grid-cols-2 gap-6" id="agents-cards-grid">
-          <!-- Rendu dynamique JS -->
-        </div>
-      </div>
+ <div class="grid grid-cols-2 gap-6" id="agents-cards-grid">
+ <!-- Rendu dynamique JS -->
+ </div>
+ </div>
 
-    </div>
+ </div>
 
-    <!-- Barre flottante de comparaison (jusqu'à 3 agents) -->
-    <div id="compare-bar" style="display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--brand-900); color: var(--white); padding: 14px 28px; border-radius: var(--radius-full); box-shadow: var(--shadow-xl); z-index: 1000; align-items: center; gap: 20px; border: 2px solid var(--gold-500);">
-      <span id="compare-count-text" style="font-weight: 700;">2 agents sélectionnés</span>
-      <button class="btn btn-gold btn-sm" onclick="launchComparison()">
-        ⚖️ Comparer maintenant →
-      </button>
-      <button class="btn-ghost btn-sm" onclick="clearComparison()" style="color: #fff; font-size: 0.8rem;">
-        Annuler
-      </button>
-    </div>
-  </main>
+ <!-- Barre flottante de comparaison (jusqu'à 3 agents) -->
+ <div id="compare-bar" style="display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--brand-900); color: var(--white); padding: 14px 28px; border-radius: var(--radius-full); box-shadow: var(--shadow-xl); z-index: 1000; align-items: center; gap: 20px; border: 2px solid var(--gold-500);">
+ <span id="compare-count-text" style="font-weight: 700;">2 agents sélectionnés</span>
+ <button class="btn btn-primary btn-sm" onclick="launchComparison()">
+  Comparer maintenant →
+ </button>
+ <button class="btn-ghost btn-sm" onclick="clearComparison()" style="color: #fff; font-size: 0.8rem;">
+ Annuler
+ </button>
+ </div>
+ </main>
 
-  <footer id="public-footer"></footer>
+ <footer id="public-footer"></footer>
 
-  <script src="js/data/seed.js"></script>
-  <script src="js/core/utils.js"></script>
-  <script src="js/core/store.js"></script>
-  <script src="js/core/auth.js"></script>
-  <script src="js/core/score.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/layout.js"></script>
+ <script src="js/data/seed.js"></script>
+ <script src="js/core/utils.js"></script>
+ <script src="js/core/store.js"></script>
+ <script src="js/core/auth.js"></script>
+ <script src="js/core/score.js"></script>
+ <script src="js/core/ui.js"></script>
+ <script src="js/core/icons.js"></script>
+ <script src="js/core/layout.js"></script>
 
-  <script>
-    let selectedForCompare = [];
+ <script>
+ let selectedForCompare = []; document.addEventListener('DOMContentLoaded', () => {
+ const urlParams = new URLSearchParams(window.location.search); const q = urlParams.get('q'); if (q) {
+ document.getElementById('filter-search').value = q; }
+ applyFilters(); }); function resetFilters() {
+ document.getElementById('filter-search').value = ''; document.getElementById('filter-sector').value = 'all'; document.getElementById('filter-region').value = 'all'; document.getElementById('filter-tier').value = 'all'; document.getElementById('filter-score').value = 0; document.getElementById('score-val-label').textContent = '0 / 100'; document.getElementById('filter-ca').value = '0'; applyFilters(); }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const q = urlParams.get('q');
-      if (q) {
-        document.getElementById('filter-search').value = q;
-      }
-      applyFilters();
-    });
+ function applyFilters() {
+ const q = (document.getElementById('filter-search').value || '').toLowerCase().trim(); const sec = document.getElementById('filter-sector').value; const reg = document.getElementById('filter-region').value; const tier = document.getElementById('filter-tier').value; const minScore = parseInt(document.getElementById('filter-score').value, 10) || 0; const minCa = parseInt(document.getElementById('filter-ca').value, 10) || 0; const sort = document.getElementById('sort-select').value; let list = window.SignwStore.getAgents(); if (q) {
+ list = list.filter(a => a.raisonSociale.toLowerCase().includes(q) || a.ville.toLowerCase().includes(q) || (a.specialites && a.specialites.some(s => s.toLowerCase().includes(q)))); }
+ if (sec !== 'all') {
+ list = list.filter(a => a.secteurId === sec); }
+ if (reg !== 'all') {
+ list = list.filter(a => a.region === reg); }
+ if (tier !== 'all') {
+ list = list.filter(a => a.niveau === tier); }
+ if (minScore > 0) {
+ list = list.filter(a => a.score >= minScore); }
+ if (minCa > 0) {
+ list = list.filter(a => a.caMoyen3ans >= minCa); }
 
-    function resetFilters() {
-      document.getElementById('filter-search').value = '';
-      document.getElementById('filter-sector').value = 'all';
-      document.getElementById('filter-region').value = 'all';
-      document.getElementById('filter-tier').value = 'all';
-      document.getElementById('filter-score').value = 0;
-      document.getElementById('score-val-label').textContent = '0 / 100';
-      document.getElementById('filter-ca').value = '0';
-      applyFilters();
-    }
+ if (sort === 'score_desc') {
+ list.sort((a, b) => b.score - a.score); } else if (sort === 'ca_desc') {
+ list.sort((a, b) => b.caMoyen3ans - a.caMoyen3ans); } else {
+ list.sort((a, b) => a.raisonSociale.localeCompare(b.raisonSociale)); }
 
-    function applyFilters() {
-      const q = (document.getElementById('filter-search').value || '').toLowerCase().trim();
-      const sec = document.getElementById('filter-sector').value;
-      const reg = document.getElementById('filter-region').value;
-      const tier = document.getElementById('filter-tier').value;
-      const minScore = parseInt(document.getElementById('filter-score').value, 10) || 0;
-      const minCa = parseInt(document.getElementById('filter-ca').value, 10) || 0;
-      const sort = document.getElementById('sort-select').value;
+ renderList(list); }
 
-      let list = window.SignwStore.getAgents();
+ function renderList(agents) {
+ const container = document.getElementById('agents-cards-grid'); const countEl = document.getElementById('results-count'); if (!container) return; countEl.textContent = `${agents.length} entreprise(s) certifiée(s) trouvée(s)`; if (agents.length === 0) {
+ container.innerHTML = `
+ <div class="card text-center" style="grid-column: span 2; padding: 48px;">
+ <img src="assets/img/empty-no-results.svg" alt="Vide" style="max-height: 150px; margin: 0 auto 16px;">
+ <h4>Aucune entreprise trouvée</h4>
+ <p class="text-muted">Modifiez vos critères de recherche ou réinitialisez les filtres.</p>
+ </div>
+ `; return; }
 
-      if (q) {
-        list = list.filter(a => a.raisonSociale.toLowerCase().includes(q) || a.ville.toLowerCase().includes(q) || (a.specialites && a.specialites.some(s => s.toLowerCase().includes(q))));
-      }
-      if (sec !== 'all') {
-        list = list.filter(a => a.secteurId === sec);
-      }
-      if (reg !== 'all') {
-        list = list.filter(a => a.region === reg);
-      }
-      if (tier !== 'all') {
-        list = list.filter(a => a.niveau === tier);
-      }
-      if (minScore > 0) {
-        list = list.filter(a => a.score >= minScore);
-      }
-      if (minCa > 0) {
-        list = list.filter(a => a.caMoyen3ans >= minCa);
-      }
+ container.innerHTML = agents.map(agt => {
+ const isChecked = selectedForCompare.includes(agt.id); return `
+ <div class="card card-hover" style="display: flex; flex-direction: column; justify-content: space-between;">
+ <div>
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+ <div style="display: flex; gap: 14px; align-items: center;">
+ <img src="${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 52px; height: 52px; border-radius: 10px;">
+ <div>
+ <h3 style="font-size: 1.1rem; margin: 0 0 2px;">
+ <a href="agent-profil.html?id=${agt.id}" style="color: var(--ink-900);">${agt.raisonSociale}</a>
+ </h3>
+ <span class="text-xs text-muted"> ${agt.ville} (${agt.region}) • Créée en ${agt.anneeCreation}</span>
+ </div>
+ </div>
+ ${window.SignwUI.renderScoreGauge(agt.score, 52)}
+ </div>
 
-      if (sort === 'score_desc') {
-        list.sort((a, b) => b.score - a.score);
-      } else if (sort === 'ca_desc') {
-        list.sort((a, b) => b.caMoyen3ans - a.caMoyen3ans);
-      } else {
-        list.sort((a, b) => a.raisonSociale.localeCompare(b.raisonSociale));
-      }
+ <div style="display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;">
+ ${window.SignwUtils.getTierBadge(agt.niveau)}
+ <span class="badge" style="background: var(--ink-100); font-weight: normal;">CA : ${window.SignwUtils.formatFCFAShort(agt.caMoyen3ans)}</span>
+ <span class="badge" style="background: var(--ink-100); font-weight: normal;"> ${agt.effectif} salariés</span>
+ </div>
 
-      renderList(list);
-    }
+ <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px;">
+ ${(agt.specialites || []).map(sp => `<span class="badge" style="background: #EBF5FB; color: #1F618D; font-size: 0.6875rem;">${sp}</span>`).join('')}
+ </div>
 
-    function renderList(agents) {
-      const container = document.getElementById('agents-cards-grid');
-      const countEl = document.getElementById('results-count');
-      if (!container) return;
+ <p class="text-xs text-muted" style="line-height: 1.5; margin-bottom: 16px;">
+ ${agt.description.length > 110 ? agt.description.substring(0, 110) + '...' : agt.description}
+ </p>
+ </div>
 
-      countEl.textContent = `${agents.length} entreprise(s) certifiée(s) trouvée(s)`;
+ <div style="border-top: 1px solid var(--ink-100); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+ <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8125rem; cursor: pointer; user-select: none;">
+ <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCompareAgent('${agt.id}', this.checked)">
+ <span>Comparer</span>
+ </label>
 
-      if (agents.length === 0) {
-        container.innerHTML = `
-          <div class="card text-center" style="grid-column: span 2; padding: 48px;">
-            <img src="assets/img/empty-no-results.svg" alt="Vide" style="max-height: 150px; margin: 0 auto 16px;">
-            <h4>Aucune entreprise trouvée</h4>
-            <p class="text-muted">Modifiez vos critères de recherche ou réinitialisez les filtres.</p>
-          </div>
-        `;
-        return;
-      }
+ <div style="display: flex; gap: 8px;">
+ <a href="agent-profil.html?id=${agt.id}" class="btn btn-secondary btn-sm">Voir la fiche →</a>
+ </div>
+ </div>
+ </div>
+ `; }).join(''); }
 
-      container.innerHTML = agents.map(agt => {
-        const isChecked = selectedForCompare.includes(agt.id);
-        return `
-          <div class="card card-hover" style="display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
-                <div style="display: flex; gap: 14px; align-items: center;">
-                  <img src="${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 52px; height: 52px; border-radius: 10px;">
-                  <div>
-                    <h3 style="font-size: 1.1rem; margin: 0 0 2px;">
-                      <a href="agent-profil.html?id=${agt.id}" style="color: var(--ink-900);">${agt.raisonSociale}</a>
-                    </h3>
-                    <span class="text-xs text-muted">📍 ${agt.ville} (${agt.region}) • Créée en ${agt.anneeCreation}</span>
-                  </div>
-                </div>
-                ${window.SignwUI.renderScoreGauge(agt.score, 52)}
-              </div>
+ function toggleCompareAgent(agentId, checked) {
+ if (checked) {
+ if (selectedForCompare.length >= 3) {
+ alert('Vous pouvez comparer jusqu’à 3 agents simultanément.'); applyFilters(); return; }
+ if (!selectedForCompare.includes(agentId)) selectedForCompare.push(agentId); } else {
+ selectedForCompare = selectedForCompare.filter(id => id !== agentId); }
 
-              <div style="display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;">
-                ${window.SignwUtils.getTierBadge(agt.niveau)}
-                <span class="badge" style="background: var(--ink-100); font-weight: normal;">CA : ${window.SignwUtils.formatFCFAShort(agt.caMoyen3ans)}</span>
-                <span class="badge" style="background: var(--ink-100); font-weight: normal;">👥 ${agt.effectif} salariés</span>
-              </div>
+ updateCompareBar(); }
 
-              <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px;">
-                ${(agt.specialites || []).map(sp => `<span class="badge" style="background: #EBF5FB; color: #1F618D; font-size: 0.6875rem;">${sp}</span>`).join('')}
-              </div>
+ function updateCompareBar() {
+ const bar = document.getElementById('compare-bar'); if (selectedForCompare.length >= 2) {
+ bar.style.display = 'flex'; document.getElementById('compare-count-text').textContent = `${selectedForCompare.length} agents sélectionnés pour comparaison`; } else {
+ bar.style.display = 'none'; }
+ }
 
-              <p class="text-xs text-muted" style="line-height: 1.5; margin-bottom: 16px;">
-                ${agt.description.length > 110 ? agt.description.substring(0, 110) + '...' : agt.description}
-              </p>
-            </div>
+ function clearComparison() {
+ selectedForCompare = []; updateCompareBar(); applyFilters(); }
 
-            <div style="border-top: 1px solid var(--ink-100); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-              <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8125rem; cursor: pointer; user-select: none;">
-                <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCompareAgent('${agt.id}', this.checked)">
-                <span>Comparer</span>
-              </label>
-
-              <div style="display: flex; gap: 8px;">
-                <a href="agent-profil.html?id=${agt.id}" class="btn btn-secondary btn-sm">Voir la fiche →</a>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function toggleCompareAgent(agentId, checked) {
-      if (checked) {
-        if (selectedForCompare.length >= 3) {
-          alert('Vous pouvez comparer jusqu’à 3 agents simultanément.');
-          applyFilters();
-          return;
-        }
-        if (!selectedForCompare.includes(agentId)) selectedForCompare.push(agentId);
-      } else {
-        selectedForCompare = selectedForCompare.filter(id => id !== agentId);
-      }
-
-      updateCompareBar();
-    }
-
-    function updateCompareBar() {
-      const bar = document.getElementById('compare-bar');
-      if (selectedForCompare.length >= 2) {
-        bar.style.display = 'flex';
-        document.getElementById('compare-count-text').textContent = `${selectedForCompare.length} agents sélectionnés pour comparaison`;
-      } else {
-        bar.style.display = 'none';
-      }
-    }
-
-    function clearComparison() {
-      selectedForCompare = [];
-      updateCompareBar();
-      applyFilters();
-    }
-
-    function launchComparison() {
-      const ids = selectedForCompare.join(',');
-      window.location.href = `app/principal/comparateur.html?agents=${ids}`;
-    }
-  </script>
+ function launchComparison() {
+ const ids = selectedForCompare.join(','); window.location.href = `app/principal/comparateur.html?agents=${ids}`; }
+ </script>
 </body>
 </html>

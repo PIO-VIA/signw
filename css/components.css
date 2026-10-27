@@ -18,7 +18,22 @@
   white-space: nowrap;
   user-select: none;
   max-width: 100%;
+  min-width: 0;
   box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Boutons pleine largeur / libellés longs : autoriser le retour à la ligne */
+.btn.w-full,
+.btn.btn-wrap,
+.modal-footer .btn,
+.audit-decision-zone .btn {
+  white-space: normal;
+  height: auto;
+  overflow: visible;
+  text-overflow: unset;
+  text-align: center;
+  line-height: 1.35;
 }
 
 .btn:disabled, .btn.disabled {
@@ -30,13 +45,11 @@
 .btn-primary {
   background-color: var(--brand-700);
   color: var(--white);
-  box-shadow: 0 2px 4px rgba(122, 27, 52, 0.2);
+  box-shadow: none;
 }
 .btn-primary:hover {
   background-color: var(--brand-900);
   color: var(--white);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(122, 27, 52, 0.25);
 }
 
 .btn-secondary {
@@ -51,15 +64,18 @@
   color: var(--ink-900);
 }
 
+/* Accent certificat / niveau Or — ne pas utiliser comme CTA principal */
 .btn-gold {
-  background-color: var(--gold-500);
-  color: #1A1203;
-  font-weight: 700;
-  box-shadow: 0 2px 4px rgba(217, 154, 30, 0.25);
+  background-color: var(--gold-100);
+  color: var(--gold-600);
+  font-weight: 600;
+  border: 1px solid rgba(184, 128, 21, 0.35);
+  box-shadow: none;
 }
 .btn-gold:hover {
-  background-color: #B88015;
-  color: var(--white);
+  background-color: var(--gold-500);
+  color: #1A1203;
+  border-color: var(--gold-500);
 }
 
 .btn-ghost {
@@ -86,12 +102,13 @@
 }
 
 .btn-lg {
-  padding: 14px 26px;
-  font-size: 1.0625rem;
+  padding: 12px 22px;
+  font-size: var(--text-md);
   border-radius: var(--radius-md);
 }
 
-.btn-icon {
+.btn-icon,
+.icon-btn {
   width: 36px;
   height: 36px;
   padding: 0;
@@ -99,6 +116,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  color: var(--ink-700);
+}
+.icon-btn:hover {
+  background: var(--ink-100);
+  color: var(--ink-900);
 }
 
 /* 2. FORM ELEMENTS */
@@ -204,15 +226,16 @@ textarea.form-control {
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
   white-space: nowrap;
+  text-transform: none;
+  border: 1px solid transparent;
 }
 
 .badge-draft, .badge-brouillon { background: #EDF0F3; color: #4B5563; }
@@ -234,17 +257,16 @@ textarea.form-control {
 
 /* 4. CARDS */
 .card {
-  background-color: var(--white);
+  background-color: var(--surface);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--ink-200);
-  box-shadow: var(--shadow-sm);
-  padding: var(--space-6);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-xs);
+  padding: var(--space-5);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 .card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   border-color: var(--ink-300);
 }
 
@@ -254,13 +276,11 @@ textarea.form-control {
   justify-content: space-between;
   margin-bottom: var(--space-4);
   padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--ink-100);
 }
 
 .card-footer {
   margin-top: var(--space-4);
   padding-top: var(--space-3);
-  border-top: 1px solid var(--ink-100);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -279,16 +299,91 @@ textarea.form-control {
 }
 .kpi-val {
   font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--brand-900);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--ink-900);
   line-height: 1.1;
 }
 .kpi-label {
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: var(--text-sm);
+  font-weight: 500;
   color: var(--ink-500);
 }
+
+/* Page header (dashboards) */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+.page-header h1,
+.page-header h2 {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+}
+.page-header p {
+  margin: 4px 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-500);
+}
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* KPI strip */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+@media (max-width: 900px) {
+  .kpi-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .kpi-strip { grid-template-columns: 1fr; }
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  color: var(--ink-500);
+}
+.empty-state .icon {
+  margin: 0 auto var(--space-3);
+  color: var(--ink-300);
+}
+.empty-state h3 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+  color: var(--ink-700);
+}
+
+/* Alert / callout sobre */
+.alert {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface);
+  font-size: var(--text-sm);
+  color: var(--ink-700);
+}
+.alert .icon { flex-shrink: 0; margin-top: 1px; }
+.alert-warning { background: var(--warning-bg); border-color: #F0D9A8; color: #7A4E00; }
+.alert-success { background: var(--success-bg); border-color: #B7E0C8; color: #145C3A; }
+.alert-danger { background: var(--danger-bg); border-color: #F0C4BE; color: #8B2A22; }
+.alert-info { background: var(--info-bg); border-color: #C5D4F5; color: #1A4A9E; }
 
 /* 5. TABLES */
 .table-container {
@@ -475,6 +570,8 @@ textarea.form-control {
   box-shadow: var(--shadow-xl);
   transform: translateY(12px) scale(0.98);
   transition: transform var(--transition-fast);
+  min-width: 0;
+  overflow: hidden;
 }
 .modal-overlay.open .modal-card {
   transform: translateY(0) scale(1);
@@ -492,13 +589,17 @@ textarea.form-control {
 }
 .modal-footer {
   padding: var(--space-4) var(--space-6);
-  border-top: 1px solid var(--ink-200);
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  flex-wrap: wrap;
   gap: var(--space-3);
   background: var(--ink-50);
   border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  min-width: 0;
+}
+.modal-footer .btn {
+  flex: 0 1 auto;
 }
 
 /* Lateral Drawer */
@@ -553,7 +654,7 @@ textarea.form-control {
   border-radius: var(--radius-md);
   padding: 12px 18px;
   box-shadow: var(--shadow-lg);
-  border-left: 4px solid var(--brand-700);
+  border: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -562,10 +663,10 @@ textarea.form-control {
   font-size: 0.875rem;
   animation: slideIn 0.25s ease-out;
 }
-.toast-success { border-left-color: var(--success); }
-.toast-error { border-left-color: var(--danger); }
-.toast-warning { border-left-color: var(--warning); }
-.toast-info { border-left-color: var(--info); }
+.toast-success { border-color: #B7E0C8; background: var(--success-bg); }
+.toast-error { border-color: #F0C4BE; background: var(--danger-bg); }
+.toast-warning { border-color: #F0D9A8; background: var(--warning-bg); }
+.toast-info { border-color: #C5D4F5; background: var(--info-bg); }
 
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }
@@ -609,13 +710,14 @@ textarea.form-control {
 .accordion-trigger {
   width: 100%;
   text-align: left;
-  padding: 16px 20px;
-  font-weight: 700;
-  font-size: 1rem;
+  padding: 14px 16px;
+  font-weight: 600;
+  font-size: var(--text-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: var(--white);
+  gap: var(--space-3);
 }
 .accordion-trigger:hover {
   background: var(--ink-50);

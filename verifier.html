@@ -1,185 +1,152 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vérification Officielle de Certificat — signw</title>
-  <meta name="description" content="Vérifiez l'authenticité d'un certificat signw grâce à son identifiant unique SGW-AAAA-NNNNN.">
-  <link rel="icon" type="image/png" href="favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Vérification Officielle de Certificat — signw</title>
+ <meta name="description" content="Vérifiez l'authenticité d'un certificat signw grâce à son identifiant unique SGW-AAAA-NNNNN.">
+ <link rel="icon" type="image/png" href="favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/pages.css">
+ <link rel="stylesheet" href="css/tokens.css">
+ <link rel="stylesheet" href="css/base.css">
+ <link rel="stylesheet" href="css/components.css">
+ <link rel="stylesheet" href="css/layout.css">
+ <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
 
-  <header id="public-header"></header>
+ <header id="public-header"></header>
 
-  <main class="container" style="padding-top: 50px; padding-bottom: 90px; max-width: 780px;">
-    <!-- En-tête -->
-    <div class="text-center" style="margin-bottom: 40px;">
-      <span class="badge badge-certifie" style="margin-bottom: 10px;">Registre public de confiance</span>
-      <h1>Vérification d’un Certificat signw</h1>
-      <p class="lead">
-        Saisissez le code unique figurant au bas du certificat papier ou numérique (ex. <code>SGW-2026-00481</code>) pour en contrôler immédiatement la validité officielle.
-      </p>
-    </div>
+ <main class="container" style="padding-top: 50px; padding-bottom: 90px; max-width: 780px;">
+ <!-- En-tête -->
+ <div class="text-center" style="margin-bottom: 40px;">
+ <span class="badge badge-certifie" style="margin-bottom: 10px;">Registre public de confiance</span>
+ <h1>Vérification d’un Certificat signw</h1>
+ <p class="lead">
+ Saisissez le code unique figurant au bas du certificat papier ou numérique (ex. <code>SGW-2026-00481</code>) pour en contrôler immédiatement la validité officielle.
+ </p>
+ </div>
 
-    <!-- Boîte de saisie -->
-    <div class="card" style="padding: 32px; box-shadow: var(--shadow-lg); margin-bottom: 32px;">
-      <form onsubmit="handleVerify(event)">
-        <label class="form-label" for="cert-code-input" style="font-size: 1rem; margin-bottom: 8px;">
-          Code d’identification unique du certificat :
-        </label>
-        <div style="display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
-          <input type="text" id="cert-code-input" class="form-control" style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; text-transform: uppercase; flex: 1; min-width: 220px;" placeholder="SGW-2026-00481" required>
-          <button type="submit" class="btn btn-gold btn-lg" style="padding-left: 28px; padding-right: 28px;">
-            Vérifier
-          </button>
-        </div>
-        <div class="text-xs text-muted">
-          💡 Exemples de codes pour le test : <code>SGW-2026-00481</code> (Or), <code>SGW-2026-00405</code> (Argent), <code>SGW-2025-00088</code> (Expiré).
-        </div>
-      </form>
-    </div>
+ <!-- Boîte de saisie -->
+ <div class="card" style="padding: 32px; box-shadow: var(--shadow-lg); margin-bottom: 32px;">
+ <form onsubmit="handleVerify(event)">
+ <label class="form-label" for="cert-code-input" style="font-size: 1rem; margin-bottom: 8px;">
+ Code d’identification unique du certificat :
+ </label>
+ <div style="display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+ <input type="text" id="cert-code-input" class="form-control" style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; text-transform: uppercase; flex: 1; min-width: 220px;" placeholder="SGW-2026-00481" required>
+ <button type="submit" class="btn btn-primary" style="padding-left: 28px; padding-right: 28px;">
+ Vérifier
+ </button>
+ </div>
+ <div class="text-xs text-muted">
+ Exemples de codes pour le test : <code>SGW-2026-00481</code> (Or), <code>SGW-2026-00405</code> (Argent), <code>SGW-2025-00088</code> (Expiré).
+ </div>
+ </form>
+ </div>
 
-    <!-- Zone de résultat -->
-    <div id="verify-result-mount">
-      <!-- Rendu dynamique JS -->
-    </div>
+ <!-- Zone de résultat -->
+ <div id="verify-result-mount">
+ <!-- Rendu dynamique JS -->
+ </div>
 
-    <!-- Explication de sécurité -->
-    <div class="card" style="margin-top: 40px; padding: 24px; background: #FAFBFD;">
-      <h5 style="margin-bottom: 10px;">Comment fonctionne la signature signw ?</h5>
-      <p class="text-sm text-muted" style="line-height: 1.6; margin: 0;">
-        Chaque certificat délivré par signw est immatriculé de manière inaltérable dans notre registre public. La falsification d'un document papier est rendue inopérante car le maître d'ouvrage peut vérifier en temps réel si les dates de validité, le score et le signataire correspondent exactement aux archives certifiées.
-      </p>
-    </div>
-  </main>
+ <!-- Explication de sécurité -->
+ <div class="card" style="margin-top: 40px; padding: 24px; background: #FAFBFD;">
+ <h5 style="margin-bottom: 10px;">Comment fonctionne la signature signw ?</h5>
+ <p class="text-sm text-muted" style="line-height: 1.6; margin: 0;">
+ Chaque certificat délivré par signw est immatriculé de manière inaltérable dans notre registre public. La falsification d'un document papier est rendue inopérante car le maître d'ouvrage peut vérifier en temps réel si les dates de validité, le score et le signataire correspondent exactement aux archives certifiées.
+ </p>
+ </div>
+ </main>
 
-  <footer id="public-footer"></footer>
+ <footer id="public-footer"></footer>
 
-  <script src="js/data/seed.js"></script>
-  <script src="js/core/utils.js"></script>
-  <script src="js/core/store.js"></script>
-  <script src="js/core/auth.js"></script>
-  <script src="js/core/score.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/layout.js"></script>
+ <script src="js/data/seed.js"></script>
+ <script src="js/core/utils.js"></script>
+ <script src="js/core/store.js"></script>
+ <script src="js/core/auth.js"></script>
+ <script src="js/core/score.js"></script>
+ <script src="js/core/ui.js"></script>
+ <script src="js/core/icons.js"></script>
+ <script src="js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
-      if (code) {
-        document.getElementById('cert-code-input').value = code;
-        runVerification(code);
-      }
-    });
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ const urlParams = new URLSearchParams(window.location.search); const code = urlParams.get('code'); if (code) {
+ document.getElementById('cert-code-input').value = code; runVerification(code); }
+ }); function handleVerify(e) {
+ e.preventDefault(); const code = document.getElementById('cert-code-input').value.trim(); runVerification(code); }
 
-    function handleVerify(e) {
-      e.preventDefault();
-      const code = document.getElementById('cert-code-input').value.trim();
-      runVerification(code);
-    }
+ function runVerification(code) {
+ const mount = document.getElementById('verify-result-mount'); if (!mount) return; const cert = window.SignwStore.getCertificationByCode(code); if (!cert) {
+ mount.innerHTML = `
+ <div class="card text-center" style="background: var(--danger-bg); border: 2px solid var(--danger); padding: 36px;">
+ <div style="font-size: 3rem; margin-bottom: 12px;"></div>
+ <h3 style="color: var(--danger); margin-bottom: 8px;">Certificat Introuvable ou Non Reconnu</h3>
+ <p style="color: #742A2A; font-size: 0.95rem; margin-bottom: 16px;">
+ Aucun document portant le code <strong>"${code}"</strong> n’a été délivré par la plateforme signw.
+ </p>
+ <div class="badge badge-rejete" style="font-size: 0.8125rem;">ATTENTION : RISQUE DE FRAUDE OU ERREUR DE SAISIE</div>
+ </div>
+ `; return; }
 
-    function runVerification(code) {
-      const mount = document.getElementById('verify-result-mount');
-      if (!mount) return;
+ const agent = window.SignwStore.getAgentById(cert.agentId); const isExpired = cert.statut === 'expiree' || new Date(cert.expireLe) < new Date(); const isSuspended = cert.statut === 'suspendue'; let statusTheme = 'var(--success-bg)'; let borderColor = 'var(--success)'; let statusTitle = ' Certificat Officiel Valide & Actif'; let titleColor = 'var(--success)'; if (isExpired) {
+ statusTheme = '#F3F4F6'; borderColor = '#9CA3AF'; statusTitle = ' Certificat Expiré'; titleColor = '#4B5563'; } else if (isSuspended) {
+ statusTheme = 'var(--warning-bg)'; borderColor = 'var(--warning)'; statusTitle = '⏸ Certificat Temporairement Suspendu'; titleColor = '#9A5B00'; }
 
-      const cert = window.SignwStore.getCertificationByCode(code);
+ mount.innerHTML = `
+ <div class="card" style="background: ${statusTheme}; border: 2px solid ${borderColor}; padding: 32px;">
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+ <div>
+ <span class="badge ${isExpired ? 'badge-expire' : (isSuspended ? 'badge-suspendu' : 'badge-certifie')}" style="font-size: 0.8125rem; margin-bottom: 8px;">
+ ${isExpired ? 'EXPIRÉ' : (isSuspended ? 'SUSPENDU' : 'ACTIF')}
+ </span>
+ <h3 style="color: ${titleColor}; margin: 0;">${statusTitle}</h3>
+ </div>
+ ${window.SignwUI.renderScoreGauge(cert.score, 60)}
+ </div>
 
-      if (!cert) {
-        mount.innerHTML = `
-          <div class="card text-center" style="background: var(--danger-bg); border: 2px solid var(--danger); padding: 36px;">
-            <div style="font-size: 3rem; margin-bottom: 12px;">❌</div>
-            <h3 style="color: var(--danger); margin-bottom: 8px;">Certificat Introuvable ou Non Reconnu</h3>
-            <p style="color: #742A2A; font-size: 0.95rem; margin-bottom: 16px;">
-              Aucun document portant le code <strong>"${code}"</strong> n’a été délivré par la plateforme signw.
-            </p>
-            <div class="badge badge-rejete" style="font-size: 0.8125rem;">ATTENTION : RISQUE DE FRAUDE OU ERREUR DE SAISIE</div>
-          </div>
-        `;
-        return;
-      }
+ <!-- Détails de l'entreprise -->
+ <div style="background: var(--white); border-radius: var(--radius-md); padding: 20px; border: 1px solid var(--ink-200); margin-bottom: 20px;">
+ <div style="font-size: 0.75rem; color: var(--ink-500); margin-bottom: 4px;">BÉNÉFICIAIRE CERTIFIÉ :</div>
+ <h2 style="font-size: 1.5rem; margin: 0 0 6px;">${agent ? agent.raisonSociale : 'Entreprise Référencée'}</h2>
+ <div style="font-size: 0.875rem; color: var(--ink-700);">
+ Forme : ${agent ? agent.formeJuridique : 'SARL'} • RCCM : ${agent ? agent.rccm : '—'} • Ville : ${agent ? agent.ville : 'Douala'}
+ </div>
+ </div>
 
-      const agent = window.SignwStore.getAgentById(cert.agentId);
-      const isExpired = cert.statut === 'expiree' || new Date(cert.expireLe) < new Date();
-      const isSuspended = cert.statut === 'suspendue';
+ <!-- Grille des métadonnées officielles -->
+ <div class="grid grid-cols-3 gap-3" style="margin-bottom: 24px;">
+ <div style="background: var(--white); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--ink-200);">
+ <div class="text-xs text-muted">NIVEAU ATTRIBUÉ</div>
+ <div style="margin-top: 4px;">${window.SignwUtils.getTierBadge(cert.niveau)}</div>
+ </div>
+ <div style="background: var(--white); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--ink-200);">
+ <div class="text-xs text-muted">DÉLIVRÉ LE</div>
+ <div class="font-bold text-sm" style="margin-top: 4px;">${window.SignwUtils.formatDateFR(cert.delivreeLe)}</div>
+ </div>
+ <div style="background: var(--white); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--ink-200);">
+ <div class="text-xs text-muted">DATE D’EXPIRATION</div>
+ <div class="font-bold text-sm" style="margin-top: 4px; color: ${isExpired ? 'var(--danger)' : 'inherit'};">${window.SignwUtils.formatDateFR(cert.expireLe)}</div>
+ </div>
+ </div>
 
-      let statusTheme = 'var(--success-bg)';
-      let borderColor = 'var(--success)';
-      let statusTitle = '✓ Certificat Officiel Valide & Actif';
-      let titleColor = 'var(--success)';
-
-      if (isExpired) {
-        statusTheme = '#F3F4F6';
-        borderColor = '#9CA3AF';
-        statusTitle = '⚠️ Certificat Expiré';
-        titleColor = '#4B5563';
-      } else if (isSuspended) {
-        statusTheme = 'var(--warning-bg)';
-        borderColor = 'var(--warning)';
-        statusTitle = '⏸️ Certificat Temporairement Suspendu';
-        titleColor = '#9A5B00';
-      }
-
-      mount.innerHTML = `
-        <div class="card" style="background: ${statusTheme}; border: 2px solid ${borderColor}; padding: 32px;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-            <div>
-              <span class="badge ${isExpired ? 'badge-expire' : (isSuspended ? 'badge-suspendu' : 'badge-certifie')}" style="font-size: 0.8125rem; margin-bottom: 8px;">
-                ${isExpired ? 'EXPIRÉ' : (isSuspended ? 'SUSPENDU' : 'ACTIF')}
-              </span>
-              <h3 style="color: ${titleColor}; margin: 0;">${statusTitle}</h3>
-            </div>
-            ${window.SignwUI.renderScoreGauge(cert.score, 60)}
-          </div>
-
-          <!-- Détails de l'entreprise -->
-          <div style="background: var(--white); border-radius: var(--radius-md); padding: 20px; border: 1px solid var(--ink-200); margin-bottom: 20px;">
-            <div style="font-size: 0.75rem; color: var(--ink-500); margin-bottom: 4px;">BÉNÉFICIAIRE CERTIFIÉ :</div>
-            <h2 style="font-size: 1.5rem; margin: 0 0 6px;">${agent ? agent.raisonSociale : 'Entreprise Référencée'}</h2>
-            <div style="font-size: 0.875rem; color: var(--ink-700);">
-              Forme : ${agent ? agent.formeJuridique : 'SARL'} • RCCM : ${agent ? agent.rccm : '—'} • Ville : ${agent ? agent.ville : 'Douala'}
-            </div>
-          </div>
-
-          <!-- Grille des métadonnées officielles -->
-          <div class="grid grid-cols-3 gap-3" style="margin-bottom: 24px;">
-            <div style="background: var(--white); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--ink-200);">
-              <div class="text-xs text-muted">NIVEAU ATTRIBUÉ</div>
-              <div style="margin-top: 4px;">${window.SignwUtils.getTierBadge(cert.niveau)}</div>
-            </div>
-            <div style="background: var(--white); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--ink-200);">
-              <div class="text-xs text-muted">DÉLIVRÉ LE</div>
-              <div class="font-bold text-sm" style="margin-top: 4px;">${window.SignwUtils.formatDateFR(cert.delivreeLe)}</div>
-            </div>
-            <div style="background: var(--white); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--ink-200);">
-              <div class="text-xs text-muted">DATE D’EXPIRATION</div>
-              <div class="font-bold text-sm" style="margin-top: 4px; color: ${isExpired ? 'var(--danger)' : 'inherit'};">${window.SignwUtils.formatDateFR(cert.expireLe)}</div>
-            </div>
-          </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 16px;">
-            <div class="text-xs text-muted">
-              Signataire officiel : <strong>${cert.signataire}</strong>
-            </div>
-            ${agent ? `
-              <a href="agent-profil.html?id=${agent.id}" class="btn btn-primary btn-sm">
-                Consulter la fiche complète de l'agent →
-              </a>
-            ` : ''}
-          </div>
-        </div>
-      `;
-    }
-  </script>
+ <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 16px;">
+ <div class="text-xs text-muted">
+ Signataire officiel : <strong>${cert.signataire}</strong>
+ </div>
+ ${agent ? `
+ <a href="agent-profil.html?id=${agent.id}" class="btn btn-primary btn-sm">
+ Consulter la fiche complète de l'agent →
+ </a>
+ ` : ''}
+ </div>
+ </div>
+ `; }
+ </script>
 </body>
 </html>

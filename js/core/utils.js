@@ -114,11 +114,8 @@ window.SignwUtils = {
       'revoque': { label: 'Révoqué', class: 'badge-revoque', icon: 'alert-octagon' }
     };
 
-    const info = map[s] || { label: s, class: 'badge-brouillon', icon: 'help-circle' };
-    return `<span class="badge ${info.class}" data-status="${s}">
-      <span class="badge-dot">●</span>
-      ${info.label}
-    </span>`;
+    const info = map[s] || { label: s, class: 'badge-brouillon', icon: 'info' };
+    return `<span class="badge ${info.class}" data-status="${s}">${info.label}</span>`;
   },
 
   /**
@@ -128,16 +125,16 @@ window.SignwUtils = {
     if (!niveau) return '';
     const n = String(niveau).toLowerCase();
     if (n.includes('or')) {
-      return `<span class="badge badge-tier-gold">★ NIVEAU OR</span>`;
+      return `<span class="badge badge-tier-gold">Niveau Or</span>`;
     }
     if (n.includes('argent')) {
-      return `<span class="badge badge-tier-silver">★ NIVEAU ARGENT</span>`;
+      return `<span class="badge badge-tier-silver">Niveau Argent</span>`;
     }
     if (n.includes('bronze')) {
-      return `<span class="badge badge-tier-bronze">★ NIVEAU BRONZE</span>`;
+      return `<span class="badge badge-tier-bronze">Niveau Bronze</span>`;
     }
     if (n.includes('réserve') || n.includes('reserve')) {
-      return `<span class="badge badge-certifie_avec_reserves">⚠ AVEC RÉSERVES</span>`;
+      return `<span class="badge badge-certifie_avec_reserves">Avec réserves</span>`;
     }
     return `<span class="badge badge-brouillon">${niveau}</span>`;
   },

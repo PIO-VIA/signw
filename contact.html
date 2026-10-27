@@ -1,139 +1,136 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contactez-nous — signw</title>
-  <meta name="description" content="Prenez contact avec les équipes de signw à Douala et Yaoundé.">
-  <link rel="icon" type="image/png" href="favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Contactez-nous — signw</title>
+ <meta name="description" content="Prenez contact avec les équipes de signw à Douala et Yaoundé.">
+ <link rel="icon" type="image/png" href="favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/pages.css">
+ <link rel="stylesheet" href="css/tokens.css">
+ <link rel="stylesheet" href="css/base.css">
+ <link rel="stylesheet" href="css/components.css">
+ <link rel="stylesheet" href="css/layout.css">
+ <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
 
-  <header id="public-header"></header>
+ <header id="public-header"></header>
 
-  <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
-    <div class="text-center" style="margin-bottom: 48px;">
-      <span class="badge badge-soumis" style="margin-bottom: 8px;">Écoute & Accompagnement</span>
-      <h1>Contactez les Équipes signw</h1>
-      <p class="lead" style="max-width: 680px; margin: 0 auto;">
-        Vous souhaitez vous faire certifier, auditer vos prestataires ou intégrer un nouveau secteur d'activité ? Nous vous répondons sous 24 heures.
-      </p>
-    </div>
+ <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
+ <div class="text-center" style="margin-bottom: 48px;">
+ <span class="badge badge-soumis" style="margin-bottom: 8px;">Écoute & Accompagnement</span>
+ <h1>Contactez les Équipes signw</h1>
+ <p class="lead" style="max-width: 680px; margin: 0 auto;">
+ Vous souhaitez vous faire certifier, auditer vos prestataires ou intégrer un nouveau secteur d'activité ? Nous vous répondons sous 24 heures.
+ </p>
+ </div>
 
-    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start;">
-      <!-- Formulaire de contact -->
-      <div class="card" style="padding: 32px;">
-        <h3 style="margin-bottom: 20px;">Envoyer un message</h3>
-        <form onsubmit="handleContactSubmit(event)">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label text-xs">Nom complet :</label>
-              <input type="text" id="contact-nom" class="form-control" placeholder="M. Paul Ndongo" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label text-xs">Organisation / Entreprise :</label>
-              <input type="text" id="contact-org" class="form-control" placeholder="Mairie ou Société" required>
-            </div>
-          </div>
+ <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start;">
+ <!-- Formulaire de contact -->
+ <div class="card" style="padding: 32px;">
+ <h3 style="margin-bottom: 20px;">Envoyer un message</h3>
+ <form onsubmit="handleContactSubmit(event)">
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+ <div class="form-group">
+ <label class="form-label text-xs">Nom complet :</label>
+ <input type="text" id="contact-nom" class="form-control" placeholder="M. Paul Ndongo" required>
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Organisation / Entreprise :</label>
+ <input type="text" id="contact-org" class="form-control" placeholder="Mairie ou Société" required>
+ </div>
+ </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label text-xs">Adresse email :</label>
-              <input type="email" id="contact-email" class="form-control" placeholder="direction@organisation.cm" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label text-xs">Téléphone :</label>
-              <input type="tel" id="contact-tel" class="form-control" placeholder="+237 6..." required>
-            </div>
-          </div>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+ <div class="form-group">
+ <label class="form-label text-xs">Adresse email :</label>
+ <input type="email" id="contact-email" class="form-control" placeholder="direction@organisation.cm" required>
+ </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Téléphone :</label>
+ <input type="tel" id="contact-tel" class="form-control" placeholder="+237 6..." required>
+ </div>
+ </div>
 
-          <div class="form-group">
-            <label class="form-label text-xs">Objet de votre demande :</label>
-            <select id="contact-subject" class="form-control" required>
-              <option value="certif">Demande d'information sur la certification</option>
-              <option value="adequation">Accompagnement Maître d'ouvrage / Passation</option>
-              <option value="nouveau_secteur">Proposer un nouveau secteur d'activité</option>
-              <option value="partenariat">Partenariat institutionnel</option>
-              <option value="autre">Autre demande</option>
-            </select>
-          </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Objet de votre demande :</label>
+ <select id="contact-subject" class="form-control" required>
+ <option value="certif">Demande d'information sur la certification</option>
+ <option value="adequation">Accompagnement Maître d'ouvrage / Passation</option>
+ <option value="nouveau_secteur">Proposer un nouveau secteur d'activité</option>
+ <option value="partenariat">Partenariat institutionnel</option>
+ <option value="autre">Autre demande</option>
+ </select>
+ </div>
 
-          <div class="form-group">
-            <label class="form-label text-xs">Votre message :</label>
-            <textarea id="contact-msg" class="form-control" placeholder="Décrivez votre besoin..." rows="5" required></textarea>
-          </div>
+ <div class="form-group">
+ <label class="form-label text-xs">Votre message :</label>
+ <textarea id="contact-msg" class="form-control" placeholder="Décrivez votre besoin..." rows="5" required></textarea>
+ </div>
 
-          <button type="submit" class="btn btn-primary btn-lg w-full">
-            Transmettre votre message →
-          </button>
-        </form>
-      </div>
+ <button type="submit" class="btn btn-primary btn-lg w-full">
+ Transmettre votre message →
+ </button>
+ </form>
+ </div>
 
-      <!-- Coordonnées et Bureaux -->
-      <div style="display: flex; flex-direction: column; gap: 24px;">
-        <div class="card" style="padding: 28px;">
-          <h4 style="color: var(--brand-900); margin-bottom: 16px;">📍 Nos Bureaux au Cameroun</h4>
+ <!-- Coordonnées et Bureaux -->
+ <div style="display: flex; flex-direction: column; gap: 24px;">
+ <div class="card" style="padding: 28px;">
+ <h4 style="color: var(--brand-900); margin-bottom: 16px;"> Nos Bureaux au Cameroun</h4>
 
-          <div style="margin-bottom: 20px;">
-            <strong style="color: var(--brand-700); font-size: 1rem;">Antenne Régionale Littoral (Douala)</strong>
-            <p class="text-sm text-muted" style="margin: 4px 0 0;">
-              45 Boulevard de la Liberté, Quartier Akwa, Douala<br>
-              📞 +237 233 42 00 00 / +237 699 12 34 56<br>
-              ✉️ douala@signw.cm
-            </p>
-          </div>
+ <div style="margin-bottom: 20px;">
+ <strong style="color: var(--brand-700); font-size: 1rem;">Antenne Régionale Littoral (Douala)</strong>
+ <p class="text-sm text-muted" style="margin: 4px 0 0;">
+ 45 Boulevard de la Liberté, Quartier Akwa, Douala<br>
+ +237 233 42 00 00 / +237 699 12 34 56<br>
+  douala@signw.cm
+ </p>
+ </div>
 
-          <div style="border-top: 1px solid var(--ink-200); padding-top: 16px; margin-bottom: 20px;">
-            <strong style="color: var(--brand-700); font-size: 1rem;">Délégation Nationale Centre (Yaoundé)</strong>
-            <p class="text-sm text-muted" style="margin: 4px 0 0;">
-              Immeuble Émergence, Boulevard du 20 Mai, Yaoundé<br>
-              📞 +237 222 23 45 67<br>
-              ✉️ yaounde@signw.cm
-            </p>
-          </div>
+ <div style="border-top: 1px solid var(--ink-200); padding-top: 16px; margin-bottom: 20px;">
+ <strong style="color: var(--brand-700); font-size: 1rem;">Délégation Nationale Centre (Yaoundé)</strong>
+ <p class="text-sm text-muted" style="margin: 4px 0 0;">
+ Immeuble Émergence, Boulevard du 20 Mai, Yaoundé<br>
+ +237 222 23 45 67<br>
+  yaounde@signw.cm
+ </p>
+ </div>
 
-          <div style="background: var(--ink-50); padding: 14px; border-radius: var(--radius-md); font-size: 0.8125rem;">
-            <strong>Horaires d'accueil au public :</strong><br>
-            Du lundi au vendredi de 08h00 à 17h30 sans interruption.
-          </div>
-        </div>
+ <div style="background: var(--ink-50); padding: 14px; border-radius: var(--radius-md); font-size: 0.8125rem;">
+ <strong>Horaires d'accueil au public :</strong><br>
+ Du lundi au vendredi de 08h00 à 17h30 sans interruption.
+ </div>
+ </div>
 
-        <div class="card" style="padding: 24px; background: var(--brand-100); border-left: 4px solid var(--brand-700);">
-          <h5 style="color: var(--brand-900); margin-bottom: 8px;">Audit & Déplacement Terrain</h5>
-          <p class="text-xs text-muted" style="margin: 0; line-height: 1.5;">
-            Nos inspecteurs se déplacent dans les 10 régions du Cameroun pour auditer les parcs matériels et les chantiers en cours.
-          </p>
-        </div>
-      </div>
-    </div>
-  </main>
+ <div class="card" style="padding: 24px; background: var(--brand-100);">
+ <h5 style="color: var(--brand-900); margin-bottom: 8px;">Audit & Déplacement Terrain</h5>
+ <p class="text-xs text-muted" style="margin: 0; line-height: 1.5;">
+ Nos inspecteurs se déplacent dans les 10 régions du Cameroun pour auditer les parcs matériels et les chantiers en cours.
+ </p>
+ </div>
+ </div>
+ </div>
+ </main>
 
-  <footer id="public-footer"></footer>
+ <footer id="public-footer"></footer>
 
-  <script src="js/data/seed.js"></script>
-  <script src="js/core/utils.js"></script>
-  <script src="js/core/store.js"></script>
-  <script src="js/core/auth.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/layout.js"></script>
+ <script src="js/data/seed.js"></script>
+ <script src="js/core/utils.js"></script>
+ <script src="js/core/store.js"></script>
+ <script src="js/core/auth.js"></script>
+ <script src="js/core/ui.js"></script>
+ <script src="js/core/icons.js"></script>
+ <script src="js/core/layout.js"></script>
 
-  <script>
-    function handleContactSubmit(e) {
-      e.preventDefault();
-      const nom = document.getElementById('contact-nom').value;
-      window.SignwUI.showToast(`Merci ${nom}, votre message a bien été transmis aux auditeurs signw !`, 'success');
-      e.target.reset();
-    }
-  </script>
+ <script>
+ function handleContactSubmit(e) {
+ e.preventDefault(); const nom = document.getElementById('contact-nom').value; window.SignwUI.showToast(`Merci ${nom}, votre message a bien été transmis aux auditeurs signw !`, 'success'); e.target.reset(); }
+ </script>
 </body>
 </html>

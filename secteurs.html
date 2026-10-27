@@ -1,171 +1,145 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secteurs d’Activité — signw</title>
-  <meta name="description" content="Découvrez les secteurs économiques certifiés par signw : BTP, Énergie, Agriculture, Numérique, Santé, Logistique.">
-  <link rel="icon" type="image/png" href="favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Secteurs d’Activité — signw</title>
+ <meta name="description" content="Découvrez les secteurs économiques certifiés par signw : BTP, Énergie, Agriculture, Numérique, Santé, Logistique.">
+ <link rel="icon" type="image/png" href="favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/pages.css">
+ <link rel="stylesheet" href="css/tokens.css">
+ <link rel="stylesheet" href="css/base.css">
+ <link rel="stylesheet" href="css/components.css">
+ <link rel="stylesheet" href="css/layout.css">
+ <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
 
-  <header id="public-header"></header>
+ <header id="public-header"></header>
 
-  <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
-    <!-- En-tête -->
-    <div style="margin-bottom: 36px;">
-      <span class="badge badge-soumis" style="margin-bottom: 8px;">Filières professionnelles</span>
-      <h1>Secteurs d’Activité Certifiés</h1>
-      <p class="lead" style="max-width: 780px;">
-        Chaque secteur économique dispose d’un barème d’audit adapté à ses contraintes techniques réelles et à ses équipements spécifiques.
-      </p>
+ <main class="container" style="padding-top: 40px; padding-bottom: 80px;">
+ <!-- En-tête -->
+ <div style="margin-bottom: 36px;">
+ <span class="badge badge-soumis" style="margin-bottom: 8px;">Filières professionnelles</span>
+ <h1>Secteurs d’Activité Certifiés</h1>
+ <p class="lead" style="max-width: 780px;">
+ Chaque secteur économique dispose d’un barème d’audit adapté à ses contraintes techniques réelles et à ses équipements spécifiques.
+ </p>
 
-      <!-- Filtres -->
-      <div style="display: flex; gap: 8px; margin-top: 24px;">
-        <button class="btn btn-sm btn-primary filter-btn" onclick="filterSectors('all', this)">Tous les secteurs</button>
-        <button class="btn btn-sm btn-secondary filter-btn" onclick="filterSectors('actif', this)">Secteurs Actifs</button>
-        <button class="btn btn-sm btn-secondary filter-btn" onclick="filterSectors('bientot', this)">Prochainement</button>
-      </div>
-    </div>
+ <!-- Filtres -->
+ <div style="display: flex; gap: 8px; margin-top: 24px;">
+ <button class="btn btn-sm btn-primary filter-btn" onclick="filterSectors('all', this)">Tous les secteurs</button>
+ <button class="btn btn-sm btn-secondary filter-btn" onclick="filterSectors('actif', this)">Secteurs Actifs</button>
+ <button class="btn btn-sm btn-secondary filter-btn" onclick="filterSectors('bientot', this)">Prochainement</button>
+ </div>
+ </div>
 
-    <!-- Grille des secteurs -->
-    <div class="grid grid-cols-3 gap-6" id="sectors-grid-container">
-      <!-- Rendu dynamique JS -->
-    </div>
+ <!-- Grille des secteurs -->
+ <div class="grid grid-cols-3 gap-6" id="sectors-grid-container">
+ <!-- Rendu dynamique JS -->
+ </div>
 
-    <!-- Modale Détail Secteur -->
-    <div class="modal-overlay" id="sector-detail-modal">
-      <div class="modal-card">
-        <div class="modal-header">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.5rem;" id="modal-sec-icon">🏗️</span>
-            <h4 id="modal-sec-title" style="margin: 0;"></h4>
-          </div>
-          <button class="btn-ghost btn-sm" onclick="SignwUI.closeModal('sector-detail-modal')">&times;</button>
-        </div>
-        <div class="modal-body" id="modal-sec-body">
-          <!-- Injecté dynamiquement -->
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary btn-sm" onclick="SignwUI.closeModal('sector-detail-modal')">Fermer</button>
-          <a href="login.html?role=agent" class="btn btn-primary btn-sm" id="modal-sec-action-btn">
-            Déposer un dossier dans ce secteur →
-          </a>
-        </div>
-      </div>
-    </div>
-  </main>
+ <!-- Modale Détail Secteur -->
+ <div class="modal-overlay" id="sector-detail-modal">
+ <div class="modal-card">
+ <div class="modal-header">
+ <div style="display: flex; align-items: center; gap: 10px;">
+ <span style="font-size: 1.5rem;" id="modal-sec-icon"></span>
+ <h4 id="modal-sec-title" style="margin: 0;"></h4>
+ </div>
+ <button class="btn-ghost btn-sm" onclick="SignwUI.closeModal('sector-detail-modal')">&times;</button>
+ </div>
+ <div class="modal-body" id="modal-sec-body">
+ <!-- Injecté dynamiquement -->
+ </div>
+ <div class="modal-footer">
+ <button class="btn btn-secondary btn-sm" onclick="SignwUI.closeModal('sector-detail-modal')">Fermer</button>
+ <a href="login.html?role=agent" class="btn btn-primary btn-sm" id="modal-sec-action-btn">
+ Déposer un dossier dans ce secteur →
+ </a>
+ </div>
+ </div>
+ </div>
+ </main>
 
-  <footer id="public-footer"></footer>
+ <footer id="public-footer"></footer>
 
-  <script src="js/data/seed.js"></script>
-  <script src="js/core/utils.js"></script>
-  <script src="js/core/store.js"></script>
-  <script src="js/core/auth.js"></script>
-  <script src="js/core/score.js"></script>
-  <script src="js/core/ui.js"></script>
-  <script src="js/core/layout.js"></script>
+ <script src="js/data/seed.js"></script>
+ <script src="js/core/utils.js"></script>
+ <script src="js/core/store.js"></script>
+ <script src="js/core/auth.js"></script>
+ <script src="js/core/score.js"></script>
+ <script src="js/core/ui.js"></script>
+ <script src="js/core/icons.js"></script>
+ <script src="js/core/layout.js"></script>
 
-  <script>
-    let currentFilter = 'all';
+ <script>
+ let currentFilter = 'all'; document.addEventListener('DOMContentLoaded', () => {
+ renderSectors(); }); function filterSectors(type, btn) {
+ currentFilter = type; document.querySelectorAll('.filter-btn').forEach(b => {
+ b.className = 'btn btn-sm btn-secondary filter-btn'; }); btn.className = 'btn btn-sm btn-primary filter-btn'; renderSectors(); }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderSectors();
-    });
+ function renderSectors() {
+ const container = document.getElementById('sectors-grid-container'); if (!container) return; let sectors = window.SignwStore.getSectors(); if (currentFilter === 'actif') {
+ sectors = sectors.filter(s => s.actif); } else if (currentFilter === 'bientot') {
+ sectors = sectors.filter(s => !s.actif); }
 
-    function filterSectors(type, btn) {
-      currentFilter = type;
-      document.querySelectorAll('.filter-btn').forEach(b => {
-        b.className = 'btn btn-sm btn-secondary filter-btn';
-      });
-      btn.className = 'btn btn-sm btn-primary filter-btn';
-      renderSectors();
-    }
+ container.innerHTML = sectors.map(sec => `
+ <div class="card card-hover" style="display: flex; flex-direction: column; overflow: hidden; padding: 0;">
+ <div style="height: 180px; position: relative; overflow: hidden;">
+ <img src="${sec.image || 'assets/img/sector-btp.webp'}" alt="${sec.nom}" style="width: 100%; height: 100%; object-fit: cover;">
+ <div style="position: absolute; top: 12px; right: 12px;">
+ <span class="badge ${sec.actif ? 'badge-certifie' : 'badge-brouillon'}">
+ ${sec.actif ? 'QUALIFICATION OUVERTE' : 'OUVERTURE BIENTÔT'}
+ </span>
+ </div>
+ </div>
+ <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+ <div>
+ <h3 style="font-size: 1.25rem; margin-bottom: 8px;">${sec.nom}</h3>
+ <p class="text-sm text-muted" style="line-height: 1.5; margin-bottom: 16px;">
+ ${sec.description}
+ </p>
+ </div>
+ <div>
+ <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--ink-100); padding-top: 14px; margin-bottom: 14px;">
+ <span class="text-xs text-muted"><strong>${sec.nbAgents || 0}</strong> prestataires certifiés</span>
+ <span class="text-xs text-muted">${sec.coutMoyenM2 ? `~${sec.coutMoyenM2.toLocaleString()} F/m²` : ''}</span>
+ </div>
+ <button class="btn btn-secondary btn-sm w-full" onclick="openSectorModal('${sec.id}')">
+ Consulter les pièces requises →
+ </button>
+ </div>
+ </div>
+ </div>
+ `).join(''); }
 
-    function renderSectors() {
-      const container = document.getElementById('sectors-grid-container');
-      if (!container) return;
-      let sectors = window.SignwStore.getSectors();
+ function openSectorModal(sectorId) {
+ const sec = window.SignwStore.getSectorById(sectorId); if (!sec) return; const schema = window.SignwStore.getFormSchemaBySector(sectorId); const sections = schema ? schema.sections || [] : []; document.getElementById('modal-sec-title').textContent = sec.nom; document.getElementById('modal-sec-body').innerHTML = `
+ <p style="font-size: 0.95rem; color: var(--ink-700); margin-bottom: 20px;">
+ ${sec.description}
+ </p>
 
-      if (currentFilter === 'actif') {
-        sectors = sectors.filter(s => s.actif);
-      } else if (currentFilter === 'bientot') {
-        sectors = sectors.filter(s => !s.actif);
-      }
+ <h5 style="margin-bottom: 12px;">Pièces typiquement requises pour ce secteur :</h5>
+ <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+ ${sections.map(s => `
+ <div style="background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 12px;">
+ <strong style="color: var(--brand-700); font-size: 0.875rem;">${s.titre}</strong>
+ <ul style="padding-left: 20px; font-size: 0.8125rem; margin-top: 6px; color: var(--ink-700);">
+ ${(s.champs || []).map(ch => `<li>${ch.label} ${ch.obligatoire ? '<span style="color: var(--danger)">*</span>' : ''}</li>`).join('')}
+ </ul>
+ </div>
+ `).join('')}
+ </div>
 
-      container.innerHTML = sectors.map(sec => `
-        <div class="card card-hover" style="display: flex; flex-direction: column; overflow: hidden; padding: 0;">
-          <div style="height: 180px; position: relative; overflow: hidden;">
-            <img src="${sec.image || 'assets/img/sector-btp.webp'}" alt="${sec.nom}" style="width: 100%; height: 100%; object-fit: cover;">
-            <div style="position: absolute; top: 12px; right: 12px;">
-              <span class="badge ${sec.actif ? 'badge-certifie' : 'badge-brouillon'}">
-                ${sec.actif ? 'QUALIFICATION OUVERTE' : 'OUVERTURE BIENTÔT'}
-              </span>
-            </div>
-          </div>
-          <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-              <h3 style="font-size: 1.25rem; margin-bottom: 8px;">${sec.nom}</h3>
-              <p class="text-sm text-muted" style="line-height: 1.5; margin-bottom: 16px;">
-                ${sec.description}
-              </p>
-            </div>
-            <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--ink-100); padding-top: 14px; margin-bottom: 14px;">
-                <span class="text-xs text-muted"><strong>${sec.nbAgents || 0}</strong> prestataires certifiés</span>
-                <span class="text-xs text-muted">${sec.coutMoyenM2 ? `~${sec.coutMoyenM2.toLocaleString()} F/m²` : ''}</span>
-              </div>
-              <button class="btn btn-secondary btn-sm w-full" onclick="openSectorModal('${sec.id}')">
-                Consulter les pièces requises →
-              </button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openSectorModal(sectorId) {
-      const sec = window.SignwStore.getSectorById(sectorId);
-      if (!sec) return;
-
-      const schema = window.SignwStore.getFormSchemaBySector(sectorId);
-      const sections = schema ? schema.sections || [] : [];
-
-      document.getElementById('modal-sec-title').textContent = sec.nom;
-      document.getElementById('modal-sec-body').innerHTML = `
-        <p style="font-size: 0.95rem; color: var(--ink-700); margin-bottom: 20px;">
-          ${sec.description}
-        </p>
-
-        <h5 style="margin-bottom: 12px;">Pièces typiquement requises pour ce secteur :</h5>
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
-          ${sections.map(s => `
-            <div style="background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 12px;">
-              <strong style="color: var(--brand-700); font-size: 0.875rem;">${s.titre}</strong>
-              <ul style="padding-left: 20px; font-size: 0.8125rem; margin-top: 6px; color: var(--ink-700);">
-                ${(s.champs || []).map(ch => `<li>${ch.label} ${ch.obligatoire ? '<span style="color: var(--danger)">*</span>' : ''}</li>`).join('')}
-              </ul>
-            </div>
-          `).join('')}
-        </div>
-
-        <div style="background: var(--brand-100); padding: 14px; border-radius: var(--radius-md); border-left: 4px solid var(--brand-700); font-size: 0.875rem;">
-          <strong>Durée de qualification moyenne :</strong> 15 jours ouvrés après recevabilité complète du dossier.
-        </div>
-      `;
-
-      window.SignwUI.openModal('sector-detail-modal');
-    }
-  </script>
+ <div style="background: var(--brand-100); padding: 14px; border-radius: var(--radius-md); font-size: 0.875rem;">
+ <strong>Durée de qualification moyenne :</strong> 15 jours ouvrés après recevabilité complète du dossier.
+ </div>
+ `; window.SignwUI.openModal('sector-detail-modal'); }
+ </script>
 </body>
 </html>

@@ -1,169 +1,139 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tableau de Bord Principal — signw</title>
-  <link rel="icon" type="image/png" href="../../favicon.png">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Tableau de Bord Principal — signw</title>
+ <link rel="icon" type="image/png" href="../../favicon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../../css/tokens.css">
-  <link rel="stylesheet" href="../../css/base.css">
-  <link rel="stylesheet" href="../../css/components.css">
-  <link rel="stylesheet" href="../../css/layout.css">
-  <link rel="stylesheet" href="../../css/pages.css">
+ <link rel="stylesheet" href="../../css/tokens.css">
+ <link rel="stylesheet" href="../../css/base.css">
+ <link rel="stylesheet" href="../../css/components.css">
+ <link rel="stylesheet" href="../../css/layout.css">
+ <link rel="stylesheet" href="../../css/pages.css">
 </head>
 <body class="app-layout">
 
-  <aside class="app-sidebar" id="app-sidebar"></aside>
+ <aside class="app-sidebar" id="app-sidebar"></aside>
 
-  <div class="app-container">
-    <header class="app-header" id="app-header"></header>
+ <div class="app-container">
+ <header class="app-header" id="app-header"></header>
 
-    <main class="app-content">
-      <!-- En-tête -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <div>
-          <h2 style="margin: 0 0 4px;" id="principal-welcome-title">Espace Maître d’Ouvrage</h2>
-          <span class="text-muted text-sm" id="principal-sub-title">Pilotage des marchés publics et adéquation des prestataires</span>
-        </div>
-        <div style="display: flex; gap: 10px;">
-          <a href="nouveau-projet.html" class="btn btn-primary">+ Publier un nouvel appel d’offres</a>
-          <a href="adequation.html" class="btn btn-gold">⚡ Simulateur d’adéquation</a>
-        </div>
-      </div>
+ <main class="app-content">
+ <!-- En-tête -->
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+ <div>
+ <h2 style="margin: 0 0 4px;" id="principal-welcome-title">Espace Maître d’Ouvrage</h2>
+ <span class="text-muted text-sm" id="principal-sub-title">Pilotage des marchés publics et adéquation des prestataires</span>
+ </div>
+ <div style="display: flex; gap: 10px;">
+ <a href="nouveau-projet.html" class="btn btn-primary">+ Publier un nouvel appel d’offres</a>
+ <a href="adequation.html" class="btn btn-primary"> Simulateur d’adéquation</a>
+ </div>
+ </div>
 
-      <!-- 4 KPI Cards -->
-      <div class="grid grid-cols-4 gap-6" style="margin-bottom: 32px;" id="principal-kpis">
-        <div class="kpi-card">
-          <span class="kpi-label">MARCHÉS PUBLIÉS</span>
-          <span class="kpi-val" id="kpi-projets">0</span>
-          <span class="text-xs text-muted">Projets actifs en cours de consultation</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">CANDIDATURES REÇUES</span>
-          <span class="kpi-val" id="kpi-candidatures" style="color: var(--brand-700);">0</span>
-          <span class="text-xs text-muted">Dossiers d'entreprises certifiées</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">BUDGET TOTAL SÉCURISÉ</span>
-          <span class="kpi-val" id="kpi-budget" style="font-size: 1.5rem;">0</span>
-          <span class="text-xs text-muted">Investissements sous contrôle d'audit</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">ALERTES CONFORMITÉ</span>
-          <span class="kpi-val" style="color: #D35400;">1</span>
-          <span class="text-xs text-muted">Certificat expirant sous 30 jours</span>
-        </div>
-      </div>
+ <!-- 4 KPI Cards -->
+ <div class="grid grid-cols-4 gap-6" style="margin-bottom: 32px;" id="principal-kpis">
+ <div class="kpi-card">
+ <span class="kpi-label">MARCHÉS PUBLIÉS</span>
+ <span class="kpi-val" id="kpi-projets">0</span>
+ <span class="text-xs text-muted">Projets actifs en cours de consultation</span>
+ </div>
+ <div class="kpi-card">
+ <span class="kpi-label">CANDIDATURES REÇUES</span>
+ <span class="kpi-val" id="kpi-candidatures" style="color: var(--brand-700);">0</span>
+ <span class="text-xs text-muted">Dossiers d'entreprises certifiées</span>
+ </div>
+ <div class="kpi-card">
+ <span class="kpi-label">BUDGET TOTAL SÉCURISÉ</span>
+ <span class="kpi-val" id="kpi-budget" style="font-size: 1.5rem;">0</span>
+ <span class="text-xs text-muted">Investissements sous contrôle d'audit</span>
+ </div>
+ <div class="kpi-card">
+ <span class="kpi-label">ALERTES CONFORMITÉ</span>
+ <span class="kpi-val" style="color: #D35400;">1</span>
+ <span class="text-xs text-muted">Certificat expirant sous 30 jours</span>
+ </div>
+ </div>
 
-      <!-- 2 Colonnes : Projets en cours + Agents recommandés -->
-      <div class="grid grid-cols-2 gap-8" style="margin-bottom: 32px;">
-        <!-- Mes projets actifs -->
-        <div class="card" style="padding: 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h4 style="margin: 0;">Mes Marchés & Appels d’Offres</h4>
-            <a href="mes-projets.html" class="text-xs text-brand font-bold">Gérer tous les projets →</a>
-          </div>
+ <!-- 2 Colonnes : Projets en cours + Agents recommandés -->
+ <div class="grid grid-cols-2 gap-8" style="margin-bottom: 32px;">
+ <!-- Mes projets actifs -->
+ <div class="card" style="padding: 24px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+ <h4 style="margin: 0;">Mes Marchés & Appels d’Offres</h4>
+ <a href="mes-projets.html" class="text-xs text-brand font-bold">Gérer tous les projets →</a>
+ </div>
 
-          <div style="display: flex; flex-direction: column; gap: 12px;" id="principal-projects-list">
-            <!-- Injecté dynamique -->
-          </div>
-        </div>
+ <div style="display: flex; flex-direction: column; gap: 12px;" id="principal-projects-list">
+ <!-- Injecté dynamique -->
+ </div>
+ </div>
 
-        <!-- Entreprises recommandées à forte adéquation -->
-        <div class="card" style="padding: 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h4 style="margin: 0;">Entreprises qualifiées recommandées</h4>
-            <a href="../../annuaire.html" class="text-xs text-brand font-bold" target="_blank">Annuaire complet →</a>
-          </div>
+ <!-- Entreprises recommandées à forte adéquation -->
+ <div class="card" style="padding: 24px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+ <h4 style="margin: 0;">Entreprises qualifiées recommandées</h4>
+ <a href="../../annuaire.html" class="text-xs text-brand font-bold" target="_blank">Annuaire complet →</a>
+ </div>
 
-          <div style="display: flex; flex-direction: column; gap: 12px;" id="principal-recommended-agents">
-            <!-- Injecté dynamique -->
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+ <div style="display: flex; flex-direction: column; gap: 12px;" id="principal-recommended-agents">
+ <!-- Injecté dynamique -->
+ </div>
+ </div>
+ </div>
+ </main>
+ </div>
 
-  <script src="../../js/data/seed.js"></script>
-  <script src="../../js/core/utils.js"></script>
-  <script src="../../js/core/store.js"></script>
-  <script src="../../js/core/auth.js"></script>
-  <script src="../../js/core/score.js"></script>
-  <script src="../../js/core/ui.js"></script>
-  <script src="../../js/core/layout.js"></script>
+ <script src="../../js/data/seed.js"></script>
+ <script src="../../js/core/utils.js"></script>
+ <script src="../../js/core/store.js"></script>
+ <script src="../../js/core/auth.js"></script>
+ <script src="../../js/core/score.js"></script>
+ <script src="../../js/core/ui.js"></script>
+ <script src="../../js/core/icons.js"></script>
+ <script src="../../js/core/layout.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!window.SignwAuth.requireAuth(['principal'])) return;
-      renderDashboard();
-    });
-
-    function renderDashboard() {
-      const user = window.SignwAuth.getCurrentUser();
-      const principal = window.SignwStore.getPrincipalById(user.principalId) || window.SignwStore.getPrincipals()[0];
-
-      document.getElementById('principal-welcome-title').textContent = principal.organisation;
-      document.getElementById('principal-sub-title').textContent = `${principal.type.toUpperCase()} • Région ${principal.region}`;
-
-      const allProjects = window.SignwStore.getProjects();
-      const myProjects = allProjects.filter(p => p.principalId === principal.id || p.organisation === principal.organisation);
-      const activeProjects = myProjects.length > 0 ? myProjects : allProjects.slice(0, 3);
-
-      let totalCandidates = 0;
-      let totalBudget = 0;
-      activeProjects.forEach(p => {
-        totalCandidates += (p.candidaturesAgentIds || []).length;
-        totalBudget += p.budgetFCFA || 0;
-      });
-
-      document.getElementById('kpi-projets').textContent = activeProjects.length;
-      document.getElementById('kpi-candidatures').textContent = totalCandidates;
-      document.getElementById('kpi-budget').textContent = window.SignwUtils.formatFCFAShort(totalBudget);
-
-      // Projets
-      const projContainer = document.getElementById('principal-projects-list');
-      projContainer.innerHTML = activeProjects.map(p => `
-        <div style="background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
-            <strong style="font-size: 0.95rem;">${p.titre}</strong>
-            <span class="badge ${p.statut === 'publie' ? 'badge-certifie' : 'badge-brouillon'}">${p.statut}</span>
-          </div>
-          <div class="text-xs text-muted" style="margin-bottom: 10px;">
-            Budget : <strong>${window.SignwUtils.formatFCFA(p.budgetFCFA)}</strong> • ${(p.candidaturesAgentIds || []).length} candidat(s)
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <a href="../../marche-detail.html?id=${p.id}" class="btn btn-secondary btn-sm" target="_blank">Voir l'appel d'offres</a>
-            <a href="adequation.html?prj=${p.id}" class="btn btn-primary btn-sm">Auditer les candidats →</a>
-          </div>
-        </div>
-      `).join('');
-
-      // Agents recommandés (Or et Argent)
-      const agentContainer = document.getElementById('principal-recommended-agents');
-      const topAgents = window.SignwStore.getAgents().filter(a => a.statutCertification.includes('certifie')).slice(0, 3);
-
-      agentContainer.innerHTML = topAgents.map(agt => `
-        <div style="background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 14px; display: flex; justify-content: space-between; align-items: center;">
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <img src="../../${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 44px; height: 44px; border-radius: 8px;">
-            <div>
-              <div class="font-bold text-sm">${agt.raisonSociale}</div>
-              <div class="text-xs text-muted">📍 ${agt.ville} • CA : ${window.SignwUtils.formatFCFAShort(agt.caMoyen3ans)}</div>
-              <div style="margin-top: 2px;">${window.SignwUtils.getTierBadge(agt.niveau)}</div>
-            </div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            ${window.SignwUI.renderScoreGauge(agt.score, 44)}
-            <a href="adequation.html?agt=${agt.id}" class="btn btn-secondary btn-sm">Tester →</a>
-          </div>
-        </div>
-      `).join('');
-    }
-  </script>
+ <script>
+ document.addEventListener('DOMContentLoaded', () => {
+ if (!window.SignwAuth.requireAuth(['principal'])) return; renderDashboard(); }); function renderDashboard() {
+ const user = window.SignwAuth.getCurrentUser(); const principal = window.SignwStore.getPrincipalById(user.principalId) || window.SignwStore.getPrincipals()[0]; document.getElementById('principal-welcome-title').textContent = principal.organisation; document.getElementById('principal-sub-title').textContent = `${principal.type.toUpperCase()} • Région ${principal.region}`; const allProjects = window.SignwStore.getProjects(); const myProjects = allProjects.filter(p => p.principalId === principal.id || p.organisation === principal.organisation); const activeProjects = myProjects.length > 0 ? myProjects : allProjects.slice(0, 3); let totalCandidates = 0; let totalBudget = 0; activeProjects.forEach(p => {
+ totalCandidates += (p.candidaturesAgentIds || []).length; totalBudget += p.budgetFCFA || 0; }); document.getElementById('kpi-projets').textContent = activeProjects.length; document.getElementById('kpi-candidatures').textContent = totalCandidates; document.getElementById('kpi-budget').textContent = window.SignwUtils.formatFCFAShort(totalBudget); // Projets
+ const projContainer = document.getElementById('principal-projects-list'); projContainer.innerHTML = activeProjects.map(p => `
+ <div style="background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 14px;">
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+ <strong style="font-size: 0.95rem;">${p.titre}</strong>
+ <span class="badge ${p.statut === 'publie' ? 'badge-certifie' : 'badge-brouillon'}">${p.statut}</span>
+ </div>
+ <div class="text-xs text-muted" style="margin-bottom: 10px;">
+ Budget : <strong>${window.SignwUtils.formatFCFA(p.budgetFCFA)}</strong> • ${(p.candidaturesAgentIds || []).length} candidat(s)
+ </div>
+ <div style="display: flex; gap: 8px;">
+ <a href="../../marche-detail.html?id=${p.id}" class="btn btn-secondary btn-sm" target="_blank">Voir l'appel d'offres</a>
+ <a href="adequation.html?prj=${p.id}" class="btn btn-primary btn-sm">Auditer les candidats →</a>
+ </div>
+ </div>
+ `).join(''); // Agents recommandés (Or et Argent)
+ const agentContainer = document.getElementById('principal-recommended-agents'); const topAgents = window.SignwStore.getAgents().filter(a => a.statutCertification.includes('certifie')).slice(0, 3); agentContainer.innerHTML = topAgents.map(agt => `
+ <div style="background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--radius-md); padding: 14px; display: flex; justify-content: space-between; align-items: center;">
+ <div style="display: flex; gap: 12px; align-items: center;">
+ <img src="../../${agt.logo || 'assets/img/company-logo-01.svg'}" alt="${agt.raisonSociale}" style="width: 44px; height: 44px; border-radius: 8px;">
+ <div>
+ <div class="font-bold text-sm">${agt.raisonSociale}</div>
+ <div class="text-xs text-muted"> ${agt.ville} • CA : ${window.SignwUtils.formatFCFAShort(agt.caMoyen3ans)}</div>
+ <div style="margin-top: 2px;">${window.SignwUtils.getTierBadge(agt.niveau)}</div>
+ </div>
+ </div>
+ <div style="display: flex; align-items: center; gap: 12px;">
+ ${window.SignwUI.renderScoreGauge(agt.score, 44)}
+ <a href="adequation.html?agt=${agt.id}" class="btn btn-secondary btn-sm">Tester →</a>
+ </div>
+ </div>
+ `).join(''); }
+ </script>
 </body>
 </html>
