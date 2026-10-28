@@ -10,10 +10,13 @@ window.SignwFormBuilder = {
   selectedFieldId: null,
   activeTab: 'edit', // 'edit', 'preview', 'json'
 
+  ic(name, size = 16) {
+    return window.SignwIcons ? window.SignwIcons.render(name, { size }) : '';
+  },
+
   init(containerId, sectorId) {
     this.currentSectorId = sectorId || 'sec_btp';
     const existing = window.SignwStore.getFormSchemaBySector(this.currentSectorId);
-    // Cloner profondément pour éditer sans altérer avant publication
     this.schema = JSON.parse(JSON.stringify(existing));
 
     if (this.schema.sections && this.schema.sections.length > 0) {
@@ -31,15 +34,15 @@ window.SignwFormBuilder = {
     if (!container) return;
 
     const sectors = window.SignwStore.getSectors();
+    const ic = (n, s) => this.ic(n, s);
 
     container.innerHTML = `
-      <!-- En-tête du constructeur -->
       <div class="card" style="margin-bottom: 20px; padding: 16px 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-          <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; min-width: 0;">
             <div>
               <label class="form-label text-xs">Secteur d’activité :</label>
-              <select class="form-control" style="width: 240px; font-weight: 700;" onchange="SignwFormBuilder.switchSector(this.value)">
+              <select class="form-control" style="width: 240px; max-width: 100%; font-weight: 700;" onchange="SignwFormBuilder.switchSector(this.value)">
                 ${sectors.map(s => `<option value="${s.id}" ${s.id === this.currentSectorId ? 'selected' : ''}>${s.nom}</option>`).join('')}
               </select>
             </div>
@@ -49,32 +52,29 @@ window.SignwFormBuilder = {
             </div>
           </div>
 
-          <!-- Onglets Mode de travail -->
-          <div style="display: flex; gap: 8px; background: var(--ink-100); padding: 4px; border-radius: var(--radius-md);">
-            <button class="btn btn-sm ${this.activeTab === 'edit' ? 'btn-primary' : 'btn-ghost'}" onclick="SignwFormBuilder.setTab('edit')">
-              ✏️ Édition visuelle
+          <div class="fb-mode-tabs" style="display: flex; gap: 4px; background: var(--ink-100); padding: 4px; border-radius: var(--radius-md); flex-wrap: wrap;">
+            <button type="button" class="btn btn-sm btn-wrap ${this.activeTab === 'edit' ? 'btn-primary' : 'btn-ghost'}" onclick="SignwFormBuilder.setTab('edit')">
+              ${ic('pencil', 14)} Édition
             </button>
-            <button class="btn btn-sm ${this.activeTab === 'preview' ? 'btn-primary' : 'btn-ghost'}" onclick="SignwFormBuilder.setTab('preview')">
-              👁️ Aperçu (Comme l’agent)
+            <button type="button" class="btn btn-sm btn-wrap ${this.activeTab === 'preview' ? 'btn-primary' : 'btn-ghost'}" onclick="SignwFormBuilder.setTab('preview')">
+              ${ic('eye', 14)} Aperçu agent
             </button>
-            <button class="btn btn-sm ${this.activeTab === 'json' ? 'btn-primary' : 'btn-ghost'}" onclick="SignwFormBuilder.setTab('json')">
-              📋 Schéma JSON
+            <button type="button" class="btn btn-sm btn-wrap ${this.activeTab === 'json' ? 'btn-primary' : 'btn-ghost'}" onclick="SignwFormBuilder.setTab('json')">
+              ${ic('code', 14)} JSON
             </button>
           </div>
 
-          <!-- Actions de publication -->
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="btn btn-secondary btn-sm btn-wrap" onclick="SignwFormBuilder.resetToDefault()">
-              Modèle BTP
+            <button type="button" class="btn btn-secondary btn-sm btn-wrap" onclick="SignwFormBuilder.resetToDefault()">
+              ${ic('refresh', 14)} Modèle BTP
             </button>
-            <button class="btn btn-gold btn-sm btn-wrap" onclick="SignwFormBuilder.publish()">
-              Publier v${this.schema.version + 1}
+            <button type="button" class="btn btn-gold btn-sm btn-wrap" onclick="SignwFormBuilder.publish()">
+              ${ic('send', 14)} Publier v${this.schema.version + 1}
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Contenu selon l'onglet actif -->
       <div id="fb-tab-content">
         ${this.renderTabContent()}
       </div>
@@ -86,112 +86,102 @@ window.SignwFormBuilder = {
   },
 
   renderTabContent() {
+    const ic = (n, s) => this.ic(n, s);
+
     if (this.activeTab === 'json') {
       return `
         <div class="card" style="padding: 24px;">
           <h4 style="margin-bottom: 12px;">Schéma JSON brut</h4>
           <p class="text-sm text-muted">Ce schéma JSON définit dynamiquement le formulaire présenté à tous les agents du secteur.</p>
           <textarea id="fb-json-textarea" class="form-control" style="font-family: var(--font-mono); font-size: 0.8125rem; min-height: 500px; margin-bottom: 16px;">${JSON.stringify(this.schema, null, 2)}</textarea>
-          <button class="btn btn-primary btn-sm btn-wrap" onclick="SignwFormBuilder.applyJson()">Appliquer le JSON</button>
+          <button type="button" class="btn btn-primary btn-sm btn-wrap" onclick="SignwFormBuilder.applyJson()">Appliquer le JSON</button>
         </div>
       `;
     }
 
     if (this.activeTab === 'preview') {
       return `
-        <div class="card" style="padding: 24px; margin-bottom: 20px; background: #FFF9E6; border: 1px dashed var(--gold-500);">
-          <strong>Mode Aperçu interactif :</strong> Vous testez le formulaire tel que les candidats agents le rempliront.
+        <div class="card" style="padding: 20px; margin-bottom: 20px; background: var(--ink-50); border: 1px dashed var(--ink-300);">
+          <strong>Mode aperçu :</strong>
+          <span class="text-sm text-muted"> vous testez le formulaire tel que les candidats agents le rempliront.</span>
         </div>
         <div id="fb-preview-mount"></div>
       `;
     }
 
-    // Onglet 'edit' (Layout 3 colonnes)
     const activeSection = (this.schema.sections || []).find(s => s.id === this.selectedSectionId) || this.schema.sections[0];
     const activeField = activeSection && activeSection.champs ? activeSection.champs.find(c => c.id === this.selectedFieldId) : null;
+
+    const palette = [
+      { type: 'texte', icon: 'type', label: 'Texte court' },
+      { type: 'texte_long', icon: 'align-left', label: 'Texte long / Description' },
+      { type: 'montant', icon: 'score', label: 'Montant en FCFA' },
+      { type: 'nombre', icon: 'hash', label: 'Nombre / Années' },
+      { type: 'date', icon: 'calendar', label: 'Date de validité' },
+      { type: 'liste', icon: 'list', label: 'Liste déroulante' },
+      { type: 'case_a_cocher', icon: 'check-square', label: 'Case à cocher' },
+      { type: 'fichier', icon: 'upload', label: 'Dépôt de pièce (PDF)', highlight: true },
+      { type: 'tableau_repetable', icon: 'table', label: 'Tableau répétable' }
+    ];
 
     return `
       <div class="form-builder-layout">
 
-        <!-- Colonne 1 : Palette d'éléments -->
         <div class="fb-palette">
           <h5 style="margin-bottom: 16px;">Palette de champs</h5>
           <p class="text-xs text-muted" style="margin-bottom: 16px;">Cliquez pour ajouter au formulaire :</p>
 
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('texte')">
-            <span>📝</span> Texte court
-          </div>
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('texte_long')">
-            <span>📄</span> Texte long / Description
-          </div>
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('montant')">
-            <span>💰</span> Montant en FCFA
-          </div>
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('nombre')">
-            <span>🔢</span> Nombre / Années
-          </div>
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('date')">
-            <span>📅</span> Date de validité
-          </div>
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('liste')">
-            <span>🔽</span> Liste déroulante
-          </div>
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('case_a_cocher')">
-            <span>☑️</span> Case à cocher
-          </div>
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('fichier')" style="border-color: var(--brand-500); background: var(--brand-100);">
-            <span>📎</span> <strong>Dépôt de pièce (PDF)</strong>
-          </div>
-          <div class="fb-palette-item" onclick="SignwFormBuilder.addField('tableau_repetable')">
-            <span>📊</span> Tableau répétable
-          </div>
+          ${palette.map(item => `
+            <div class="fb-palette-item${item.highlight ? ' fb-palette-item--accent' : ''}" onclick="SignwFormBuilder.addField('${item.type}')">
+              <span class="fb-palette-icon">${ic(item.icon, 16)}</span>
+              ${item.highlight ? `<strong>${item.label}</strong>` : item.label}
+            </div>
+          `).join('')}
 
           <div style="margin-top: 24px; padding-top: 16px;">
-            <button class="btn btn-secondary btn-sm w-full" onclick="SignwFormBuilder.addSection()">
-              + Nouvelle section
+            <button type="button" class="btn btn-secondary btn-sm w-full btn-wrap" onclick="SignwFormBuilder.addSection()">
+              ${ic('plus', 14)} Nouvelle section
             </button>
           </div>
         </div>
 
-        <!-- Colonne 2 : Canevas central -->
         <div class="fb-canvas">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 8px;">
             <h4 style="margin: 0;">Sections du formulaire</h4>
-            <span class="text-sm text-muted">${(this.schema.sections || []).length} section(s) configurée(s)</span>
+            <span class="text-sm text-muted">${(this.schema.sections || []).length} section(s)</span>
           </div>
 
-          ${(this.schema.sections || []).map((sec, sIdx) => {
+          ${(this.schema.sections || []).map(sec => {
             const isSecSelected = sec.id === this.selectedSectionId;
             return `
               <div class="fb-section-card" style="${isSecSelected ? 'border: 2px solid var(--brand-700);' : ''}">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <strong style="color: var(--brand-900); font-size: 1rem;">${sec.titre}</strong>
-                    <span class="badge" style="background: var(--ink-200); font-size: 0.7rem;">Pilier : ${sec.pilier || 'admin'}</span>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
+                  <div style="display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1;">
+                    <strong style="color: var(--brand-900); font-size: 1rem; word-break: break-word;">${window.SignwUtils.escapeHTML(sec.titre)}</strong>
+                    <span class="badge" style="background: var(--ink-200); font-size: 0.7rem; flex-shrink: 0;">Pilier : ${sec.pilier || 'admin'}</span>
                   </div>
-                  <div style="display: flex; gap: 4px;">
-                    <button class="btn-ghost btn-sm" onclick="SignwFormBuilder.selectSection('${sec.id}')" title="Éditer cette section">✏️</button>
-                    <button class="btn-ghost btn-sm" onclick="SignwFormBuilder.deleteSection('${sec.id}')" title="Supprimer la section">🗑️</button>
+                  <div style="display: flex; gap: 2px; flex-shrink: 0;">
+                    <button type="button" class="icon-btn" onclick="SignwFormBuilder.selectSection('${sec.id}')" title="Éditer cette section">${ic('pencil', 16)}</button>
+                    <button type="button" class="icon-btn" onclick="SignwFormBuilder.deleteSection('${sec.id}')" title="Supprimer la section">${ic('trash', 16)}</button>
                   </div>
                 </div>
 
-                <!-- Champs de la section -->
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                   ${(sec.champs || []).map((ch, cIdx) => {
                     const isFieldSelected = ch.id === this.selectedFieldId;
                     return `
                       <div class="fb-field-card ${isFieldSelected ? 'selected' : ''}" onclick="SignwFormBuilder.selectField('${sec.id}', '${ch.id}')">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                          <span style="color: var(--ink-500); font-size: 0.8rem;">::</span>
-                          <div>
-                            <span class="font-bold text-sm">${ch.label || 'Champ sans titre'}</span>
-                            <div class="text-xs text-muted">Type : ${ch.type} • Poids : ${ch.poids || 1} pts ${ch.obligatoire ? '• <span style="color: var(--danger)">Obligatoire</span>' : ''}</div>
+                        <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+                          <span class="fb-field-grip" aria-hidden="true">${ic('grip', 14)}</span>
+                          <div style="min-width: 0;">
+                            <span class="font-bold text-sm" style="display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${window.SignwUtils.escapeHTML(ch.label || 'Champ sans titre')}</span>
+                            <div class="text-xs text-muted">Type : ${ch.type} · ${ch.poids || 1} pts ${ch.obligatoire ? '· <span style="color: var(--danger)">Obligatoire</span>' : ''}</div>
                           </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 4px;">
-                          <button type="button" class="btn-ghost btn-sm" onclick="event.stopPropagation(); SignwFormBuilder.moveField('${sec.id}', ${cIdx}, -1)">▲</button>
-                          <button type="button" class="btn-ghost btn-sm" onclick="event.stopPropagation(); SignwFormBuilder.moveField('${sec.id}', ${cIdx}, 1)">▼</button>
-                          <button type="button" class="btn-ghost btn-sm" onclick="event.stopPropagation(); SignwFormBuilder.deleteField('${sec.id}', '${ch.id}')">✕</button>
+                        <div style="display: flex; align-items: center; gap: 2px; flex-shrink: 0;">
+                          <button type="button" class="icon-btn" title="Monter" onclick="event.stopPropagation(); SignwFormBuilder.moveField('${sec.id}', ${cIdx}, -1)">${ic('chevron-up', 14)}</button>
+                          <button type="button" class="icon-btn" title="Descendre" onclick="event.stopPropagation(); SignwFormBuilder.moveField('${sec.id}', ${cIdx}, 1)">${ic('chevron-down', 14)}</button>
+                          <button type="button" class="icon-btn" title="Supprimer" onclick="event.stopPropagation(); SignwFormBuilder.deleteField('${sec.id}', '${ch.id}')">${ic('x', 14)}</button>
                         </div>
                       </div>
                     `;
@@ -202,13 +192,12 @@ window.SignwFormBuilder = {
           }).join('')}
         </div>
 
-        <!-- Colonne 3 : Inspecteur de propriétés -->
         <div class="fb-inspector">
           <h5 style="margin-bottom: 16px;">Propriétés du champ</h5>
 
           ${activeField ? `
             <div class="form-group">
-              <label class="form-label text-xs">Libellé du champ (Label) :</label>
+              <label class="form-label text-xs">Libellé du champ :</label>
               <input type="text" class="form-control" value="${window.SignwUtils.escapeHTML(activeField.label || '')}" onchange="SignwFormBuilder.updateFieldProp('label', this.value)">
             </div>
 
@@ -308,7 +297,7 @@ window.SignwFormBuilder = {
     sec.champs.push(newField);
     this.selectedFieldId = id;
     this.render();
-    window.SignwUI.showToast(`Champ "${newField.label}" ajouté à la section.`, 'info');
+    window.SignwUI.showToast(`Champ « ${newField.label} » ajouté à la section.`, 'info');
   },
 
   updateFieldProp(prop, val) {
