@@ -1,0 +1,259 @@
+/**
+ * Theme signw pour le template Arsha
+ * Palette et typographie issues de signw/css/tokens.css
+ */
+
+:root {
+  /* SignW Design Tokens */
+  --brand-900: #3B0D1A;
+  --brand-700: #7A1B34;
+  --brand-600: #9A2A47;
+  --brand-500: #B8405E;
+  --brand-100: #F8E6EB;
+  --gold-500: #D99A1E;
+  --gold-600: #B88015;
+  --gold-100: #FBF1D9;
+  --ink-900: #14161A;
+  --ink-700: #3A3F47;
+  --ink-500: #6B7280;
+  --ink-50: #F9FAFB;
+
+  /* Arsha Fonts Override */
+  --default-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --heading-font: "Plus Jakarta Sans", "Jost", system-ui, sans-serif;
+  --nav-font: "Inter", "Poppins", system-ui, sans-serif;
+
+  /* Arsha Global Color Overrides */
+  --background-color: #ffffff;
+  --default-color: #3A3F47;
+  --heading-color: #3B0D1A;
+  --accent-color: #7A1B34;
+  --surface-color: #ffffff;
+  --contrast-color: #ffffff;
+
+  /* Arsha Nav Menu Overrides */
+  --nav-color: #ffffff;
+  --nav-hover-color: #D99A1E;
+  --nav-mobile-background-color: #ffffff;
+  --nav-dropdown-background-color: #ffffff;
+  --nav-dropdown-color: #14161A;
+  --nav-dropdown-hover-color: #7A1B34;
+}
+
+.light-background {
+  --background-color: #F9FAFB;
+  --surface-color: #ffffff;
+}
+
+.dark-background {
+  --background-color: #3B0D1A;
+  --default-color: #F8E6EB;
+  --heading-color: #ffffff;
+  --surface-color: #7A1B34;
+  --contrast-color: #ffffff;
+}
+
+/* Header */
+.header {
+  --background-color: #3B0D1A;
+  --heading-color: #ffffff;
+}
+
+.header .logo img {
+  max-height: 40px;
+  margin-right: 0;
+}
+
+.index-page.scrolled .header {
+  --background-color: rgba(59, 13, 26, 0.94);
+  backdrop-filter: blur(8px);
+}
+
+.header .btn-getstarted,
+.header .btn-getstarted:focus {
+  background: var(--gold-500);
+  color: #1A1203;
+  font-weight: 700;
+}
+
+.header .btn-getstarted:hover,
+.header .btn-getstarted:focus:hover {
+  background: var(--gold-600);
+  color: #ffffff;
+}
+
+/* Hero Section */
+.hero {
+  background-color: var(--brand-900);
+  background-image: linear-gradient(135deg, rgba(59, 13, 26, 0.92) 0%, rgba(122, 27, 52, 0.84) 100%), url("../../signw/assets/img/hero-bg.webp");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero .hero-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(217, 154, 30, 0.45);
+  padding: 6px 14px;
+  border-radius: 50px;
+  color: var(--gold-100);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.hero .btn-getstarted {
+  background: var(--gold-500);
+  color: #1A1203;
+  font-weight: 700;
+}
+
+.hero .btn-getstarted:hover {
+  background: var(--gold-600);
+  color: #ffffff;
+}
+
+.hero .btn-watch-video {
+  color: #ffffff;
+}
+
+.hero .btn-watch-video i {
+  color: var(--gold-500);
+}
+
+.hero .btn-watch-video:hover {
+  color: var(--gold-100);
+}
+
+.hero .hero-img img {
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(20, 10, 14, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* Section Titles */
+.section-title h2::after {
+  background: var(--gold-500);
+}
+
+/* Clients Carousel */
+.clients .swiper-slide img {
+  max-height: 76px;
+  width: auto;
+  margin: 0 auto;
+  display: block;
+  border-radius: 12px;
+}
+
+/* Why Us */
+.why-us .why-us-img img {
+  border-radius: 16px;
+  box-shadow: 0 14px 32px rgba(59, 13, 26, 0.12);
+  max-height: 440px;
+  object-fit: cover;
+}
+
+/* Skills */
+.skills img {
+  border-radius: 16px;
+  box-shadow: 0 14px 32px rgba(20, 22, 26, 0.12);
+}
+
+.skills .progress-bar {
+  background-color: var(--brand-700);
+}
+
+/* Call To Action */
+.call-to-action:before {
+  background: linear-gradient(135deg, rgba(59, 13, 26, 0.88) 0%, rgba(122, 27, 52, 0.78) 100%);
+}
+
+.call-to-action .cta-btn {
+  border-color: var(--gold-500);
+  background: var(--gold-500);
+  color: #1A1203;
+  font-weight: 700;
+}
+
+.call-to-action .cta-btn:hover {
+  background: var(--gold-600);
+  border-color: var(--gold-600);
+  color: #ffffff;
+}
+
+/* Portfolio / Secteurs & Entreprises */
+.portfolio .portfolio-item img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Team / Acteurs */
+.team .team-member .pic {
+  background: var(--brand-100);
+  border: 3px solid var(--brand-100);
+}
+
+/* Pricing / Niveaux de certification */
+.pricing .pricing-item {
+  border-top: 4px solid var(--brand-100);
+}
+
+.pricing .featured {
+  border-top-color: var(--gold-500);
+}
+
+.pricing .featured h4 {
+  color: var(--gold-600);
+}
+
+.pricing .featured .buy-btn {
+  background: var(--gold-500);
+  border-color: var(--gold-500);
+  color: #1A1203;
+  font-weight: 700;
+}
+
+.pricing .featured .buy-btn:hover {
+  background: var(--gold-600);
+  border-color: var(--gold-600);
+  color: #ffffff;
+}
+
+/* Testimonials */
+.testimonials .testimonial-item .stars i {
+  color: var(--gold-500);
+}
+
+/* Subscribe */
+.subscribe .container {
+  background: var(--brand-100);
+  padding-bottom: 60px;
+}
+
+.subscribe .cta-image img {
+  max-height: 220px;
+}
+
+/* Recent Blog Posts */
+.recent-blog-postst .post-item .post-img {
+  height: 240px;
+}
+
+.recent-blog-postst .post-item .post-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Footer */
+.footer .footer-newsletter {
+  background-color: var(--brand-100);
+}
+
